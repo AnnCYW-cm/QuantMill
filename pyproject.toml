@@ -45,9 +45,9 @@ broker = ["alpaca-py>=0.30"]    # 接 Alpaca 美股(需 API 密钥)| Alpaca US b
 web = ["flask>=3.0"]            # 网页仪表盘 | web dashboard
 
 [project.urls]
-Homepage = "https://github.com/AnnCYW-cm/quantmill"
-Repository = "https://github.com/AnnCYW-cm/quantmill"
-Issues = "https://github.com/AnnCYW-cm/quantmill/issues"
+Homepage = "https://github.com/AnnCYW-cm/QuantMill"
+Repository = "https://github.com/AnnCYW-cm/QuantMill"
+Issues = "https://github.com/AnnCYW-cm/QuantMill/issues"
 
 # 装完后 `quantmill` 就是个命令 | after install, `quantmill` maps to the CLI
 [project.scripts]
