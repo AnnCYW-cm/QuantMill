@@ -150,6 +150,32 @@ def cmd_experiment(a):
     print("⚠️ 仅供研究,策略无经证实的 alpha,别拿真钱跟。")
 
 
+def cmd_textfactor(a):
+    import os
+    from quantmill.llm.textfactor import combine, extract_signals
+    if a.demo or not a.symbol:
+        titles = ["公司季度业绩超预期,上调全年利润指引",
+                  "遭监管立案调查,股价面临退市风险",
+                  "宣布 10 亿元股票回购计划",
+                  "第三季度营收低于市场预期,下调指引",
+                  "召开年度股东大会审议分红方案"]
+    else:
+        from quantmill.llm.news import fetch_news
+        titles = [it["title"] for it in fetch_news(a.symbol, a.market, limit=a.limit)]
+        if not titles:
+            print("没抓到新闻(免费源覆盖有限,尤其港/A股)。加 --demo 看离线演示。")
+            return
+    prefer = bool(os.environ.get("ANTHROPIC_API_KEY"))
+    sigs = extract_signals(titles, prefer_llm=prefer)
+    print("=" * 74)
+    print(f"LLM 文本因子抽取 · 打分器 {'Claude' if prefer else '词典兜底(设 ANTHROPIC_API_KEY 用 Claude)'}")
+    print("=" * 74)
+    print(f"{'展望':>6}{'指引':>6}{'风险':>6}{'因子':>7}  标题")
+    for t, s in zip(titles, sigs):
+        print(f"{s['outlook']:>+6.2f}{s['guidance']:>+6d}{s['risk']:>6.2f}{combine(s):>+7.2f}  {str(t)[:46]}")
+    print("⚠️ 只抽取'文本说了什么'(分类),不预测涨跌;免费源无历史新闻→暂不能回测其 alpha,须过可信度层。")
+
+
 def cmd_niche(a):
     from quantmill.niche import (analyze_cb_ipo, analyze_etf_premium,
                                  fetch_cb_first_days, fetch_etf_premium, load_sample_cb)
@@ -315,6 +341,13 @@ def main():
     sp.add_argument("config", nargs="?", help="实验 YAML 路径(run 时必填)")
     sp.add_argument("--no-save", action="store_true", help="不存档结果")
     sp.set_defaults(func=cmd_experiment)
+
+    sp = sub.add_parser("textfactor", help="LLM文本→结构化因子(展望/指引/风险)| LLM text->factor")
+    sp.add_argument("symbol", nargs="?", help="代码(如 AAPL);省略或 --demo 用离线示例")
+    sp.add_argument("market", nargs="?", default="us", choices=["us", "hk", "cn"])
+    sp.add_argument("--demo", action="store_true", help="离线演示(内置示例标题)")
+    sp.add_argument("--limit", type=int, default=10, help="抓多少条新闻")
+    sp.set_defaults(func=cmd_textfactor)
 
     sp = sub.add_parser("niche", help="散户结构性机会验证:可转债打新/ETF套利 | retail niche edges")
     sp.add_argument("niche_action", choices=["cb", "etf"], help="cb=可转债打新 / etf=ETF折溢价")
