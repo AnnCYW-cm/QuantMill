@@ -9,7 +9,7 @@ akshare==1.18.64         # A股/港股 A-share & HK
 
 # --- 计算 & 回测 compute & backtest ---
 pandas==2.3.3
-numpy==2.0.2
+numpy==2.2.6
 backtesting==0.6.5
 bokeh==3.4.3             # backtesting 画图依赖 | plotting dep
 
