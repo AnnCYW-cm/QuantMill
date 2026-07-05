@@ -176,6 +176,33 @@ def cmd_textfactor(a):
     print("⚠️ 只抽取'文本说了什么'(分类),不预测涨跌;免费源无历史新闻→暂不能回测其 alpha,须过可信度层。")
 
 
+def cmd_risk(a):
+    import pandas as pd
+    from quantmill.cross import (composite_score, factor_columns, get_panel,
+                                 walk_forward_scores)
+    from quantmill.risk import risk_managed_backtest
+    panel = get_panel(market=a.market, sample=a.sample, horizon=a.horizon, verbose=False)
+    if a.model == "composite":
+        score = composite_score(panel)
+    else:
+        nd = panel.index.get_level_values(0).nunique()
+        score = walk_forward_scores(panel, factor_columns(panel), horizon=a.horizon,
+                                    init_train=min(504, max(60, nd // 2)), step=63)
+    res = risk_managed_backtest(panel, score, k=a.topk, horizon=a.horizon, cost=a.cost,
+                                target_vol=a.target_vol, max_weight=a.max_weight, dd_limit=a.dd_limit)
+    print("=" * 70)
+    print(f"风控对比 · {a.market.upper()}{'(样本)' if a.sample else ''} · {a.model} · top-{res['k_used']}"
+          f" · 目标波动{a.target_vol*100:.0f}% · 单只上限{a.max_weight*100:.0f}% · 回撤开关{a.dd_limit*100:.0f}%")
+    print("=" * 70)
+    print(pd.DataFrame(res["metrics"]).T.to_string())
+    m = res["metrics"]
+    if m["等权满仓"] and m["风控后"]:
+        print(f"\n样本外 {res['periods']} 期 · 平均敞口 {res['avg_exposure']}")
+        print(f"👉 最大回撤 {m['等权满仓']['最大回撤%']}% → {m['风控后']['最大回撤%']}%,"
+              f"年化波动 {m['等权满仓']['年化波动%']}% → {m['风控后']['年化波动%']}%")
+    print("⚠️ 仅供研究;风控降回撤通常以让渡部分收益为代价——这是'活下去'的合理对价。")
+
+
 def cmd_niche(a):
     from quantmill.niche import (analyze_cb_ipo, analyze_etf_premium,
                                  fetch_cb_first_days, fetch_etf_premium, load_sample_cb)
@@ -341,6 +368,21 @@ def main():
     sp.add_argument("config", nargs="?", help="实验 YAML 路径(run 时必填)")
     sp.add_argument("--no-save", action="store_true", help="不存档结果")
     sp.set_defaults(func=cmd_experiment)
+
+    sp = sub.add_parser("risk", help="风控/仓位层:等权满仓 vs 风控后对照 | risk overlay")
+    sp.add_argument("--market", default="cn", choices=["cn", "hk", "us"])
+    sp.add_argument("--sample", action="store_true", help="用内置样本(离线)")
+    sp.add_argument("--model", default="composite", choices=["composite", "ml"])
+    sp.add_argument("-k", "--topk", type=int, default=20)
+    sp.add_argument("--horizon", type=int, default=20)
+    sp.add_argument("--cost", type=float, default=0.0015)
+    sp.add_argument("--target-vol", type=float, default=0.15, dest="target_vol",
+                    help="年化波动目标(默认15%)")
+    sp.add_argument("--max-weight", type=float, default=0.15, dest="max_weight",
+                    help="单只权重上限(默认15%)")
+    sp.add_argument("--dd-limit", type=float, default=0.12, dest="dd_limit",
+                    help="回撤开关阈值(默认12%)")
+    sp.set_defaults(func=cmd_risk)
 
     sp = sub.add_parser("textfactor", help="LLM文本→结构化因子(展望/指引/风险)| LLM text->factor")
     sp.add_argument("symbol", nargs="?", help="代码(如 AAPL);省略或 --demo 用离线示例")

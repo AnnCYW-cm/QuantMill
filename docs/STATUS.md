@@ -1,6 +1,6 @@
 # quantmill 交付清单 / Status
 
-> 截至 2026-07-05 · 14 层模块 · 43 个 Python 文件 · 102 测试全绿 · 14 个 CLI 命令 · 网页台(8页)· 中英双语 · pip 可安装
+> 截至 2026-07-05 · 14 层模块 · 43 个 Python 文件 · 105 测试全绿 · 15 个 CLI 命令 · 网页台(8页)· 中英双语 · pip 可安装
 
 ---
 
@@ -19,7 +19,7 @@
 | **llm** | ✅ | Claude 情绪 + 词典兜底,严格 PIT |
 | **execution** | ✅ | 纸面账户 + Alpaca 适配器 |
 | **report / web** | ✅ | 信号面板 + 工作台首页 + Flask 网页台(8页) |
-| **workflow** | ✅ | pipeline + cli(14 命令) |
+| **workflow** | ✅ | pipeline + cli(15 命令) |
 
 ### 二、横截面选股(2026-07 主线)
 - ✅ 全 CSI300(300只)+ 港股蓝筹(86只)面板,横截面 IC。
@@ -33,7 +33,7 @@
 - ✅ 密钥支持环境变量或 `~/quant/.alpaca` 文件(双击启动也读);行情页显示 🟢实时/🕒延迟。
 
 ### 四、工程质量
-- **102 个离线测试全绿**(合成数据、确定性、可复现)。
+- **105 个离线测试全绿**(合成数据、确定性、可复现)。
 - **核心锁死「无未来函数」**:特征层 / 组合层 / 情绪因子 / **cross walk-forward(砍未来数据不改过去打分)**。
 - 中英双语 · pip 可安装(`[dev][llm][broker][web]`)· git 就绪。
 
@@ -73,6 +73,6 @@
 
 ---
 
-## 附:14 命令速查
-`scan · validate · analyze · factors · portfolio · news · paper · cross · experiment · niche · textfactor · web · home · docs-pdf`
+## 附:15 命令速查
+`scan · validate · analyze · factors · portfolio · news · paper · cross · risk · experiment · niche · textfactor · web · home · docs-pdf`
 （详见 `docs/CLI.md`）
