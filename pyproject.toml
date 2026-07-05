@@ -1,0 +1,71 @@
+# pyproject.toml —— 打包与项目元数据 | packaging & project metadata
+# 安装 install:  ./.venv/bin/pip install -e .
+# 装完后可直接用命令 | then use the command directly:  quant scan / quant analyze AAPL us
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "quantmill"
+version = "0.1.0"
+description = "开源全链条 AI 量化平台,内建抗过拟合可信度检验(港股/美股/A股) | Open-source full-chain AI quant platform with built-in overfit-resistant credibility checks (HK/US/A-share)"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "quantmill contributors", email = "wootilehq@gmail.com" }]
+keywords = ["quant", "trading", "backtest", "factor", "cross-sectional",
+            "credibility", "DSR", "PBO", "A-share", "HK", "US", "LightGBM"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Financial and Insurance Industry",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Office/Business :: Financial :: Investment",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "yfinance>=1.2.0",
+    "akshare>=1.18.0",
+    "pandas>=2.0",
+    "numpy>=1.24",
+    "backtesting>=0.6.5",
+    "bokeh>=3.4",
+    "matplotlib>=3.8",
+    "scikit-learn>=1.4",
+    "lightgbm>=4.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+llm = ["anthropic>=0.40"]       # LLM 消息面情绪(需 ANTHROPIC_API_KEY)| LLM news sentiment
+broker = ["alpaca-py>=0.30"]    # 接 Alpaca 美股(需 API 密钥)| Alpaca US broker
+web = ["flask>=3.0"]            # 网页仪表盘 | web dashboard
+
+# ⚠️ 把 OWNER 换成你的 GitHub 用户名 | replace OWNER with your GitHub handle
+[project.urls]
+Homepage = "https://github.com/OWNER/quantmill"
+Repository = "https://github.com/OWNER/quantmill"
+Issues = "https://github.com/OWNER/quantmill/issues"
+
+# 装完后 `quantmill` 就是个命令 | after install, `quantmill` maps to the CLI
+[project.scripts]
+quantmill = "quantmill.workflow.cli:main"
+
+[tool.ruff]
+line-length = 100
+target-version = "py39"
+exclude = [".venv", "docs/.pdfbuild", "build", "dist"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B"]
+ignore = ["E501"]   # 行长交给 line-length,中文注释常超
+
+[tool.setuptools.packages.find]
+include = ["quantmill*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

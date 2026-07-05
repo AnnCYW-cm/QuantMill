@@ -1,0 +1,22 @@
+# quantmill 依赖(锁定版本,换电脑/别人也能一键装)
+# quantmill dependencies (pinned so it installs identically anywhere)
+# ⚠️ 依赖的权威来源是 pyproject.toml;本文件是"锁定版本"快照,供精确复现。
+#    日常安装推荐:pip install -e ".[dev]"    精确复现:pip install -r requirements.txt
+
+# --- 数据 data ---
+yfinance==1.2.0          # 美股/港股 US & HK
+akshare==1.18.64         # A股/港股 A-share & HK
+
+# --- 计算 & 回测 compute & backtest ---
+pandas==2.3.3
+numpy==2.0.2
+backtesting==0.6.5
+bokeh==3.4.3             # backtesting 画图依赖 | plotting dep
+matplotlib==3.9.4
+
+# --- 机器学习 machine learning ---
+scikit-learn==1.6.1
+lightgbm==4.6.0          # 注意 macOS 需先 `brew install libomp` | on macOS run `brew install libomp` first
+
+# --- 测试 tests ---
+pytest==8.4.2

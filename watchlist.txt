@@ -1,0 +1,28 @@
+# 我的自选股 · My Watchlist
+# 每行一个:市场 代码   (# 开头的行是注释,会被忽略)
+# One per line: market code   (lines starting with # are ignored)
+# 市场 market: us=美股 US | hk=港股 HK | cn=A股 A-share
+# 改完存盘,直接跑 dashboard / validate 就生效。
+# Edit, save, then run dashboard / validate — changes take effect immediately.
+
+
+# --- us ---
+us AAPL
+us MSFT
+us NVDA
+us AMZN
+us GOOGL
+us JPM
+us KO
+us JNJ
+
+# --- hk ---
+hk 00700
+hk 09988
+hk 00939
+hk 00005
+
+# --- cn ---
+cn 000001
+cn 600519
+cn 600036

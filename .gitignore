@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.pyc
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+
+# 虚拟环境 | virtualenv
+.venv/
+
+# 生成的产物(数据缓存 & 报告 & 纸面账户,不入库)| generated artifacts (not tracked)
+data/
+results/
+paper_account.json
+quantmill.app
+
+# Alpaca 密钥文件(勿入库)| broker/data keys
+.alpaca
+
+# 文档 PDF 构建工作区(puppeteer/chromium,勿入库)
+docs/.pdfbuild/
+
+# 生成的 PDF(可由 `quantmill docs-pdf` 重建,不入库)| generated PDFs (regenerable)
+docs/*.pdf
+
+# node
+node_modules/
