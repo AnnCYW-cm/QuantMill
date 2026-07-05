@@ -10,8 +10,9 @@ dist/
 .venv/
 
 # 生成的产物(数据缓存 & 报告 & 纸面账户,不入库)| generated artifacts (not tracked)
-data/
-results/
+# ⚠️ 必须用前导 / 锚定到仓库根目录,否则会误伤源码包 quantmill/data/!
+/data/
+/results/
 paper_account.json
 quantmill.app
 
