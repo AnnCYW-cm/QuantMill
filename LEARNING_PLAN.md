@@ -80,7 +80,7 @@ cd ~/quant
 > quantlib/backtest.py  概率阈值策略接回 backtesting.py(含手续费滑点)
 > quantlib/metrics.py   策略 vs 买入持有对比(含自算买入持有回撤)
 > quantlib/report.py    生成 HTML 研究报告
-> main.py               一键跑通:./.venv/bin/python main.py --symbol 00700 --market hk
+> quantmill analyze     深挖单只票:quantmill analyze 00700 hk
 > ```
 > 已验证:美股AAPL🟡(回撤更小) / A股000001🔴(单边跌帮不上) / 港股00700✅(收益持平回撤大降)
 
