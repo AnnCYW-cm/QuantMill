@@ -36,6 +36,7 @@ dependencies = [
     "bokeh>=3.4",
     "scikit-learn>=1.4",
     "lightgbm>=4.0",
+    "pyyaml>=6.0",           # 配置驱动的实验流程 | config-driven experiments
 ]
 
 [project.optional-dependencies]

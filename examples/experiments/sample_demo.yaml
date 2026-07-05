@@ -1,0 +1,8 @@
+# 离线 demo:用随包内置样本,秒出,无需联网。
+# 跑:quantmill experiment run examples/experiments/sample_demo.yaml
+name: sample-demo
+sample: true          # 用内置样本面板(20只×300天)
+model: composite      # 稳健因子组合
+horizon: 20
+k: 6
+cost: 0.0015

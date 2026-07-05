@@ -1,0 +1,16 @@
+# A股稳健因子组合基线(首次会联网拉全池,之后走缓存)。
+# 想换因子?改 recipe 即可,不用碰代码。正=越大越好,负=越小越好。
+# 跑:quantmill experiment run examples/experiments/cn_composite.yaml
+name: cn-composite-baseline
+market: cn
+model: composite
+horizon: 20
+k: 20
+cost: 0.0015
+start: "2023-01-01"
+recipe:
+  ey: 1              # 盈利收益率(价值)
+  bp: 1              # 账面价值比(价值)
+  dist_high_20: 1    # 近高点(动量)
+  pos_60d: 1         # 高位(动量)
+  vol_20d: -1        # 低波动

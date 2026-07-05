@@ -1,0 +1,12 @@
+# 对照组:43因子 LightGBM 排名模型(反面教材——A股漂亮但港股翻车、去偏差后崩)。
+# 用来对比"复杂 ML vs 简单组合",见 docs/RESEARCH_NOTES.md。
+# 跑:quantmill experiment run examples/experiments/cn_ml_baseline.yaml
+name: cn-ml-baseline
+market: cn
+model: ml
+horizon: 20
+k: 20
+cost: 0.0015
+start: "2023-01-01"
+init_train: 504
+step: 63

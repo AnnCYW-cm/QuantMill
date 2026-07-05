@@ -39,6 +39,33 @@ quantmill cross survivorship --model ml         # 看 ML 去偏差后崩成负
 
 ---
 
+## experiment ★ —— 配置驱动的实验(YAML)
+
+用一个 YAML 定义实验(市场/因子配方/模型/参数/日期),可复现地跑,结果自动存档到 `results/experiments/<时间戳>_<名字>/`。**换因子/参数不用改代码。**
+
+```
+quantmill experiment run <config.yaml> [--no-save]
+quantmill experiment list
+```
+
+**示例**
+```bash
+quantmill experiment run examples/experiments/sample_demo.yaml   # 离线样本,秒出
+quantmill experiment run examples/experiments/cn_composite.yaml  # A股稳健组合
+quantmill experiment list
+```
+
+YAML 可配项:`name / market(cn/hk/us) / model(composite/ml) / horizon / k / cost / start / sample / recipe(因子配方) / init_train / step`。改 `recipe` 就能换因子组合:
+```yaml
+name: my-value-tilt
+market: cn
+model: composite
+recipe: { ey: 1, bp: 1, vol_20d: -1 }   # 正=越大越好,负=越小越好
+```
+存档内容:`config.yaml`(可复现)+ `result.json`(指标/DSR/IC)+ `equity.csv` + `ic.csv`。
+
+---
+
 ## scan —— 自选股「今日信号」面板
 
 ```

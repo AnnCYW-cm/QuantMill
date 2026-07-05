@@ -124,6 +124,32 @@ def cmd_cross(a):
                      cost=a.cost, long_short=a.long_short, model=a.model, sample=a.sample)
 
 
+def cmd_experiment(a):
+    from quantmill.workflow.experiment import (list_experiments, load_config,
+                                               run_experiment, save_experiment)
+    if a.exp_action == "list":
+        exps = list_experiments()
+        print("已存实验:" if exps else "还没有实验(先 run 一个)。")
+        for e in exps:
+            print("  ", e)
+        return
+    if not a.config:
+        raise SystemExit("run 需要指定实验 YAML 路径,如:quantmill experiment run examples/experiments/sample_demo.yaml")
+    cfg = load_config(a.config)
+    print(f"跑实验:{cfg['name']} · {cfg['market']} · {cfg['model']} · "
+          f"horizon={cfg['horizon']} k={cfg['k']}"
+          + ("  (内置样本,离线)" if cfg["sample"] else ""))
+    res = run_experiment(cfg)
+    s = res["strat"]
+    print("=" * 62)
+    print(f"策略年化 {s['年化']}%  超额 {s['超额年化']}%  夏普 {s['夏普']}  "
+          f"最大回撤 {s['最大回撤']}%  DSR {res['dsr']}  样本外{res['periods']}期  胜率{res['winrate']}%")
+    print("=" * 62)
+    if not a.no_save:
+        print(f"结果已存档 -> {save_experiment(res)}")
+    print("⚠️ 仅供研究,策略无经证实的 alpha,别拿真钱跟。")
+
+
 def cmd_docs_pdf(a):
     import os
     import subprocess
@@ -246,6 +272,12 @@ def main():
 
     sp = sub.add_parser("home", help="只刷新主页 | rebuild home page")
     sp.set_defaults(func=cmd_home)
+
+    sp = sub.add_parser("experiment", help="配置驱动的实验(YAML)run/list | config-driven experiments")
+    sp.add_argument("exp_action", choices=["run", "list"], help="run=跑实验 / list=看已存实验")
+    sp.add_argument("config", nargs="?", help="实验 YAML 路径(run 时必填)")
+    sp.add_argument("--no-save", action="store_true", help="不存档结果")
+    sp.set_defaults(func=cmd_experiment)
 
     sp = sub.add_parser("docs-pdf", help="生成带UML渲染的文档PDF | build docs PDF with UML")
     sp.add_argument("--no-open", action="store_true", help="不自动打开")
