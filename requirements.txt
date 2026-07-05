@@ -12,7 +12,6 @@ pandas==2.3.3
 numpy==2.0.2
 backtesting==0.6.5
 bokeh==3.4.3             # backtesting 画图依赖 | plotting dep
-matplotlib==3.9.4
 
 # --- 机器学习 machine learning ---
 scikit-learn==1.6.1

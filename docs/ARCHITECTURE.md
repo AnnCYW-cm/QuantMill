@@ -224,12 +224,12 @@ sequenceDiagram
 sequenceDiagram
     participant FE as 前端 loadQuotes
     participant API as /api/quotes
-    participant Q as _get_quotes
+    participant Q as market._get_quotes
     participant YF as yfinance
     participant Live as data.live (Alpaca)
 
     FE->>API: GET /api/quotes?market=us
-    API->>Q: _get_quotes(syms, "us")
+    API->>Q: market._get_quotes(syms, "us")
     Q->>YF: 下载日线(历史spark + 昨收)
     YF-->>Q: 收盘序列
     alt market==us 且有 .alpaca 密钥
@@ -249,7 +249,7 @@ sequenceDiagram
 sequenceDiagram
     participant FE as 前端 loadCross
     participant API as /api/cross
-    participant TH as 后台线程 _compute_cross_bg
+    participant TH as 后台线程 cross_view._compute_cross_bg
     participant Cross as cross.run
 
     FE->>API: GET /api/cross?market=cn&model=composite

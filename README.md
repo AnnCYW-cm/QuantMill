@@ -102,7 +102,7 @@ quantmill/
 ├── llm/             ⑤ 消息面情绪(Claude + 词典兜底,PIT)
 ├── execution/       ⑨ 券商抽象(纸面 + Alpaca)+ 执行引擎
 ├── report/          ⑫ 单只报告 / 信号面板 / 工作台首页
-├── web/             网页台(Flask 单文件 SPA)
+├── web/             网页台(Flask 蓝图:market/cross_view/research/trading + static 前端)
 ├── workflow/        编排:pipeline + cli(11 命令)
 └── watchlist.py     自选股加载
 tests/               82 个离线测试(含「无未来函数」锁)

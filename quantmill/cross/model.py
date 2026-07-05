@@ -40,9 +40,11 @@ def walk_forward_scores(panel: pd.DataFrame, feature_cols: list[str],
     """
     from lightgbm import LGBMRegressor
 
+    # deterministic=True + force_row_wise=True:同机同输入可复现(可信度平台的底线)
     params = params or dict(n_estimators=300, learning_rate=0.03, num_leaves=31,
                             min_child_samples=80, subsample=0.8, colsample_bytree=0.8,
-                            reg_lambda=1.0, random_state=0, n_jobs=-1, verbose=-1)
+                            reg_lambda=1.0, random_state=0, n_jobs=-1, verbose=-1,
+                            deterministic=True, force_row_wise=True)
 
     Xall = rank_normalize(panel, feature_cols)
     yall = _demean(panel, label)
