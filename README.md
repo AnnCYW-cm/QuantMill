@@ -1,5 +1,10 @@
 # 🏭 quantmill · 开源全链条 AI 量化平台
 
+[![CI](https://github.com/AnnCYW-cm/QuantMill/actions/workflows/ci.yml/badge.svg)](https://github.com/AnnCYW-cm/QuantMill/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+![Python](https://img.shields.io/badge/python-3.9%2B-blue.svg)
+![Tests](https://img.shields.io/badge/tests-86%20passing-brightgreen.svg)
+
 **一个会自己拆穿自己的诚实量化平台**:从多市场数据 → 因子 → 模型 → 组合 → 执行,每一步都内建**抗过拟合的可信度检验**。它不给你看漂亮回测就让你上头,而是当面告诉你"这个策略到底成不成立"。
 
 > An honest, full-chain open-source AI quant platform for **HK / US / A-share**.
