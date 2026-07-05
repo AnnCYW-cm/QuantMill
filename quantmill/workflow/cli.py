@@ -151,7 +151,7 @@ def cmd_experiment(a):
 
 
 def cmd_textfactor(a):
-    import os
+    from quantmill.llm.llm_client import backend
     from quantmill.llm.textfactor import combine, extract_signals
     if a.demo or not a.symbol:
         titles = ["公司季度业绩超预期,上调全年利润指引",
@@ -165,10 +165,10 @@ def cmd_textfactor(a):
         if not titles:
             print("没抓到新闻(免费源覆盖有限,尤其港/A股)。加 --demo 看离线演示。")
             return
-    prefer = bool(os.environ.get("ANTHROPIC_API_KEY"))
-    sigs = extract_signals(titles, prefer_llm=prefer)
+    be = backend()
+    sigs = extract_signals(titles, prefer_llm=True)
     print("=" * 74)
-    print(f"LLM 文本因子抽取 · 打分器 {'Claude' if prefer else '词典兜底(设 ANTHROPIC_API_KEY 用 Claude)'}")
+    print(f"LLM 文本因子抽取 · 后端 {be or '词典兜底(配 QUANTMILL_LLM_BASE_URL/MODEL/KEY 用 LLM)'}")
     print("=" * 74)
     print(f"{'展望':>6}{'指引':>6}{'风险':>6}{'因子':>7}  标题")
     for t, s in zip(titles, sigs):

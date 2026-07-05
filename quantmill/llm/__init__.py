@@ -13,6 +13,7 @@ llm —— 消息面/LLM 特征层 | News & LLM feature layer
   2. 情绪因子严格 point-in-time;且免费源无历史新闻,其 alpha 暂无法回测,须过可信度层才可信。
 """
 
+from quantmill.llm import llm_client
 from quantmill.llm.provider import AnthropicScorer, LexiconScorer, get_scorer
 from quantmill.llm.sentiment import news_sentiment, score_headlines, sentiment_feature
 from quantmill.llm.textfactor import (combine, cross_text_factor, extract_signals,

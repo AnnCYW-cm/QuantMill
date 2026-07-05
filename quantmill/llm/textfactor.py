@@ -21,12 +21,11 @@ from __future__ import annotations
 
 import json
 import math
-import os
 import re
 
 import pandas as pd
 
-_MODEL = "claude-haiku-4-5-20251001"
+from quantmill.llm import llm_client
 
 _PROMPT = """你是金融文本标注员。对每条中/英文标题,仅根据文本【陈述的内容】(不要预测股价、\
 不要用你的先验知识猜未来)输出三个字段:
@@ -63,24 +62,17 @@ def _lexicon_extract(texts: list[str]) -> list[dict]:
 
 
 def _llm_extract(texts: list[str]) -> list[dict] | None:
-    """调 Claude 做结构化抽取;失败返回 None(调用方退词典)。"""
-    key = os.environ.get("ANTHROPIC_API_KEY")
-    if not key:
+    """走可插拔 LLM(DeepSeek/Qwen/Gemini/本地Ollama/Claude,见 llm_client)做结构化抽取。
+    没配置或失败返回 None(调用方退词典)。"""
+    items = "\n".join(f"{i+1}. {t}" for i, t in enumerate(texts))
+    raw = llm_client.chat(_PROMPT.format(items=items), max_tokens=1024, temperature=0.0)
+    if not raw:
         return None
     try:
-        import anthropic
-        client = anthropic.Anthropic(api_key=key)
-        items = "\n".join(f"{i+1}. {t}" for i, t in enumerate(texts))
-        msg = client.messages.create(
-            model=_MODEL, max_tokens=1024, temperature=0,
-            messages=[{"role": "user", "content": _PROMPT.format(items=items)}])
-        raw = msg.content[0].text
         arr = json.loads(re.search(r"\[.*\]", raw, re.S).group(0))
-        out = []
-        for d in arr[:len(texts)]:
-            out.append({"outlook": float(d.get("outlook", 0)),
-                        "guidance": int(d.get("guidance", 0)),
-                        "risk": float(d.get("risk", 0))})
+        out = [{"outlook": float(d.get("outlook", 0)),
+                "guidance": int(d.get("guidance", 0)),
+                "risk": float(d.get("risk", 0))} for d in arr[:len(texts)]]
         return out if len(out) == len(texts) else None
     except Exception:  # noqa: BLE001
         return None

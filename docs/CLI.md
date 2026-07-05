@@ -75,8 +75,28 @@ quantmill textfactor [SYMBOL MARKET] [--demo] [--limit 10]
 ```
 - `--demo`:内置示例标题,离线看抽取效果。
 - 带 `SYMBOL MARKET`:抓真实新闻做抽取(你机器上跑)。
-- 有 `ANTHROPIC_API_KEY` 走 Claude Haiku,否则词典兜底。
 - ⚠️ 只抽取"文本说了什么"(分类),**不预测涨跌**(防 LLM 用记忆的未来作弊);免费源无历史新闻 → alpha 暂不能回测,须过可信度层。
+
+### 可插拔 LLM 后端(不锁死贵的 Claude)
+
+LLM 路径走 **OpenAI 兼容**接口,配 3 个环境变量即可换任意便宜/免费/本地方案,不改代码;不配则**词典兜底**(离线)。
+
+```bash
+# DeepSeek(便宜、中文强)
+export QUANTMILL_LLM_BASE_URL=https://api.deepseek.com/v1
+export QUANTMILL_LLM_MODEL=deepseek-chat
+export QUANTMILL_LLM_KEY=sk-...
+
+# 通义千问 qwen-turbo(全场最便宜、中文最准、送免费额度)
+export QUANTMILL_LLM_BASE_URL=https://dashscope.aliyuncs.com/compatible-mode/v1
+export QUANTMILL_LLM_MODEL=qwen-turbo
+
+# 本地 Ollama(零成本、隐私,先 `ollama run qwen3:4b`)
+export QUANTMILL_LLM_BASE_URL=http://localhost:11434/v1
+export QUANTMILL_LLM_MODEL=qwen3:4b
+export QUANTMILL_LLM_KEY=ollama
+```
+也兼容 `OPENAI_BASE_URL`/`OPENAI_API_KEY`;或退回 `ANTHROPIC_API_KEY` 走 Claude。CLI 会显示当前后端(如 `后端 api.deepseek.com(deepseek-chat)`)。
 
 代码里 `cross_text_factor(news_by_symbol, panel_index)` 直接产出 (date, symbol) 因子,可喂 `cross` 的横截面 IC / 可信度检验。
 

@@ -3,7 +3,7 @@
 [![CI](https://github.com/AnnCYW-cm/QuantMill/actions/workflows/ci.yml/badge.svg)](https://github.com/AnnCYW-cm/QuantMill/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 ![Python](https://img.shields.io/badge/python-3.9%2B-blue.svg)
-![Tests](https://img.shields.io/badge/tests-98%20passing-brightgreen.svg)
+![Tests](https://img.shields.io/badge/tests-102%20passing-brightgreen.svg)
 ![Coverage](https://img.shields.io/badge/coverage-42%25-yellow.svg)
 
 **一个会自己拆穿自己的诚实量化平台**:从多市场数据 → 因子 → 模型 → 组合 → 执行,每一步都内建**抗过拟合的可信度检验**。它不给你看漂亮回测就让你上头,而是当面告诉你"这个策略到底成不成立"。
@@ -116,7 +116,7 @@ quantmill/
 ├── web/             网页台(Flask 蓝图:market/cross_view/research/trading + static 前端)
 ├── workflow/        编排:pipeline + cli(14 命令)
 └── watchlist.py     自选股加载
-tests/               98 个离线测试(含「无未来函数」锁)
+tests/               102 个离线测试(含「无未来函数」锁)
 docs/                产品/架构/UML/研究纪要/行业调研
 ```
 
@@ -149,7 +149,7 @@ docs/                产品/架构/UML/研究纪要/行业调研
 ## 开发 / Dev
 
 ```bash
-./.venv/bin/python -m pytest -q        # 98 个离线测试
+./.venv/bin/python -m pytest -q        # 102 个离线测试
 bash docs/build_pdf.sh                 # 生成带 UML 渲染的文档 PDF -> docs/quantmill-docs.pdf
 ```
 
