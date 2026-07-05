@@ -115,14 +115,14 @@ def cmd_web(a):
 def cmd_cross(a):
     from quantmill.cross.run import run_ic, run_backtest, run_validate, run_survivorship
     if a.action == "ic":
-        run_ic(market=a.market, quick=a.quick, horizon=a.horizon)
+        run_ic(market=a.market, quick=a.quick, horizon=a.horizon, sample=a.sample)
     elif a.action == "validate":
         run_validate(model=a.model, markets=("cn", "hk"), horizon=a.horizon, cost=a.cost)
     elif a.action == "survivorship":
         run_survivorship(market=a.market, model=a.model, k=a.topk, horizon=a.horizon, cost=a.cost)
     else:  # backtest
         run_backtest(market=a.market, quick=a.quick, k=a.topk, horizon=a.horizon,
-                     cost=a.cost, long_short=a.long_short, model=a.model)
+                     cost=a.cost, long_short=a.long_short, model=a.model, sample=a.sample)
 
 
 def cmd_docs_pdf(a):
@@ -229,6 +229,8 @@ def main():
     sp.add_argument("--model", default="composite", choices=["composite", "ml"],
                     help="composite=稳健因子组合(默认,跨市场验证过)/ ml=LightGBM排名")
     sp.add_argument("--market", default="cn", choices=["cn", "hk", "us"])
+    sp.add_argument("--sample", action="store_true",
+                    help="用随包内置小样本(20只×300天,离线秒出,装上即试)")
     sp.add_argument("--quick", action="store_true", help="小股票池快速跑(10只)")
     sp.add_argument("-k", "--topk", type=int, default=20, help="持仓只数")
     sp.add_argument("--cost", type=float, default=0.0015, help="单边成本(默认0.15%)")

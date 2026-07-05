@@ -27,10 +27,24 @@ from quantmill.cross.backtest import topk_backtest
 DEFAULT_START = "2023-01-01"     # 与百度估值「近三年」对齐 | aligned with valuation history
 
 
+def load_sample_panel() -> pd.DataFrame:
+    """随包发布的小样本面板(20只A股×300天),装上即试、无需联网。
+    Bundled tiny sample panel (20 A-shares × 300 days) — works offline out of the box."""
+    from importlib.resources import files
+    res = files("quantmill.data").joinpath("sample", "panel_sample.csv.gz")
+    with res.open("rb") as f:
+        panel = pd.read_csv(f, index_col=[0, 1], parse_dates=[0], compression="gzip")
+    panel.index.names = ["date", "symbol"]
+    return panel
+
+
 def get_panel(market: str = "cn", quick: bool = False, n: int | None = None,
-              start: str | None = None, horizon: int = 20,
-              refresh: bool = False, verbose: bool = True) -> pd.DataFrame:
-    """建/取横截面面板;全池会缓存到 data/panel_<market>.pkl。"""
+              start: str | None = None, horizon: int = 20, refresh: bool = False,
+              verbose: bool = True, sample: bool = False) -> pd.DataFrame:
+    """建/取横截面面板;全池会缓存到 data/panel_<market>.pkl。sample=True 用随包小样本(离线)。"""
+    if sample:
+        logger.info("[cross] 使用内置样本面板(20只×300天,离线)。真实全池请去掉 --sample。")
+        return load_sample_panel()
     start = start or DEFAULT_START
     cache = os.path.join(config.DATA_DIR, f"panel_{market}.pkl")
     full = not quick and n is None
@@ -82,6 +96,10 @@ def run_backtest(market: str = "cn", quick: bool = False, k: int = 20,
 
     panel = get_panel(market=market, quick=quick, horizon=horizon, **kw)
     cols = factor_columns(panel)
+    n_uni = panel.index.get_level_values(1).nunique()
+    n_dates = panel.index.get_level_values(0).nunique()
+    k = min(k, max(2, n_uni // 3))          # 小股票池自动收窄持仓,避免 top-k≈全池
+    init_train = min(init_train, max(60, n_dates // 2))   # 小样本收窄训练窗
     score = _score_for(panel, cols, model, horizon, init_train, step)
     res = topk_backtest(panel, score, k=k, horizon=horizon,
                         cost=cost, long_short=long_short)

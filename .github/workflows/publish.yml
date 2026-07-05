@@ -1,0 +1,46 @@
+name: Publish to PyPI
+
+# 打了 v* 标签就自动构建并发布到 PyPI。
+# 用 PyPI「Trusted Publishing」(OIDC,无需 token):
+#   1. 先在 https://pypi.org 建项目 quantmill(或首次用 TestPyPI 演练)
+#   2. PyPI 项目 → Settings → Publishing → 添加 Trusted Publisher:
+#        Owner=AnnCYW-cm  Repo=QuantMill  Workflow=publish.yml  Environment=pypi
+#   3. 打标签推送即可:git tag v0.1.0 && git push origin v0.1.0
+
+on:
+  push:
+    tags: ["v*"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Build sdist + wheel
+        run: |
+          python -m pip install --upgrade pip build
+          python -m build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write        # Trusted Publishing 需要 OIDC
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        # 若用 token 而非 Trusted Publishing,取消下面两行并在仓库配 PYPI_API_TOKEN
+        # with:
+        #   password: ${{ secrets.PYPI_API_TOKEN }}

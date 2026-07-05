@@ -39,7 +39,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest>=8.0"]
+dev = ["pytest>=8.0", "pytest-cov>=4.0"]
 llm = ["anthropic>=0.40"]       # LLM 消息面情绪(需 ANTHROPIC_API_KEY)| LLM news sentiment
 broker = ["alpaca-py>=0.30"]    # 接 Alpaca 美股(需 API 密钥)| Alpaca US broker
 web = ["flask>=3.0"]            # 网页仪表盘 | web dashboard
@@ -66,7 +66,15 @@ ignore = ["E501"]   # 行长交给 line-length,中文注释常超
 include = ["quantmill*"]
 
 [tool.setuptools.package-data]
-"quantmill.web" = ["static/*"]     # 网页前端(index.html/app.css/app.js)随包发布
+"quantmill.web" = ["static/*"]         # 网页前端(index.html/app.css/app.js)
+"quantmill.data" = ["sample/*"]        # 内置样本面板(装上即试,离线)
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+
+[tool.coverage.run]
+source = ["quantmill"]
+omit = ["quantmill/web/app.py", "*/__main__.py"]   # 装配层/脚本自测不计
+
+[tool.coverage.report]
+exclude_lines = ["pragma: no cover", "if __name__ == .__main__.:", "raise NotImplementedError"]

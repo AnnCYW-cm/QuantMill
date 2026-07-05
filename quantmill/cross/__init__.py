@@ -19,7 +19,8 @@ from quantmill.cross.ic import daily_ic, ic_summary, ic_table
 from quantmill.cross.model import rank_normalize, walk_forward_scores
 from quantmill.cross.backtest import topk_backtest
 from quantmill.cross.composite import composite_score, ROBUST_RECIPE
-from quantmill.cross.run import get_panel, run_ic, run_backtest, run_validate, run_survivorship
+from quantmill.cross.run import (get_panel, load_sample_panel, run_ic, run_backtest,
+                                 run_validate, run_survivorship)
 
 __all__ = [
     "csi300", "sample", "universe",
@@ -27,5 +28,6 @@ __all__ = [
     "daily_ic", "ic_summary", "ic_table",
     "rank_normalize", "walk_forward_scores", "topk_backtest",
     "composite_score", "ROBUST_RECIPE", "csi300_pit",
-    "get_panel", "run_ic", "run_backtest", "run_validate", "run_survivorship",
+    "get_panel", "load_sample_panel",
+    "run_ic", "run_backtest", "run_validate", "run_survivorship",
 ]

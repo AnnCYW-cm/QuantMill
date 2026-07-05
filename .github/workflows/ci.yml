@@ -30,8 +30,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install -e ".[dev,web]"     # web=flask,test_web 需要;llm/broker 懒加载不需装
 
-      - name: Run tests (offline, synthetic data)
-        run: pytest -q
+      - name: Run tests + coverage (offline, synthetic data)
+        run: pytest -q --cov=quantmill --cov-report=term-missing
 
   lint:
     runs-on: ubuntu-latest

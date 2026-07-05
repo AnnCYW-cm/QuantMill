@@ -27,3 +27,8 @@ docs/*.pdf
 
 # node
 node_modules/
+
+# 覆盖率产物 | coverage artifacts
+.coverage
+coverage.xml
+htmlcov/

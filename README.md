@@ -3,7 +3,8 @@
 [![CI](https://github.com/AnnCYW-cm/QuantMill/actions/workflows/ci.yml/badge.svg)](https://github.com/AnnCYW-cm/QuantMill/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 ![Python](https://img.shields.io/badge/python-3.9%2B-blue.svg)
-![Tests](https://img.shields.io/badge/tests-86%20passing-brightgreen.svg)
+![Tests](https://img.shields.io/badge/tests-89%20passing-brightgreen.svg)
+![Coverage](https://img.shields.io/badge/coverage-42%25-yellow.svg)
 
 **一个会自己拆穿自己的诚实量化平台**:从多市场数据 → 因子 → 模型 → 组合 → 执行,每一步都内建**抗过拟合的可信度检验**。它不给你看漂亮回测就让你上头,而是当面告诉你"这个策略到底成不成立"。
 
@@ -61,10 +62,14 @@ brew install libomp                        # macOS 上 LightGBM 需要 OpenMP
 ## 快速开始 / Quickstart
 
 ```bash
+# —— 装上即试(离线,内置样本,秒出)——
+quantmill cross backtest --sample   # 用随包小样本跑通选股回测,无需联网
+quantmill cross ic --sample         # 内置样本上的横截面因子 IC
+
 # —— 网页台(推荐)——
 quantmill web                       # 起本地网页台,浏览器自动打开
 
-# —— 横截面选股(今天的主线)——
+# —— 横截面选股(真实全池,首次联网拉数据)——
 quantmill cross ic --market cn      # 全市场横截面因子 IC 排行
 quantmill cross backtest --market cn --model composite   # 稳健组合回测(默认)
 quantmill cross validate            # 跨市场验证(A股 + 港股都为正才算稳健)
