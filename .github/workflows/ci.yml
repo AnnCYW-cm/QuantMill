@@ -16,6 +16,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: System deps (OpenMP runtime for LightGBM)
+        run: sudo apt-get update && sudo apt-get install -y libgomp1
+
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5
         with:
