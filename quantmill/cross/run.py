@@ -7,10 +7,15 @@ run.py —— 横截面流水线编排 | cross-sectional pipeline orchestration
 """
 from __future__ import annotations
 
+import logging
 import os
+import time
 
 import numpy as np
 import pandas as pd
+
+logger = logging.getLogger(__name__)
+_PANEL_STALE_DAYS = 7          # 面板缓存超过这么多天就提醒可能陈旧 | staleness warning threshold
 
 from quantmill import config
 from quantmill.cross.universe import universe
@@ -30,17 +35,18 @@ def get_panel(market: str = "cn", quick: bool = False, n: int | None = None,
     cache = os.path.join(config.DATA_DIR, f"panel_{market}.pkl")
     full = not quick and n is None
     if full and not refresh and os.path.exists(cache):
-        if verbose:
-            print(f"[cross] 复用缓存面板 {cache}")
+        age_days = (time.time() - os.path.getmtime(cache)) / 86400
+        if age_days > _PANEL_STALE_DAYS:
+            logger.warning(f"[cross] ⚠️ 面板缓存已 {age_days:.0f} 天,可能陈旧;"
+                           f"加 --refresh(或删 {os.path.basename(cache)})重建。")
+        logger.info(f"[cross] 复用缓存面板 {cache}")
         return pd.read_pickle(cache)
     syms = universe(market, n=(10 if quick else n))
-    if verbose:
-        print(f"[cross] {market} 股票池 {len(syms)} 只,构建面板(start={start}, horizon={horizon})…")
+    logger.info(f"[cross] {market} 股票池 {len(syms)} 只,构建面板(start={start}, horizon={horizon})…")
     panel = build_panel(syms, market=market, start=start, horizon=horizon, verbose=verbose)
     if full:
         panel.to_pickle(cache)
-        if verbose:
-            print(f"[cross] 面板已缓存 -> {cache}")
+        logger.info(f"[cross] 面板已缓存 -> {cache}")
     return panel
 
 

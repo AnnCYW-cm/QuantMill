@@ -16,10 +16,13 @@ one stock on one day: [technical factors + fundamental factors + label].
 """
 from __future__ import annotations
 
+import logging
 import os
 
 import numpy as np
 import pandas as pd
+
+logger = logging.getLogger(__name__)
 
 from quantmill import config
 from quantmill.data import get_ohlcv
@@ -103,11 +106,11 @@ def build_panel(symbols, market: str = "cn", start=None, end=None, horizon: int 
         frames.append(feats)
         ok += 1
         if verbose:
-            print(f"  ✓ {sym}  ({len(df)} 天)")
+            logger.info(f"  ✓ {sym}  ({len(df)} 天)")
     if not frames:
         raise RuntimeError("面板为空:所有标的都拉取失败(检查网络/代码)。")
     if verbose:
-        print(f"[panel] 成功 {ok} 只 / 跳过 {skip} 只")
+        logger.info(f"[panel] 成功 {ok} 只 / 跳过 {skip} 只")
     panel = pd.concat(frames, ignore_index=True)
     panel = panel.set_index(["date", "symbol"]).sort_index()
     return panel

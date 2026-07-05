@@ -155,6 +155,9 @@ def cmd_factors(a):
 
 
 def main():
+    import logging
+    # CLI 把库内 logging 打到 stdout(库被 import 时默认静默,不污染调用方)
+    logging.basicConfig(level=logging.INFO, format="%(message)s")
     p = argparse.ArgumentParser(
         prog="quantmill",
         description="quantmill 量化研究工作台 | quantmill research workbench")

@@ -14,8 +14,12 @@ model.py —— 横截面排名模型 | cross-sectional ranking model
 """
 from __future__ import annotations
 
+import logging
+
 import numpy as np
 import pandas as pd
+
+logger = logging.getLogger(__name__)
 
 
 def rank_normalize(panel: pd.DataFrame, cols: list[str]) -> pd.DataFrame:
@@ -73,7 +77,7 @@ def walk_forward_scores(panel: pd.DataFrame, feature_cols: list[str],
         out.update(pred.to_dict())
         i += step
 
-    print(f"[walk-forward] 重训 {n_fit} 次,样本外打分 {len(out)} 条")
+    logger.info(f"[walk-forward] 重训 {n_fit} 次,样本外打分 {len(out)} 条")
     s = pd.Series(out, dtype=float).rename("score")
     if len(s):                                    # 恢复 (date, symbol) 索引名
         s.index = pd.MultiIndex.from_tuples(s.index, names=["date", "symbol"])

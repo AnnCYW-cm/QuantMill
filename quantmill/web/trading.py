@@ -18,6 +18,7 @@ from quantmill import config
 from quantmill.watchlist import load_watchlist
 from quantmill.web.market import _get_quotes, _get_signals
 from quantmill.web.state import _BCACHE, _CCACHE, _QCACHE, _SCACHE, _SPROG
+from quantmill.web.util import get_market
 
 bp = Blueprint("trading", __name__)
 
@@ -182,7 +183,7 @@ def api_paper():
 
 @bp.route("/api/rebalance")
 def api_rebalance():
-    return jsonify(_paper_rebalance(request.args.get("market", "us"),
+    return jsonify(_paper_rebalance(get_market(),
                                     request.args.get("method", "topk")))
 
 
@@ -193,7 +194,7 @@ def api_overview():
 
 @bp.route("/api/backtest")
 def api_backtest():
-    m = request.args.get("market", "us")
+    m = get_market()
     if request.args.get("refresh"):
         _BCACHE.pop((m, request.args.get("method", "topk")), None)
     return jsonify(_get_backtest(m, request.args.get("method", "topk")))
@@ -201,15 +202,15 @@ def api_backtest():
 
 @bp.route("/api/export")
 def api_export():
-    m = request.args.get("market", "us")
+    m = get_market()
     return Response(_build_snapshot(m), mimetype="text/html", headers={
         "Content-Disposition": f'attachment; filename="quantmill_snapshot_{m}.html"'})
 
 
-@bp.route("/api/watchlist")
+@bp.route("/api/watchlist", methods=["GET", "POST"])
 def api_watchlist():
-    m = request.args.get("market", "us")
-    add, remove = request.args.get("add"), request.args.get("remove")
-    if add or remove:
-        return jsonify({"symbols": _edit_watchlist(m, add, remove)})
+    m = get_market()
+    if request.method == "POST":                   # 增删走 POST(带副作用),GET 只读
+        return jsonify({"symbols": _edit_watchlist(
+            m, request.form.get("add"), request.form.get("remove"))})
     return jsonify({"symbols": load_watchlist().get(m, [])})

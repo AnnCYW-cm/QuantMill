@@ -11,8 +11,10 @@ import threading
 from flask import Blueprint, jsonify, request
 
 from quantmill.web.state import _XCACHE, _XPROG
+from quantmill.web.util import get_market
 
 bp = Blueprint("cross", __name__)
+_LOCK = threading.Lock()   # 保护"检查是否在跑→启动线程",防并发重复启动
 
 
 def _compute_cross_bg(market, model="composite"):
@@ -69,17 +71,20 @@ def _compute_cross_bg(market, model="composite"):
 @bp.route("/api/cross")
 def api_cross():
     """横截面选股:算好返回;没算就后台启动并返回进度(前端轮询)。model=composite/ml。"""
-    m = request.args.get("market", "cn")
+    m = get_market("cn")
     model = request.args.get("model", "composite")
+    if model not in ("composite", "ml"):
+        model = "composite"
     key = f"{m}:{model}"
     if request.args.get("refresh"):
         _XCACHE.pop(key, None)
         _XPROG.pop(key, None)
     if key in _XCACHE:
         return jsonify({"status": "ready", "data": _XCACHE[key]})
-    pr = _XPROG.get(key)
-    if not pr or not pr["running"]:
-        threading.Thread(target=_compute_cross_bg, args=(m, model), daemon=True).start()
-        pr = {"running": True, "stage": "启动中…"}
-        _XPROG[key] = pr
+    with _LOCK:                                    # 原子:检查+启动,避免并发重复起线程
+        pr = _XPROG.get(key)
+        if not pr or not pr["running"]:
+            pr = {"running": True, "stage": "启动中…"}
+            _XPROG[key] = pr
+            threading.Thread(target=_compute_cross_bg, args=(m, model), daemon=True).start()
     return jsonify({"status": "computing", "stage": pr.get("stage", "计算中…")})

@@ -11,6 +11,7 @@ from flask import Blueprint, jsonify, request
 from quantmill import config
 from quantmill.watchlist import load_watchlist
 from quantmill.web.state import _CCACHE
+from quantmill.web.util import get_market, get_symbol
 
 bp = Blueprint("research", __name__)
 
@@ -63,12 +64,12 @@ def _get_news(symbol, market):
 
 @bp.route("/api/chart")
 def api_chart():
-    return jsonify(_get_chart(request.args.get("symbol"), request.args.get("market", "us")))
+    return jsonify(_get_chart(get_symbol(), get_market()))
 
 
 @bp.route("/api/credibility")
 def api_credibility():
-    m = request.args.get("market", "us")
+    m = get_market()
     if request.args.get("refresh"):
         _CCACHE.pop(m, None)
     return jsonify(_get_credibility(m))
@@ -76,11 +77,9 @@ def api_credibility():
 
 @bp.route("/api/factors")
 def api_factors():
-    return jsonify(_get_factors(request.args.get("symbol"),
-                                request.args.get("market", "us")))
+    return jsonify(_get_factors(get_symbol(), get_market()))
 
 
 @bp.route("/api/news")
 def api_news():
-    return jsonify(_get_news(request.args.get("symbol"),
-                             request.args.get("market", "us")))
+    return jsonify(_get_news(get_symbol(), get_market()))

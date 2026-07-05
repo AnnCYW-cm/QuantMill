@@ -74,10 +74,12 @@ async function loadSignals(refresh){sigLoading=true;signals=null;sigProg={done:0
     else{sigProg={done:d.done||0,total:d.total||0};renderGrid();setTimeout(poll,2500);}}
     catch(e){sigLoading=false;renderGrid();}};
   poll();}
+const _wlPost=(m,body)=>fetch(`/api/watchlist?market=${m}`,{method:"POST",
+  headers:{"Content-Type":"application/x-www-form-urlencoded"},body});
 async function wlAdd(){const v=$("wl-in").value.trim();if(!v)return;$("wl-in").value="";
-  try{await fetch(`/api/watchlist?market=${market}&add=${encodeURIComponent(v)}`);toast("已加入自选 "+v.toUpperCase());
+  try{await _wlPost(market,"add="+encodeURIComponent(v));toast("已加入自选 "+v.toUpperCase());
     quotes={};signals=null;loadQuotes();loadSignals();}catch(e){toast("添加失败");}}
-async function wlRemove(s){try{await fetch(`/api/watchlist?market=${market}&remove=${encodeURIComponent(s)}`);toast("已移除 "+s);
+async function wlRemove(s){try{await _wlPost(market,"remove="+encodeURIComponent(s));toast("已移除 "+s);
     quotes={};signals=null;loadQuotes();loadSignals();}catch(e){}}
 async function loadPaperData(){try{window._paper=await (await fetch("/api/paper")).json();}catch(e){}renderGrid();}
 async function rebalance(btn,msg,method){const b=$(btn);b.disabled=true;$(msg).textContent="下单中(首次要先算信号)…";

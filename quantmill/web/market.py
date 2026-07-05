@@ -14,8 +14,10 @@ from flask import Blueprint, jsonify, request
 from quantmill import config
 from quantmill.watchlist import load_watchlist
 from quantmill.web.state import _QCACHE, _QSRC, _SCACHE, _SPROG
+from quantmill.web.util import get_market
 
 bp = Blueprint("market", __name__)
+_SIG_LOCK = threading.Lock()   # 保护"检查是否在跑→启动线程"这段,防并发重复启动
 
 
 def _yahoo(sym, market):
@@ -104,7 +106,7 @@ def _compute_signals_bg(symbols, market, horizon):
 
 @bp.route("/api/quotes")
 def api_quotes():
-    m = request.args.get("market", "us")
+    m = get_market()
     syms = load_watchlist().get(m, [])
     q = _get_quotes(syms, m)
     return jsonify({"market": m, "symbols": syms, "quotes": q,
@@ -115,17 +117,18 @@ def api_quotes():
 @bp.route("/api/signals")
 def api_signals():
     """信号:算好就返回;没算就后台启动并返回进度(前端轮询)。| ready or computing+progress."""
-    m = request.args.get("market", "us")
+    m = get_market()
     if request.args.get("refresh"):
         _SCACHE.pop(m, None)
         _SPROG.pop(m, None)
     if m in _SCACHE:
         return jsonify({"status": "ready", "signals": _SCACHE[m]})
-    pr = _SPROG.get(m)
-    if not pr or not pr["running"]:
-        syms = load_watchlist().get(m, [])
-        threading.Thread(target=_compute_signals_bg, args=(syms, m, config.HORIZON),
-                         daemon=True).start()
-        pr = {"done": 0, "total": len(syms), "running": True}
-        _SPROG[m] = pr
+    with _SIG_LOCK:                                # 原子:检查+启动,避免并发重复起线程
+        pr = _SPROG.get(m)
+        if not pr or not pr["running"]:
+            syms = load_watchlist().get(m, [])
+            pr = {"done": 0, "total": len(syms), "running": True}
+            _SPROG[m] = pr
+            threading.Thread(target=_compute_signals_bg, args=(syms, m, config.HORIZON),
+                             daemon=True).start()
     return jsonify({"status": "computing", "done": pr["done"], "total": pr["total"]})

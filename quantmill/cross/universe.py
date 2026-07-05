@@ -11,9 +11,12 @@ We use *current* constituents (cached); this carries survivorship bias.
 from __future__ import annotations
 
 import json
+import logging
 import os
 
 from quantmill import config
+
+logger = logging.getLogger(__name__)
 
 _CACHE = os.path.join(config.DATA_DIR, "csi300_cons.json")
 
@@ -42,7 +45,7 @@ def csi300(refresh: bool = False) -> list[str]:
                   open(_CACHE, "w"), ensure_ascii=False)
         return syms
     except Exception as e:
-        print(f"[universe] 成分股拉取失败,用静态兜底池:{type(e).__name__}")
+        logger.warning(f"[universe] 成分股拉取失败,用静态兜底池:{type(e).__name__}")
         return _FALLBACK
 
 
@@ -71,7 +74,7 @@ def csi300_pit(asof: str = "2023-01-01", refresh: bool = False) -> list[str]:
         json.dump({"symbols": syms, "asof": asof}, open(cache, "w"), ensure_ascii=False)
         return syms
     except Exception as e:
-        print(f"[universe] PIT 成分股拉取失败:{type(e).__name__}")
+        logger.warning(f"[universe] PIT 成分股拉取失败:{type(e).__name__}")
         return []
 
 

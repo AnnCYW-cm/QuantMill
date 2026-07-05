@@ -17,12 +17,16 @@ File format (one per line: market code; lines starting with # are comments):
 
 from __future__ import annotations
 
+import logging
+
 import os
 
 from quantmill import config
 from quantmill.credibility.validate import DEFAULT_UNIVERSE
 
 # 清单文件放项目根目录 | watchlist file lives at the project root
+logger = logging.getLogger(__name__)
+
 WATCHLIST_PATH = config.WATCHLIST_PATH
 
 _VALID_MARKETS = ("us", "hk", "cn")
@@ -58,8 +62,8 @@ def load_watchlist(path: str | None = None, create_if_missing: bool = True) -> d
     if not os.path.exists(path):
         if create_if_missing:
             _write_default(path)
-            print(f"[清单] 未找到,已生成默认自选股清单 -> {os.path.relpath(path)}")
-            print("       想改关注的票,直接编辑这个文件即可。")
+            logger.info(f"[清单] 未找到,已生成默认自选股清单 -> {os.path.relpath(path)}")
+            logger.info("       想改关注的票,直接编辑这个文件即可。")
         else:
             raise FileNotFoundError(path)
 
@@ -72,19 +76,19 @@ def load_watchlist(path: str | None = None, create_if_missing: bool = True) -> d
             # 支持 "us AAPL" 或 "us:AAPL" 两种写法 | accept "us AAPL" or "us:AAPL"
             parts = line.replace(":", " ").split()
             if len(parts) != 2:
-                print(f"[清单] 第 {lineno} 行格式不对,跳过:{line!r}(应为 '市场 代码')")
+                logger.warning(f"[清单] 第 {lineno} 行格式不对,跳过:{line!r}(应为 '市场 代码')")
                 continue
             market, code = parts[0].lower(), parts[1]
             if market not in _VALID_MARKETS:
-                print(f"[清单] 第 {lineno} 行市场无效 {market!r},跳过(应为 us/hk/cn)")
+                logger.warning(f"[清单] 第 {lineno} 行市场无效 {market!r},跳过(应为 us/hk/cn)")
                 continue
             watchlist.setdefault(market, []).append(code)
 
     if not watchlist:
-        print("[清单] 清单是空的,回退到默认股票池。")
+        logger.warning("[清单] 清单是空的,回退到默认股票池。")
         return DEFAULT_UNIVERSE
     total = sum(len(v) for v in watchlist.values())
-    print(f"[清单] 已加载 {total} 只:" +
+    logger.info(f"[清单] 已加载 {total} 只:" +
           "  ".join(f"{m}×{len(s)}" for m, s in watchlist.items()))
     return watchlist
 
