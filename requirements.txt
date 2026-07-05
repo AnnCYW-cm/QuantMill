@@ -4,7 +4,7 @@
 #    日常安装推荐:pip install -e ".[dev]"    精确复现:pip install -r requirements.txt
 
 # --- 数据 data ---
-yfinance==1.2.0          # 美股/港股 US & HK
+yfinance==1.5.1          # 美股/港股 US & HK
 akshare==1.18.64         # A股/港股 A-share & HK
 
 # --- 计算 & 回测 compute & backtest ---
