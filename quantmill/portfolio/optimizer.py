@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 optimizer.py —— 组合配置器:信号截面 → 权重 | Portfolio allocators: signals → weights
 =====================================================================================
@@ -86,7 +85,7 @@ def inverse_vol(signals, ret_window=None, k=None, max_weight=None) -> pd.Series:
 
 def min_variance(signals, ret_window=None, k=None, max_weight=None) -> pd.Series:
     """top-k 内最小方差组合(用收缩协方差)。| Min-variance within top-k (shrinkage cov)."""
-    from quantmill.portfolio.risk import shrinkage_cov, min_variance_weights
+    from quantmill.portfolio.risk import min_variance_weights, shrinkage_cov
 
     picks = _top_k(signals, k)
     w = pd.Series(0.0, index=signals.index)

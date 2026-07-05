@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 backtest.py —— 把模型信号接回 backtesting.py
 backtest.py —— Feed model signals back into backtesting.py

@@ -1,0 +1,16 @@
+version: 2
+updates:
+  # Python 依赖(pyproject/requirements)| Python deps
+  - package-ecosystem: pip
+    directory: "/"
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    labels: ["dependencies"]
+
+  # GitHub Actions 版本更新 | keep workflow actions current
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+    labels: ["dependencies", "ci"]

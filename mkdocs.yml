@@ -1,0 +1,44 @@
+site_name: QuantMill
+site_description: 开源全链条 AI 量化平台 · 诚实优先 | Honest full-chain open-source AI quant platform
+site_url: https://AnnCYW-cm.github.io/QuantMill/
+repo_url: https://github.com/AnnCYW-cm/QuantMill
+repo_name: AnnCYW-cm/QuantMill
+docs_dir: docs
+
+theme:
+  name: material
+  language: zh
+  palette:
+    - scheme: default
+      primary: teal
+      accent: teal
+      toggle: { icon: material/weather-night, name: 切换深色 }
+    - scheme: slate
+      primary: teal
+      accent: teal
+      toggle: { icon: material/weather-sunny, name: 切换浅色 }
+  features:
+    - navigation.sections
+    - navigation.top
+    - content.code.copy
+    - search.highlight
+
+nav:
+  - 首页 Home: index.md
+  - 架构与 UML: ARCHITECTURE.md
+  - 研究纪要 Research: RESEARCH_NOTES.md
+  - CLI 参考: CLI.md
+  - 产品设计: PRODUCT_DESIGN.md
+  - 交付清单 Status: STATUS.md
+  - 行业调研 Landscape: ai-quant-landscape.md
+
+markdown_extensions:
+  - admonition
+  - tables
+  - toc: { permalink: true }
+  - pymdownx.highlight
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format

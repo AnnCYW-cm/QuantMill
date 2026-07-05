@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 sentiment.py —— 新闻 → 情绪 → PIT 特征 | News → sentiment → point-in-time feature
 =================================================================================

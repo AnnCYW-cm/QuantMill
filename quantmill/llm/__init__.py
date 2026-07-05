@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 llm —— 消息面/LLM 特征层 | News & LLM feature layer
 ====================================================
@@ -13,8 +12,8 @@ llm —— 消息面/LLM 特征层 | News & LLM feature layer
   2. 情绪因子严格 point-in-time;且免费源无历史新闻,其 alpha 暂无法回测,须过可信度层才可信。
 """
 
-from quantmill.llm.provider import get_scorer, LexiconScorer, AnthropicScorer
-from quantmill.llm.sentiment import score_headlines, news_sentiment, sentiment_feature
+from quantmill.llm.provider import AnthropicScorer, LexiconScorer, get_scorer
+from quantmill.llm.sentiment import news_sentiment, score_headlines, sentiment_feature
 
 __all__ = [
     "get_scorer", "LexiconScorer", "AnthropicScorer",

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 research.py —— 个股研究 | chart / factors / news / credibility blueprint
 =====================================================================

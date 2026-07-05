@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 execution —— 执行层 | Execution layer
 ======================================
@@ -10,8 +9,8 @@ execution —— 执行层 | Execution layer
 ⚠️ 真券商(Alpaca/QMT)需账号+密钥,AlpacaBroker 留桩;当前 PaperBroker 本地模拟。
 """
 
-from quantmill.execution.broker import Broker, PaperBroker, AlpacaBroker
-from quantmill.execution.engine import paper_run, paper_status, paper_reset
+from quantmill.execution.broker import AlpacaBroker, Broker, PaperBroker
+from quantmill.execution.engine import paper_reset, paper_run, paper_status
 
 __all__ = [
     "Broker", "PaperBroker", "AlpacaBroker",

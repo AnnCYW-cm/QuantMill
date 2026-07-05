@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 run.py —— 横截面流水线编排 | cross-sectional pipeline orchestration
 =====================================================================
@@ -11,18 +10,17 @@ import logging
 import os
 import time
 
-import numpy as np
 import pandas as pd
 
 logger = logging.getLogger(__name__)
 _PANEL_STALE_DAYS = 7          # 面板缓存超过这么多天就提醒可能陈旧 | staleness warning threshold
 
 from quantmill import config
-from quantmill.cross.universe import universe
-from quantmill.cross.panel import build_panel, factor_columns
+from quantmill.cross.backtest import topk_backtest
 from quantmill.cross.ic import ic_table
 from quantmill.cross.model import walk_forward_scores
-from quantmill.cross.backtest import topk_backtest
+from quantmill.cross.panel import build_panel, factor_columns
+from quantmill.cross.universe import universe
 
 DEFAULT_START = "2023-01-01"     # 与百度估值「近三年」对齐 | aligned with valuation history
 
@@ -123,7 +121,7 @@ def run_backtest(market: str = "cn", quick: bool = False, k: int = 20,
             trials.append(sharpe(r["equity"]["long"]))
         dsr = deflated_sharpe_ratio(eq["long"], sr_trials=trials, n_trials=max(len(trials), 20))
         print(f"\n[可信度] DSR = {dsr['dsr']:.3f}  (P(真夏普>0),>0.95 才算扣多重检验后显著)")
-        print(f"          ⚠️ 幸存者偏差未修(用当前成分股)—— 别把回测收益当真实 alpha。")
+        print("          ⚠️ 幸存者偏差未修(用当前成分股)—— 别把回测收益当真实 alpha。")
         res["dsr"] = dsr
     return res
 

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 credibility.py —— 可信度层:统计严谨的抗过拟合体检(平台护城河)
 credibility.py —— Credibility layer: statistically rigorous overfit checks (the moat)
@@ -25,7 +24,7 @@ from __future__ import annotations
 from itertools import combinations
 
 import numpy as np
-from scipy.stats import norm, skew, kurtosis
+from scipy.stats import kurtosis, norm, skew
 
 _EULER = 0.5772156649015329  # 欧拉-马歇罗尼常数 | Euler–Mascheroni constant
 

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 credibility —— 可信度层(平台护城河)| Credibility layer (the platform's moat)
 ================================================================================
@@ -9,19 +8,19 @@ Statistical rigor (DSR/PBO) + breadth & robustness batch validation.
 """
 
 from quantmill.credibility.stats import (
-    sharpe,
-    expected_max_sharpe,
     deflated_sharpe_ratio,
+    expected_max_sharpe,
     probability_of_backtest_overfitting,
+    sharpe,
 )
 from quantmill.credibility.validate import (
-    breadth,
-    robustness,
-    run_all,
-    generate_report,
-    compute_proba,
     DEFAULT_UNIVERSE,
     QUICK_UNIVERSE,
+    breadth,
+    compute_proba,
+    generate_report,
+    robustness,
+    run_all,
 )
 
 __all__ = [

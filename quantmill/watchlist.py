@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 watchlist.py —— 自选股清单(用户可编辑)
 watchlist.py —— User-editable watchlist
@@ -18,7 +17,6 @@ File format (one per line: market code; lines starting with # are comments):
 from __future__ import annotations
 
 import logging
-
 import os
 
 from quantmill import config

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 state.py —— 网页各蓝图共享的内存缓存 | shared in-memory caches across blueprints
 =====================================================================

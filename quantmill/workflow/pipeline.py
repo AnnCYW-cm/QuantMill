@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 pipeline.py —— 单只标的的完整流程(数据→特征→模型→回测→报告)
 pipeline.py —— Full single-stock pipeline (data→features→model→backtest→report)
@@ -10,11 +9,11 @@ Keeps the "deep-dive one stock" logic inside the package, reused by the CLI.
 from __future__ import annotations
 
 from quantmill import config
-from quantmill.data import get_ohlcv
-from quantmill.factor import build_dataset
-from quantmill.model import walk_forward, train_full, feature_importance, time_series_cv
 from quantmill.backtest import run_ml_backtest
+from quantmill.data import get_ohlcv
 from quantmill.evaluation import summarize, verdict
+from quantmill.factor import build_dataset
+from quantmill.model import feature_importance, time_series_cv, train_full, walk_forward
 from quantmill.report import generate
 
 

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 cli.py —— 统一命令入口(打包后暴露为 `quant` 命令)
 cli.py —— Unified command entry (exposed as the `quant` command after install)
@@ -31,15 +30,15 @@ def _refresh_home():
 
 
 def cmd_scan(a):
-    from quantmill.report.dashboard import run
     from quantmill.credibility.validate import QUICK_UNIVERSE
+    from quantmill.report.dashboard import run
     run(QUICK_UNIVERSE if a.quick else None,   # None -> 读 watchlist.txt | None -> read watchlist.txt
         start=a.start, end=a.end, horizon=a.horizon)
     _refresh_home()
 
 
 def cmd_validate(a):
-    from quantmill.credibility.validate import run_all, QUICK_UNIVERSE
+    from quantmill.credibility.validate import QUICK_UNIVERSE, run_all
     if a.quick:
         universe = QUICK_UNIVERSE
     else:
@@ -88,7 +87,7 @@ def cmd_news(a):
 
 
 def cmd_paper(a):
-    from quantmill.execution.engine import paper_run, paper_status, paper_reset
+    from quantmill.execution.engine import paper_reset, paper_run, paper_status
     if a.action == "run":
         symbols = None
         if a.quick:
@@ -113,7 +112,7 @@ def cmd_web(a):
 
 
 def cmd_cross(a):
-    from quantmill.cross.run import run_ic, run_backtest, run_validate, run_survivorship
+    from quantmill.cross.run import run_backtest, run_ic, run_survivorship, run_validate
     if a.action == "ic":
         run_ic(market=a.market, quick=a.quick, horizon=a.horizon, sample=a.sample)
     elif a.action == "validate":
@@ -128,6 +127,7 @@ def cmd_cross(a):
 def cmd_docs_pdf(a):
     import os
     import subprocess
+
     from quantmill import config
     script = os.path.join(config.PROJECT_ROOT, "docs", "build_pdf.sh")
     if not os.path.exists(script):

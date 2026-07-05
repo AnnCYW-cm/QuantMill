@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 dashboard.py —— 自选股扫描 + 今日信号面板
 dashboard.py —— Watchlist scanner + "today's signal" panel
@@ -26,12 +25,12 @@ import os
 import pandas as pd
 
 from quantmill import config
-from quantmill.data import get_ohlcv
-from quantmill.factor import make_features, build_dataset, FEATURE_COLS
-from quantmill.model import train_full, walk_forward
-from quantmill.evaluation import summarize
 from quantmill.backtest import run_ml_backtest
-from quantmill.credibility.validate import DEFAULT_UNIVERSE, QUICK_UNIVERSE, _quiet
+from quantmill.credibility.validate import QUICK_UNIVERSE, _quiet
+from quantmill.data import get_ohlcv
+from quantmill.evaluation import summarize
+from quantmill.factor import FEATURE_COLS, build_dataset, make_features
+from quantmill.model import train_full, walk_forward
 from quantmill.watchlist import load_watchlist
 
 

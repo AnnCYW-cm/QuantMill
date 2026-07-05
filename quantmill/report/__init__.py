@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 report.py —— 生成 HTML 研究报告
 report.py —— Generate an HTML research report
@@ -117,11 +116,11 @@ def generate(symbol, market, s: dict, importance: pd.Series,
 
 
 if __name__ == "__main__":
-    from quantmill.data import get_ohlcv
-    from quantmill.factor import build_dataset
-    from quantmill.model import walk_forward, train_full, feature_importance
     from quantmill.backtest import run_ml_backtest
+    from quantmill.data import get_ohlcv
     from quantmill.evaluation import summarize
+    from quantmill.factor import build_dataset
+    from quantmill.model import feature_importance, train_full, walk_forward
 
     df = get_ohlcv("AAPL", "us", start="2018-01-01", end="2024-01-01")
     X, y, feat_df = build_dataset(df, horizon=5)

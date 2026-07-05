@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 model.py —— LightGBM 涨跌预测 + 时序交叉验证(Day 6 核心)
 model.py — LightGBM up/down prediction + time-series cross-validation (Day 6 core)

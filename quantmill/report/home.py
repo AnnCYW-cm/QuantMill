@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 home.py —— 统一主页(把所有产出串成一个入口)
 home.py —— Unified home page (ties every output into one entry point)

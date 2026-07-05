@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 quantmill —— 一个从零搭起来的端到端量化研究工具箱
 quantmill —— an end-to-end quant research toolkit built from scratch

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 data.py —— 统一多市场数据层
 data.py —— Unified multi-market data layer
@@ -32,7 +31,6 @@ calls and speed up repeated experiments.
 from __future__ import annotations
 
 import logging
-
 import os
 from datetime import datetime
 

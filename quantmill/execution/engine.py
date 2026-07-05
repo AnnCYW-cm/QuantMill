@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 engine.py —— 纸面交易闭环引擎 | Paper-trading loop engine
 ==========================================================
@@ -24,7 +23,7 @@ def _snapshot(symbol: str, market: str, horizon: int):
     """一只票的:最新价、最新信号 P(涨)、近60日收益、数据截止日。
     Latest price, latest P(up) signal, recent returns, and as-of date for one stock."""
     from quantmill.data import get_ohlcv
-    from quantmill.factor import build_dataset, make_features, FEATURE_COLS
+    from quantmill.factor import FEATURE_COLS, build_dataset, make_features
     from quantmill.model import train_full
 
     df = get_ohlcv(symbol, market)

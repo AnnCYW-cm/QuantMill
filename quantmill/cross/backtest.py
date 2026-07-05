@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 backtest.py —— 横截面 top-k 回测 | cross-sectional top-k backtest
 =====================================================================

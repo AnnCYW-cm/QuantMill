@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 ic.py —— 横截面 IC | cross-sectional information coefficient
 =====================================================================

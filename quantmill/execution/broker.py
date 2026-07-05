@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 broker.py —— 券商抽象 + 本地纸面账户 + Alpaca 适配器
 broker.py —— Broker abstraction + local paper account + Alpaca adapter
@@ -175,8 +174,8 @@ class AlpacaBroker(Broker):
 
     def _submit(self, symbol: str, qty: float, side: str) -> None:
         if self._real:
-            from alpaca.trading.requests import MarketOrderRequest
             from alpaca.trading.enums import OrderSide, TimeInForce
+            from alpaca.trading.requests import MarketOrderRequest
             self._client.submit_order(MarketOrderRequest(
                 symbol=symbol, qty=qty,
                 side=OrderSide.BUY if side == "buy" else OrderSide.SELL,

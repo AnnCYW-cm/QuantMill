@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 validate.py —— 策略可信度验证层
 validate.py —— Strategy credibility / robustness layer
@@ -28,14 +27,16 @@ import numpy as np
 import pandas as pd
 
 from quantmill import config
+from quantmill.backtest import run_ml_backtest
+from quantmill.credibility.stats import (
+    deflated_sharpe_ratio,
+    probability_of_backtest_overfitting,
+    sharpe,
+)
 from quantmill.data import get_ohlcv
+from quantmill.evaluation import summarize
 from quantmill.factor import build_dataset
 from quantmill.model import walk_forward
-from quantmill.backtest import run_ml_backtest
-from quantmill.evaluation import summarize
-from quantmill.credibility.stats import (
-    sharpe, deflated_sharpe_ratio, probability_of_backtest_overfitting,
-)
 
 # 默认股票池:三市场各挑有代表性的(成长/防御/银行混搭,避免只挑牛股自欺)
 # Default universe: representative names per market (growth/defensive/banks mixed,

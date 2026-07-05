@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 factor —— 因子层 | Factor layer
 ================================
@@ -21,8 +20,8 @@ from quantmill import config
 from quantmill.factor.library import (
     FACTORS,
     FEATURE_COLS,
-    make_features,
     compute_factors,
+    make_features,
 )
 
 __all__ = [

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 cross —— 横截面选股 | cross-sectional stock selection
 =====================================================================
@@ -13,14 +12,20 @@ universe into one panel so the model learns *relative* strength.
 """
 from __future__ import annotations
 
-from quantmill.cross.universe import csi300, sample, universe, csi300_pit
-from quantmill.cross.panel import build_panel, factor_columns, VALUE_COLS
+from quantmill.cross.backtest import topk_backtest
+from quantmill.cross.composite import ROBUST_RECIPE, composite_score
 from quantmill.cross.ic import daily_ic, ic_summary, ic_table
 from quantmill.cross.model import rank_normalize, walk_forward_scores
-from quantmill.cross.backtest import topk_backtest
-from quantmill.cross.composite import composite_score, ROBUST_RECIPE
-from quantmill.cross.run import (get_panel, load_sample_panel, run_ic, run_backtest,
-                                 run_validate, run_survivorship)
+from quantmill.cross.panel import VALUE_COLS, build_panel, factor_columns
+from quantmill.cross.run import (
+                                 get_panel,
+                                 load_sample_panel,
+                                 run_backtest,
+                                 run_ic,
+                                 run_survivorship,
+                                 run_validate,
+)
+from quantmill.cross.universe import csi300, csi300_pit, sample, universe
 
 __all__ = [
     "csi300", "sample", "universe",

@@ -1,0 +1,26 @@
+cff-version: 1.2.0
+message: "If you use QuantMill in your research, please cite it as below."
+title: "QuantMill: an honest full-chain open-source AI quant platform"
+abstract: >-
+  QuantMill is an open-source full-chain AI quant platform for HK/US/A-share
+  markets, whose defining feature is honesty: it runs built-in credibility
+  checks (Deflated Sharpe Ratio, Probability of Backtest Overfitting),
+  cross-sectional selection, cross-market validation, and forward/survivorship
+  bias quantification to falsify its own backtests instead of overselling them.
+type: software
+authors:
+  - name: "QuantMill contributors"
+    email: wootilehq@gmail.com
+repository-code: "https://github.com/AnnCYW-cm/QuantMill"
+url: "https://github.com/AnnCYW-cm/QuantMill"
+license: MIT
+version: 0.1.0
+date-released: 2026-07-06
+keywords:
+  - quantitative-finance
+  - backtesting
+  - cross-sectional
+  - factor-investing
+  - deflated-sharpe-ratio
+  - overfitting
+  - A-share

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 portfolio —— 组合层 | Portfolio layer
 ======================================

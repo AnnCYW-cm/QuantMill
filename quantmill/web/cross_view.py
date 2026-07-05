@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 cross_view.py —— 横截面选股 | cross-sectional selection blueprint
 =====================================================================
@@ -22,9 +21,15 @@ def _compute_cross_bg(market, model="composite"):
     key = f"{market}:{model}"
     _XPROG[key] = {"running": True, "stage": "建面板 / 打分回测…"}
     try:
-        from quantmill.cross import (composite_score, factor_columns, get_panel,
-                                     ic_table, topk_backtest, walk_forward_scores)
         from quantmill.credibility.stats import deflated_sharpe_ratio, sharpe
+        from quantmill.cross import (
+            composite_score,
+            factor_columns,
+            get_panel,
+            ic_table,
+            topk_backtest,
+            walk_forward_scores,
+        )
         panel = get_panel(market=market, verbose=False)
         cols = factor_columns(panel)
         if model == "composite":

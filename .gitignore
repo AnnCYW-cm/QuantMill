@@ -32,3 +32,6 @@ node_modules/
 .coverage
 coverage.xml
 htmlcov/
+
+# mkdocs 构建产物 | mkdocs build output
+site/

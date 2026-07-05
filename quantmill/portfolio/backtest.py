@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 backtest.py —— 组合级回测引擎 | Portfolio-level backtest engine
 ================================================================
@@ -17,7 +16,7 @@ import numpy as np
 import pandas as pd
 
 from quantmill.portfolio.optimizer import ALLOCATORS
-from quantmill.portfolio.risk import shrinkage_cov, portfolio_vol
+from quantmill.portfolio.risk import portfolio_vol, shrinkage_cov
 
 
 def backtest_portfolio(signal_panel: pd.DataFrame, return_panel: pd.DataFrame,

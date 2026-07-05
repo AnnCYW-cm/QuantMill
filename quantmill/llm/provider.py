@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 provider.py —— 可插拔情绪打分器 | Pluggable sentiment scorers
 =============================================================

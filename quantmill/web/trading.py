@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 trading.py —— 纸面账户 / 组合 / 总览 / 导出 / 自选股
 trading.py —— paper / portfolio backtest / overview / export / watchlist blueprint
@@ -39,6 +38,7 @@ def _get_paper():
 
 def _paper_rebalance(market, method="topk", k=None):
     import pandas as pd
+
     from quantmill.execution.broker import PaperBroker
     from quantmill.portfolio.optimizer import ALLOCATORS
     from quantmill.portfolio.rules import market_rules

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 metrics.py —— 核心指标汇总与对比
 metrics.py —— Core metric summary and comparison
@@ -80,10 +79,10 @@ def verdict(s: dict) -> str:
 
 
 if __name__ == "__main__":
+    from quantmill.backtest import run_ml_backtest
     from quantmill.data import get_ohlcv
     from quantmill.factor import build_dataset
     from quantmill.model import walk_forward
-    from quantmill.backtest import run_ml_backtest
 
     df = get_ohlcv("AAPL", "us", start="2018-01-01", end="2024-01-01")
     X, y, feat_df = build_dataset(df, horizon=5)
