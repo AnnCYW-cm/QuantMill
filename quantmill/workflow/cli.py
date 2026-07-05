@@ -150,6 +150,43 @@ def cmd_experiment(a):
     print("⚠️ 仅供研究,策略无经证实的 alpha,别拿真钱跟。")
 
 
+def cmd_niche(a):
+    from quantmill.niche import (analyze_cb_ipo, analyze_etf_premium,
+                                 fetch_cb_first_days, fetch_etf_premium, load_sample_cb)
+    if a.niche_action == "cb":
+        df = load_sample_cb() if a.sample else fetch_cb_first_days(limit=a.limit)
+        if df is None or len(df) == 0:
+            print("拿不到可转债数据(本环境 eastmoney 常不通;你自己机器上应正常)。先试 --sample 看离线演示。")
+            return
+        r = analyze_cb_ipo(df, win_rate=a.win_rate)
+        print("=" * 66)
+        print(f"可转债打新 · 诚实验证{'(内置样本)' if a.sample else ''} · {r['n_bonds']} 只")
+        print("=" * 66)
+        print(f"📣 营销口径:首日均涨 {r['mean_first_day']}% · 涨超20%占 {r['pct_gain_20']}% · 破发率 {r['break_rate']}%")
+        print(f"🧾 诚实口径(扣中签率 {a.win_rate*100:.3f}% · 顶格1000手):")
+        print(f"   每只新债期望中签 {r['exp_hands_per_cb']} 手 → 期望收益 ≈ {r['ev_yuan_per_cb']} 元/账户")
+        print(f"   👉 年化期望 ≈ {r['ev_yuan_per_year']:.0f} 元/账户(对中签率极敏感,用 --win-rate 填你的真实值)")
+        if r.get("by_year"):
+            print("   分年破发率/首日均值:")
+            for y, v in sorted(r["by_year"].items()):
+                print(f"     {y}: {v['n']}只 破发{v['break%']}% 均值{v['mean%']}%")
+        print("⚠️ 首日翻卖≠持有到期(信用违约退市是独立尾部风险);要有意义需多账户;红利随中签率稀释、时效窗口短。")
+    else:  # etf
+        df = fetch_etf_premium()
+        if df is None or len(df) == 0:
+            print("拿不到 ETF 现价(本环境 eastmoney 常不通;你机器上应正常)。")
+            return
+        r = analyze_etf_premium(df, cost=a.cost)
+        print("=" * 66)
+        print(f"ETF 折溢价套利 · 当前横截面监控 · 全市场 {r['n_etf']} 只")
+        print("=" * 66)
+        print(f"平均 |折溢价| {r['mean_abs_premium']}%(中位 {r['median_abs_premium']}%)")
+        print(f"扣往返成本 {a.cost*100:.2f}% 后,真够套利的:{r['n_exploitable']} 只({r['pct_over_cost']}%)")
+        for t in r["top"]:
+            print(f"     {t['code']} {t['name']}  折溢价{t['premium%']:+.2f}%  净{t['net%']:+.2f}%")
+        print("⚠️ 最小申赎单位常几十万~上百万;停牌成分需现金替代;价差常在成本内;容量有限。")
+
+
 def cmd_docs_pdf(a):
     import os
     import subprocess
@@ -278,6 +315,15 @@ def main():
     sp.add_argument("config", nargs="?", help="实验 YAML 路径(run 时必填)")
     sp.add_argument("--no-save", action="store_true", help="不存档结果")
     sp.set_defaults(func=cmd_experiment)
+
+    sp = sub.add_parser("niche", help="散户结构性机会验证:可转债打新/ETF套利 | retail niche edges")
+    sp.add_argument("niche_action", choices=["cb", "etf"], help="cb=可转债打新 / etf=ETF折溢价")
+    sp.add_argument("--sample", action="store_true", help="cb:用内置合成样本(离线秒出)")
+    sp.add_argument("--limit", type=int, default=None, help="cb:只拉前N只(试跑)")
+    sp.add_argument("--win-rate", type=float, default=0.00003, dest="win_rate",
+                    help="cb:单账户每手中签率(默认0.003%,对结果极敏感,请填你的真实值)")
+    sp.add_argument("--cost", type=float, default=0.002, help="etf:往返成本(默认0.2%)")
+    sp.set_defaults(func=cmd_niche)
 
     sp = sub.add_parser("docs-pdf", help="生成带UML渲染的文档PDF | build docs PDF with UML")
     sp.add_argument("--no-open", action="store_true", help="不自动打开")

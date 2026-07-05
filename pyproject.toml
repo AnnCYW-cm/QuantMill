@@ -70,6 +70,7 @@ include = ["quantmill*"]
 [tool.setuptools.package-data]
 "quantmill.web" = ["static/*"]         # 网页前端(index.html/app.css/app.js)
 "quantmill.data" = ["sample/*"]        # 内置样本面板(装上即试,离线)
+"quantmill.niche" = ["sample/*"]       # 可转债打新合成样本
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

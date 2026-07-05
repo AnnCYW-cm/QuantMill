@@ -3,7 +3,7 @@
 [![CI](https://github.com/AnnCYW-cm/QuantMill/actions/workflows/ci.yml/badge.svg)](https://github.com/AnnCYW-cm/QuantMill/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 ![Python](https://img.shields.io/badge/python-3.9%2B-blue.svg)
-![Tests](https://img.shields.io/badge/tests-89%20passing-brightgreen.svg)
+![Tests](https://img.shields.io/badge/tests-95%20passing-brightgreen.svg)
 ![Coverage](https://img.shields.io/badge/coverage-42%25-yellow.svg)
 
 **一个会自己拆穿自己的诚实量化平台**:从多市场数据 → 因子 → 模型 → 组合 → 执行,每一步都内建**抗过拟合的可信度检验**。它不给你看漂亮回测就让你上头,而是当面告诉你"这个策略到底成不成立"。
@@ -46,7 +46,7 @@
 | **组合** | 等权 / TopK / 逆波动 / 最小方差(收缩协方差、波动率目标、A股制度) |
 | **消息面** | LLM 情绪(Claude + 词典兜底,严格 point-in-time) |
 | **执行** | 纸面账户 + Alpaca 美股适配器(纸面盘) |
-| **界面** | Flask 网页台(7 页)+ 12 个 CLI 命令 + 双击启动 |
+| **界面** | Flask 网页台(7 页)+ 13 个 CLI 命令 + 双击启动 |
 
 ---
 
@@ -65,6 +65,7 @@ brew install libomp                        # macOS 上 LightGBM 需要 OpenMP
 # —— 装上即试(离线,内置样本,秒出)——
 quantmill cross backtest --sample   # 用随包小样本跑通选股回测,无需联网
 quantmill experiment run examples/experiments/sample_demo.yaml  # 配置驱动的实验(离线)
+quantmill niche cb --sample         # 可转债打新"诚实口径"(营销+13% → 实际~250元/年)
 
 # —— 网页台(推荐)——
 quantmill web                       # 起本地网页台,浏览器自动打开
@@ -113,9 +114,9 @@ quantmill/
 ├── execution/       ⑨ 券商抽象(纸面 + Alpaca)+ 执行引擎
 ├── report/          ⑫ 单只报告 / 信号面板 / 工作台首页
 ├── web/             网页台(Flask 蓝图:market/cross_view/research/trading + static 前端)
-├── workflow/        编排:pipeline + cli(12 命令)
+├── workflow/        编排:pipeline + cli(13 命令)
 └── watchlist.py     自选股加载
-tests/               92 个离线测试(含「无未来函数」锁)
+tests/               95 个离线测试(含「无未来函数」锁)
 docs/                产品/架构/UML/研究纪要/行业调研
 ```
 
@@ -148,7 +149,7 @@ docs/                产品/架构/UML/研究纪要/行业调研
 ## 开发 / Dev
 
 ```bash
-./.venv/bin/python -m pytest -q        # 92 个离线测试
+./.venv/bin/python -m pytest -q        # 95 个离线测试
 bash docs/build_pdf.sh                 # 生成带 UML 渲染的文档 PDF -> docs/quantmill-docs.pdf
 ```
 
