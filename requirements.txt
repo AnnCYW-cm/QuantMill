@@ -14,7 +14,7 @@ backtesting==0.6.5
 bokeh==3.4.3             # backtesting 画图依赖 | plotting dep
 
 # --- 机器学习 machine learning ---
-scikit-learn==1.6.1
+scikit-learn==1.7.2
 lightgbm==4.6.0          # 注意 macOS 需先 `brew install libomp` | on macOS run `brew install libomp` first
 
 # --- 测试 tests ---
