@@ -67,5 +67,8 @@ ignore = ["E501"]   # 行长交给 line-length,中文注释常超
 [tool.setuptools.packages.find]
 include = ["quantmill*"]
 
+[tool.setuptools.package-data]
+"quantmill.web" = ["static/*"]     # 网页前端(index.html/app.css/app.js)随包发布
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]

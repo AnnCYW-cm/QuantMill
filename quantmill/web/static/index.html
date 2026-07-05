@@ -1,0 +1,112 @@
+<!doctype html><html lang="zh"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>quantmill · 量化台</title>
+<link rel="stylesheet" href="/static/app.css"></head><body>
+<div class="app">
+ <nav class="side">
+   <div class="brand">🏭 quantmill<span>量化台</span></div>
+   <input class="search" id="gsearch" placeholder="🔍 搜代码 · 回车深挖">
+   <a class="nav on" data-v="overview">🏠 总览</a>
+   <a class="nav" data-v="markets">📊 行情</a>
+   <a class="nav" data-v="portfolio">📦 组合</a>
+   <a class="nav" data-v="credibility">🔬 可信度</a>
+   <a class="nav" data-v="factors">📈 因子</a>
+   <a class="nav" data-v="cross">🎯 选股</a>
+   <a class="nav" data-v="news">📰 消息面</a>
+   <a class="nav" data-v="analyze">🔍 个股</a>
+   <div class="mkt"><div class="mkt-lbl">市场</div>
+     <div class="mkt-tabs"><span class="mt on" data-m="us">US</span>
+       <span class="mt" data-m="hk">HK</span><span class="mt" data-m="cn">CN</span></div>
+     <div style="text-align:center;margin-top:10px"><span id="theme" style="cursor:pointer;color:var(--dim);font-size:12px">🌓 切换主题</span></div></div>
+ </nav>
+ <main class="main">
+
+  <section id="v-overview" class="view on">
+    <h1>🏠 总览</h1>
+    <div class="sub">三市场概况 + 纸面账户一眼看全。点市场卡片 → 跳该市场行情。</div>
+    <div class="ctrls"><button class="btn btn2" id="export">⬇️ 导出快照 HTML</button></div>
+    <div id="ov"><div class="muted"><span class="spin"></span> 加载中…</div></div>
+  </section>
+
+  <section id="v-markets" class="view">
+    <h1>📊 行情</h1>
+    <div class="sub"><span class="dot"></span>行情 · 更新 <b id="upd">—</b>
+      · <span id="src">—</span> · 信号=模型预测未来5天 P(涨),仅供研究</div>
+    <div class="ctrls">
+      <span style="color:var(--dim);font-size:12px">排序</span>
+      <select id="sort"><option value="sig">按信号</option><option value="chg">按涨跌</option><option value="sym">按代码</option></select>
+      <button class="btn" id="reb">⚡ 一键调仓到信号组合</button>
+      <button class="btn btn2" id="refsig">🔄 刷新信号</button>
+      <label style="font-size:12px;color:var(--dim);display:flex;align-items:center;gap:4px"><input type="checkbox" id="autosig" style="width:auto"> 自动刷新</label>
+      <input class="wl-in" id="wl-in" placeholder="加自选" style="margin-left:auto">
+      <button class="btn btn2" id="wladd">＋</button>
+      <span id="rebmsg" style="color:var(--dim);font-size:12px"></span>
+    </div>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <section id="v-portfolio" class="view">
+    <h1>📦 组合 · 纸面账户</h1>
+    <div class="sub">数据→信号→下单闭环的结果。点「一键调仓」按当前信号再平衡。</div>
+    <div class="ctrls">
+      <span style="color:var(--dim);font-size:12px">配置法</span>
+      <select id="pf-method"><option value="topk">TopK等权</option><option value="invvol">逆波动</option><option value="minvar">最小方差</option></select>
+      <button class="btn" id="reb2">⚡ 一键调仓</button>
+      <button class="btn btn2" id="runbt">📉 跑组合回测(慢)</button>
+      <span id="reb2msg" style="color:var(--dim);font-size:12px"></span></div>
+    <div id="pf"></div>
+    <div id="bt"></div>
+  </section>
+
+  <section id="v-credibility" class="view">
+    <h1>🔬 可信度体检 <span style="font-size:12px;color:var(--dim)">DSR / PBO</span></h1>
+    <div class="sub">平台护城河:当面告诉你策略是真优势还是运气+过拟合。别的产品不给你看这个。</div>
+    <div class="ctrls"><button class="btn" id="runcred">运行体检(约1-2分钟)</button></div>
+    <div id="cred" class="panel"><div class="muted">点上面按钮开始体检</div></div>
+  </section>
+
+  <section id="v-factors" class="view">
+    <h1>📈 因子有效性</h1>
+    <div class="sub">因子对未来收益的预测力(IC/RankIC)。日线单股 |RankIC|~0.1 已算不错。</div>
+    <div class="ctrls"><input id="f-sym" placeholder="代码 如 AAPL" value="AAPL" style="width:130px">
+      <button class="btn" id="runfac">分析因子</button></div>
+    <div id="fac" class="panel"><div class="muted">输入代码,点分析</div></div>
+  </section>
+
+  <section id="v-cross" class="view">
+    <h1>🎯 横截面选股 <span style="font-size:12px;color:var(--dim)">全市场排名 · 月度换仓</span></h1>
+    <div class="sub">全市场打分,买 top-k,月度换仓,和等权基准比。<b>稳健组合</b>=价值+动量+低波固定配方(跨市场验证过);<b>ML排名</b>=43因子LightGBM(A股漂亮但港股翻车)。目前仅 A股/港股。</div>
+    <div class="ctrls">
+      <span style="color:var(--dim);font-size:12px">模型</span>
+      <button class="btn btn2 on2" id="cm-composite">稳健组合</button><button class="btn btn2" id="cm-ml">ML排名</button>
+      <button class="btn" id="runcross" style="margin-left:12px">跑回测</button>
+      <span class="muted" style="margin-left:8px">稳健组合秒出 · ML约30秒</span></div>
+    <div id="cross" class="panel"><div class="muted">选模型,点「跑回测」</div></div>
+  </section>
+
+  <section id="v-news" class="view">
+    <h1>📰 消息面情绪</h1>
+    <div class="sub">LLM 打分近期新闻(无 key 时走词典兜底)。情绪≠涨跌,仅供研究。</div>
+    <div class="ctrls"><input id="n-sym" placeholder="代码 如 AAPL" value="AAPL" style="width:130px">
+      <button class="btn" id="runnews">抓取情绪</button></div>
+    <div id="news" class="panel"><div class="muted">输入代码,点抓取</div></div>
+  </section>
+
+  <section id="v-analyze" class="view">
+    <h1>🔍 个股深挖</h1>
+    <div class="sub">K线 + 模型信号。点行情页的卡片也会跳到这里。</div>
+    <div class="ctrls"><input id="a-sym" placeholder="代码 如 AAPL" value="AAPL" style="width:130px">
+      <button class="btn" id="runana">深挖</button>
+      <span style="margin-left:10px;color:var(--dim);font-size:12px">图型</span>
+      <button class="btn btn2 on2" id="ct-candle">蜡烛</button><button class="btn btn2" id="ct-line">折线</button>
+      <span style="margin-left:10px;color:var(--dim);font-size:12px">均线</span>
+      <button class="btn btn2 on2" id="ma-5">MA5</button><button class="btn btn2" id="ma-10">MA10</button><button class="btn btn2 on2" id="ma-20">MA20</button><button class="btn btn2" id="ma-60">MA60</button></div>
+    <div id="ana" class="panel"><div class="muted">输入代码,点深挖</div></div>
+  </section>
+
+  <div class="foot">quantmill · 数据 yfinance/akshare · 信号 LightGBM · 本地服务,非投资建议<br>
+   ⚠️ 内置策略未通过可信度验证(约 2/15 跑赢基准)—— 信号仅供研究,别拿真钱跟。</div>
+ </main>
+</div>
+<div class="toast" id="toast"></div>
+<script src="/static/app.js"></script></body></html>
