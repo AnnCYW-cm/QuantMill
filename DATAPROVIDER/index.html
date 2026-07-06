@@ -531,6 +531,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#modelproviderai" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        同款:可插拔 ModelProvider(AI 能力集成)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -677,6 +688,19 @@
 <span class="n">assert_bar_contract</span><span class="p">(</span><span class="n">MyVendor</span><span class="p">(),</span> <span class="s2">&quot;600519&quot;</span><span class="p">,</span> <span class="s2">&quot;cn&quot;</span><span class="p">,</span> <span class="s2">&quot;2023-01-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2024-01-01&quot;</span><span class="p">)</span>
 <span class="c1"># 基本面源必须带 available_date 且不早于数据日,否则测试直接拦下(防未来函数)</span>
 </code></pre></div></p>
+<h2 id="modelproviderai">同款:可插拔 ModelProvider(AI 能力集成)<a class="headerlink" href="#modelproviderai" title="Permanent link">&para;</a></h2>
+<p>模型层照同一套哲学做成可插拔(<code>quantmill/model/provider.py</code>)——数据、LLM、<strong>模型</strong>三层同构。</p>
+<ul>
+<li><strong>契约</strong>:<code>fit(X, y) -&gt; self</code> + <code>predict(X) -&gt; 实数分数</code>(越大越看多;分类器=P涨∈[0,1],回归器=预测收益)。</li>
+<li><strong>按任务两个注册表</strong>:<code>CLASSIFIERS</code>(单股 P涨)/ <code>REGRESSORS</code>(横截面打分)。</li>
+<li><strong>自带实现</strong>:<code>lgbm</code>(默认,与原写死参数逐值等价——零回归)、<code>logistic</code>、<code>ridge</code>(sklearn,证明可插拔)。</li>
+<li><strong>换模型一个环境变量</strong>:
+  <div class="highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">QUANTMILL_MODEL_RANKER</span><span class="o">=</span>ridge<span class="w">      </span><span class="c1"># 横截面打分器(cross)</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">QUANTMILL_MODEL_CLF</span><span class="o">=</span>logistic<span class="w">      </span><span class="c1"># 单股分类器</span>
+</code></pre></div></li>
+<li><strong>接你自己的模型</strong>(XGBoost / 神经网 / LLM-as-ranker):写个类实现 <code>fit/predict</code>、
+  <code>REGRESSORS.register(你的类)</code>,过 <code>assert_model_contract</code> 即可——和接数据源一样。</li>
+</ul>
 <h2 id="_5">现状与边界(诚实标注)<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
 <ul>
 <li>✅ bars(cn/hk/us)、fundamentals(cn/hk)、universe(<strong>cn/hk/us 全走注册表</strong>)。</li>
