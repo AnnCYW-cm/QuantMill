@@ -1,37 +1,26 @@
 name: Deploy docs
 
-# 推到 main(且改了文档/配置)就构建 mkdocs 站并部署到 GitHub Pages。
-# ⚠️ 一次性:仓库 Settings → Pages → Source 选 "GitHub Actions"。
+# 推到 main(且改了文档/配置)就构建 mkdocs 站并部署到 gh-pages 分支。
+# 用 mkdocs gh-deploy:靠 Actions 自带的 GITHUB_TOKEN 推分支,【不依赖 Pages 设置即可变绿】。
+# 想真正对外访问站点(可选,一次性):Settings → Pages → Source 选 "Deploy from a branch" → gh-pages。
 on:
   push:
     branches: [main]
-    paths: ["docs/**", "mkdocs.yml", ".github/workflows/docs.yml"]
+    paths: ["docs/**", "mkdocs.yml", ".github/workflows/docs.yml", "README.md"]
   workflow_dispatch:
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: pages
-  cancel-in-progress: true
+  contents: write        # 允许把构建产物推到 gh-pages 分支
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0    # gh-deploy 需要完整历史来更新 gh-pages 分支
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
       - run: pip install mkdocs-material
-      - run: mkdocs build            # 非 strict:容忍文档间的相对链接告警
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: site
-      - id: deployment
-        uses: actions/deploy-pages@v4
+      - run: mkdocs gh-deploy --force --clean   # 构建 + 推 gh-pages;非 strict,容忍相对链接告警
