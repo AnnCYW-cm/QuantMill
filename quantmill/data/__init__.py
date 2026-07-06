@@ -55,10 +55,13 @@ from quantmill.data.sources import (  # noqa: E402
 # 组装默认数据源注册表 | assemble the default provider registry
 # ----------------------------------------------------------------------
 # 命名的 provider 实例池:环境变量可按名字换源(见 _env_chain)。
+from quantmill.data.sharadar import SharadarProvider  # noqa: E402
+
 _PROVIDERS = {
     "yfinance": YFinanceProvider(),
     "akshare": AkshareProvider(),
     "parquet": ParquetProvider(),
+    "sharadar": SharadarProvider(),        # PIT 干净的美股(需 key,见 docs/DATAPROVIDER.md)
 }
 
 

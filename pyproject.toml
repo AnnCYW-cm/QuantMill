@@ -45,6 +45,7 @@ llm = ["anthropic>=0.40"]       # LLM 消息面情绪(需 ANTHROPIC_API_KEY)| LL
 broker = ["alpaca-py>=0.30"]    # 接 Alpaca 美股(需 API 密钥)| Alpaca US broker
 web = ["flask>=3.0"]            # 网页仪表盘 | web dashboard
 parquet = ["pyarrow>=14.0"]     # 自备数据模板 ParquetProvider | bring-your-own-data via parquet
+sharadar = ["nasdaq-data-link>=1.0"]  # SharadarProvider:PIT干净美股(需API key)| PIT-clean US data
 docs = ["mkdocs-material>=9.5"] # 文档站 | docs site
 
 [project.urls]

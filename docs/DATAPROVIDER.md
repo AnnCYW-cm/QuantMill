@@ -37,6 +37,28 @@ export QUANTMILL_FUNDAMENTALS_CN=myvendor
 ```
 格式:`QUANTMILL_<能力>_<市场>=provider1,provider2`(能力 = BARS/FUNDAMENTALS/UNIVERSE/QUOTES)。
 
+## 已内置样板:SharadarProvider(PIT 干净的美股)
+
+`data/sharadar.py` 是"接付费数据修天花板"的头号样板(经 Nasdaq Data Link),**四接口全实现**:
+
+| 接口 | Sharadar 表 | 为什么关键 |
+|---|---|---|
+| `bars` | SEP | 复权日线(`closeadj`,O/H/L 同因子缩放) |
+| `fundamentals` | SF1(dim=ARQ) | **`datekey`=SEC 备案日=天然 `available_date`** → 严格 PIT 基本面(免费源没有) |
+| `universe` | SP500 | **含 added/removed 动作 → 真实成分史,survivorship-free**(填平 hk/us 天花板) |
+| `quotes` | SEP 末行 | 最新收盘 |
+
+用法:
+```bash
+pip install -e ".[sharadar]"
+echo "NASDAQ_DATA_LINK_API_KEY=你的key" > ~/quant/.sharadar   # 或设环境变量
+export QUANTMILL_BARS_US=sharadar,yfinance          # 美股 bars 优先 Sharadar
+export QUANTMILL_FUNDAMENTALS_US=sharadar           # 解锁美股基本面(平台原来没有)
+export QUANTMILL_UNIVERSE_US=sharadar               # 用真实 S&P500 成分史,不再幸存者偏差
+```
+> ⚠️ 这是**模板**:列名按 Sharadar 官方 schema 映射、映射逻辑有离线测试焊死(`tests/test_sharadar.py`),
+> 但作者无真实账号未跑通端到端;接上你的 key 后若某列名有出入,改 `_MAP_SF1` 即可。
+
 ## 接入你自己的数据(三步)
 
 **A. 最快:用自带的 `ParquetProvider` 模板(零代码)**
