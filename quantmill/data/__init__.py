@@ -82,9 +82,10 @@ def _build_registry() -> Registry:
     for m in ("cn", "hk"):
         r.set("bars", m, CachingSource(_env_chain("bars", m, ["akshare", "yfinance"])))
     r.set("bars", "us", CachingSource(_env_chain("bars", "us", ["yfinance"])))
-    # fundamentals:cn/hk 百度估值(akshare);us 无免费历史估值 → 不注册(调用方自行退化)
+    # fundamentals:cn/hk 百度估值(akshare);us 默认指向 sharadar(需 key,无 key 自动退化为纯量价)
     for m in ("cn", "hk"):
         r.set("fundamentals", m, _env_chain("fundamentals", m, ["akshare"]))
+    r.set("fundamentals", "us", _env_chain("fundamentals", "us", ["sharadar"]))
     # universe:cn 用真实成分股(带纳入日期,PIT),失败回退静态兜底池;
     #          hk/us 无免费真实成分史 → 静态蓝筹(带幸存者偏差,已诚实标注,可被自备源替换)
     r.set("universe", "cn", ChainSource(

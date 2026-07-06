@@ -37,12 +37,10 @@ def _val_cache(symbol: str, market: str) -> str:
 
 
 def _valuation(symbol: str, market: str = "cn", period: str = "近三年") -> pd.DataFrame | None:
-    """基本面估值:PE-TTM / PB / 总市值 -> DataFrame(index=date)。缓存到 data/。
-    现在底层走可插拔 data.fundamentals(默认 akshare 百度源,可换)。cn/hk 有免费每日历史,
-    us 无 → None(退化为纯量价)。返回含 available_date 列(PIT);build_panel 只用 pe/pb/mktcap。
-    Daily valuation via the pluggable data.fundamentals provider; CN & HK only, else None."""
-    if market not in ("cn", "hk"):
-        return None
+    """基本面估值:PE-TTM / PB / 市值 -> DataFrame(index=date)。缓存到 data/。
+    底层走可插拔 data.fundamentals:cn/hk=akshare 百度源,**us=Sharadar(需 key)**。
+    该市场没注册源、或拉取失败 → None(优雅退化为纯量价)。返回含 available_date 列(PIT)。
+    Pluggable data.fundamentals; any market with a registered source (us via Sharadar)."""
     cache = _val_cache(symbol, market)
     if os.path.exists(cache):
         try:
@@ -88,7 +86,7 @@ def build_panel(symbols, market: str = "cn", start=None, end=None, horizon: int 
                 verbose: bool = True) -> pd.DataFrame:
     """构建横截面面板。| Build the cross-sectional panel.
 
-    market: cn/hk/us(cn/hk 带基本面因子,us 退化为纯量价)。
+    market: cn/hk/us(cn/hk 带基本面因子;us 配了 Sharadar key 才带基本面,否则退化为纯量价)。
     label 「fwd」= 未来 horizon 天的收益率(横截面里做相对排名用)。
     """
     start = start or config.START

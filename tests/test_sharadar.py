@@ -90,6 +90,31 @@ def test_registered_and_swappable(monkeypatch):
         importlib.reload(d)
 
 
+def test_us_fundamentals_registered_and_valuation_degrades(monkeypatch, tmp_path):
+    """门已打开:us 基本面注册到 sharadar;无 key/包时 _valuation('X','us') 优雅退化为 None。"""
+    from quantmill import config
+    from quantmill.cross.panel import _valuation
+    import quantmill.data as d
+    assert d.REGISTRY.fundamentals("us")                 # us 现在有源(sharadar)
+    for v in ("NASDAQ_DATA_LINK_API_KEY", "QUANTMILL_SHARADAR_KEY", "QUANDL_API_KEY"):
+        monkeypatch.delenv(v, raising=False)
+    monkeypatch.setattr(config, "DATA_DIR", str(tmp_path))    # 干净缓存目录
+    monkeypatch.setattr("os.path.expanduser", lambda p: str(tmp_path / "none"))
+    assert _valuation("AAPL", "us") is None              # 无 key → None,不抛,退化纯量价
+
+
+def test_valuation_us_uses_source_when_available(monkeypatch, tmp_path):
+    """配了 us 基本面源时,_valuation('X','us') 真的取到基本面(用假 Sharadar 表验证)。"""
+    from quantmill import config
+    from quantmill.cross.panel import _valuation
+    from quantmill.data.sharadar import SharadarProvider
+    monkeypatch.setattr(config, "DATA_DIR", str(tmp_path))
+    monkeypatch.setattr("os.path.expanduser", lambda p: str(tmp_path / "none"))
+    monkeypatch.setattr(SharadarProvider, "_get_table", lambda self, name, **k: _fake_sf1())
+    v = _valuation("AAPL", "us")
+    assert v is not None and "pe" in v.columns and "available_date" in v.columns
+
+
 def test_load_key_missing_returns_none(monkeypatch, tmp_path):
     for v in ("NASDAQ_DATA_LINK_API_KEY", "QUANTMILL_SHARADAR_KEY", "QUANDL_API_KEY"):
         monkeypatch.delenv(v, raising=False)
