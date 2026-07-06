@@ -987,8 +987,12 @@
 <td>横截面因子 RankIC 排行(哪些因子在选股上有信息)</td>
 </tr>
 <tr>
+<td><code>ic-decay</code></td>
+<td><strong>IC 衰减矩阵</strong>:因子×未来h天横截面 IC,看信号多快衰减(定换仓频率)。需真实池(不支持 --sample)</td>
+</tr>
+<tr>
 <td><code>backtest</code></td>
-<td>训练/组合打分 + top-k 回测 + DSR 可信度</td>
+<td>训练/组合打分 + top-k 回测 + DSR 可信度;指标含<strong>夏普/Sortino/Calmar/信息比IR/换手率</strong></td>
 </tr>
 <tr>
 <td><code>validate</code></td>
