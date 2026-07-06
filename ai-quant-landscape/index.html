@@ -1,0 +1,1278 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="开源全链条 AI 量化平台 · 诚实优先 | Honest full-chain open-source AI quant platform">
+      
+      
+      
+        <link rel="canonical" href="https://AnnCYW-cm.github.io/QuantMill/ai-quant-landscape/">
+      
+      
+        <link rel="prev" href="../STATUS/">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>行业调研 Landscape - QuantMill</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="teal">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#ai-v2" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href=".." title="QuantMill" class="md-header__button md-logo" aria-label="QuantMill" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            QuantMill
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              行业调研 Landscape
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="teal"  aria-label="切换深色"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换深色" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="teal"  aria-label="切换浅色"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换浅色" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/AnnCYW-cm/QuantMill" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    AnnCYW-cm/QuantMill
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="QuantMill" class="md-nav__button md-logo" aria-label="QuantMill" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    QuantMill
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/AnnCYW-cm/QuantMill" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    AnnCYW-cm/QuantMill
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页 Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ARCHITECTURE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    架构与 UML
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../RESEARCH_NOTES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    研究纪要 Research
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../CLI/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI 参考
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PRODUCT_DESIGN/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    产品设计
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../STATUS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    交付清单 Status
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    行业调研 Landscape
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    行业调研 Landscape
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#0-tldr-8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0. TL;DR(把整份报告压成 8 句话)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 全景地图:三层 × 关键事实
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-quantlib" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 散户/个人层(和你 quantlib 最对标)——逐个带数字
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. 散户/个人层(和你 quantlib 最对标)——逐个带数字">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        中国散户平台
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 机构层(仰望层,买不到,只作对标)——带真实业绩与反面证据
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 基础设施层(你真正该抄作业的)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 技术路线四代演进(带论文硬数字,均经对抗核实为"稳健")
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. 最硬的诚实校准:为什么多数策略样本外失效(全是同行评审)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-a-ai" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. 中国 A 股 AI 量化专题
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-alpha" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. 另类数据:真 alpha 但有条件
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-vs-quantlib" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. 「成熟产品能力 vs 你的 quantlib」对照表
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-quantlib-5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. 给 quantlib 的 5 条务实演进建议(按性价比)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        附:核心信源(节选,全部可查)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#0-tldr-8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0. TL;DR(把整份报告压成 8 句话)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 全景地图:三层 × 关键事实
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-quantlib" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 散户/个人层(和你 quantlib 最对标)——逐个带数字
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. 散户/个人层(和你 quantlib 最对标)——逐个带数字">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        中国散户平台
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 机构层(仰望层,买不到,只作对标)——带真实业绩与反面证据
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 基础设施层(你真正该抄作业的)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 技术路线四代演进(带论文硬数字,均经对抗核实为"稳健")
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. 最硬的诚实校准:为什么多数策略样本外失效(全是同行评审)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-a-ai" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. 中国 A 股 AI 量化专题
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-alpha" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. 另类数据:真 alpha 但有条件
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-vs-quantlib" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. 「成熟产品能力 vs 你的 quantlib」对照表
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-quantlib-5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. 给 quantlib 的 5 条务实演进建议(按性价比)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        附:核心信源(节选,全部可查)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="ai-v2">全球 AI 量化交易产品与平台 · 深度调研报告(v2 高密度版)<a class="headerlink" href="#ai-v2" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p>方法:22 个产品/机构逐一专职深挖 + 5 大主题深挖 + 12 条量化断言对抗核实(3 票制)。共 39 个研究 agent、约 90 万 token。
+标注:<strong>[证据]</strong> 有权威一手/论文/监管源 · <strong>[自述]</strong> 厂商营销口径,只证"功能/规模存在"非"真能赚钱" · <strong>[存疑]</strong> 单一来源或前瞻判断。
+底线:量化行业营销 &gt;&gt; 真实收益。凡"业绩"数字先问三件事——<strong>样本外吗?扣成本吗?试了多少次?</strong></p>
+</blockquote>
+<hr />
+<h2 id="0-tldr-8">0. TL;DR(把整份报告压成 8 句话)<a class="headerlink" href="#0-tldr-8" title="Permanent link">&para;</a></h2>
+<ol>
+<li><strong>散户能碰到的"AI 量化"里,平台的 AI 几乎都是"给你搭 ML 的工具箱",不是"会赚钱的黑箱"</strong>——QuantConnect、聚宽、米筐、掘金、Alpaca 本质都是数据+回测+执行,模型要你自己写。</li>
+<li><strong>真把 AI 当主策略跑、且有硬证据的,只有极少数</strong>:幻方(万卡 A100 集群 + SC24 论文,还顺手孵化了 DeepSeek)、Two Sigma/D.E.Shaw(自研数十年)、Renaissance(HMM/核方法)——<strong>全部是买不到的封闭机构</strong>。</li>
+<li><strong>最该抄的作业是微软 Qlib</strong>(开源、MIT、45.6k stars):它把"数据→模型库(20+)→风险模型→组合优化→订单执行(RL)"整条链都做全了,精确定义了你 quantlib 缺哪几段。</li>
+<li><strong>LLM 是趋势但不是印钞机</strong>:最严格的实证(2004–2024、100+ 股)显示 LLM 智能体(FinMem/FinAgent)<strong>跑不赢买入持有,所有 alpha 的 p 值 &gt;0.34</strong>;所谓"神预测"多是模型<strong>背了答案</strong>(见"记忆问题"论文)。</li>
+<li><strong>过拟合是全行业系统性隐瞒的头号杀手</strong>:发表后因子收益平均掉 58%(McLean-Pontiff);452 个学术异象里 65% 连 t&gt;1.96 都过不了(Hou-Xue-Zhang)。</li>
+<li><strong>真正扛住样本外检验的因子极少</strong>:动量(212 年、40+ 国)、价值(8 类资产普遍存在)、低波/低 beta——共性是"跨市场跨时代重复 + 有经济学解释"。</li>
+<li><strong>中国 A 股 AI 量化高度头部化但 alpha 强周期衰减</strong>:中证 500 指增平均超额从 2019 年 ~19% 掉到 2023 年 ~3%,2024 年初一度全行业负超额,2025 又回到 20–30%——<strong>超额靠成交量和风格,不是稳定的</strong>。</li>
+<li><strong>对你 quantlib 的判断</strong>:工程"壳"已达个人工具良好水准,<strong>"可信度验证"这一步甚至领先多数商业 To C 产品</strong>;真正落差在①统计严谨(去膨胀夏普)②组合/风险/执行③信息源(另类/消息面)。</li>
+</ol>
+<hr />
+<h2 id="1">1. 全景地图:三层 × 关键事实<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>层</th>
+<th>玩家</th>
+<th>一句话</th>
+<th>港/美/A股</th>
+<th>AI 的真面目</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>散户·西方</strong></td>
+<td>QuantConnect</td>
+<td>开源 LEAN 引擎+云回测,散户量化最主流</td>
+<td>美股+加密强;<strong>无港/A</strong></td>
+<td>你自带 sklearn/PyTorch,平台给算力数据</td>
+</tr>
+<tr>
+<td></td>
+<td>Numerai</td>
+<td>众包 ML 对冲基金,质押 NMR</td>
+<td>全球股(美股确;A股大概率无)</td>
+<td>1191 匿名特征,示例即 LightGBM</td>
+</tr>
+<tr>
+<td></td>
+<td>Composer(被 SoFi 收购)</td>
+<td>no-code 积木+LLM 自然语言搭策略</td>
+<td><strong>仅美股/美国用户</strong></td>
+<td>LLM 只做"话→规则树",选股是确定性规则</td>
+</tr>
+<tr>
+<td></td>
+<td>Alpaca</td>
+<td>可编程券商 API(执行通道)</td>
+<td>美股+2026 欧股;<strong>无港/A</strong></td>
+<td>自身无 AI,只做 LLM→下单的 MCP 桥</td>
+</tr>
+<tr>
+<td></td>
+<td>Trade Ideas/Tickeron/Kavout</td>
+<td>AI 选股信号</td>
+<td><strong>只有 Kavout 覆盖 A/港股</strong></td>
+<td>夜间回测优选/神经网络形态/多因子打分</td>
+</tr>
+<tr>
+<td></td>
+<td>开源库(backtrader/vectorbt/zipline/QuantRocket)</td>
+<td>自建工具链</td>
+<td>QuantRocket 经 IBKR/EDI 可回测港/A</td>
+<td>引擎不含 AI;vectorbt PRO 主打 LLM 接口</td>
+</tr>
+<tr>
+<td><strong>散户·中国</strong></td>
+<td>聚宽 JoinQuant</td>
+<td>最早领先 Python 云平台(2015)</td>
+<td><strong>主 A 股</strong>,港美股基本无</td>
+<td>平台给因子+环境,ML 你自己写</td>
+</tr>
+<tr>
+<td></td>
+<td>米筐 RiceQuant</td>
+<td>开源 RQalpha(6.5k★),转 ToB</td>
+<td><strong>A 股/期货</strong>,无港美股</td>
+<td>"AI"是弱项,靠用户自备</td>
+</tr>
+<tr>
+<td></td>
+<td>BigQuant</td>
+<td>最主打"AI 选股"的国产平台</td>
+<td>A 股原生;港美股仅自定义数据回测</td>
+<td>StockRanker(排序学习+GBDT)、DeepAlpha(深度学习)</td>
+</tr>
+<tr>
+<td></td>
+<td>掘金/迅投QMT/PTrade</td>
+<td>接券商真实下单的实盘三件套</td>
+<td>A 股+港股通;<strong>无美股实盘</strong></td>
+<td>基本靠自写;仅 PTrade 接 DeepSeek 做写码助手</td>
+</tr>
+<tr>
+<td></td>
+<td>优矿/果仁/天软</td>
+<td>云平台/无代码/机构数据</td>
+<td>A 股为主,部分港股;无美股</td>
+<td>果仁"AI"=参数寻优;优矿=教育内容</td>
+</tr>
+<tr>
+<td><strong>机构</strong></td>
+<td>Renaissance/Medallion</td>
+<td>量化天花板,封闭自营</td>
+<td>全球高流动性品种;A 股无专门策略</td>
+<td>HMM+核方法+统计套利(非深度学习)</td>
+</tr>
+<tr>
+<td></td>
+<td>Two Sigma</td>
+<td>科技驱动系统化基金</td>
+<td>美/港/<strong>A股(境内 WFOE 直投)</strong></td>
+<td>ML+深度序列+NLP+另类数据</td>
+</tr>
+<tr>
+<td></td>
+<td>D.E.Shaw / Citadel</td>
+<td>顶级多策略巨鲸</td>
+<td>全球;A股经陆股通/QFII 边缘参与</td>
+<td>DSG 另类数据+ML;DEShaw 2018 设 ML 组</td>
+</tr>
+<tr>
+<td></td>
+<td>AQR / Man AHL/Numeric</td>
+<td>因子/CTA 老牌学术派</td>
+<td>全球;A/港经 EM 策略间接</td>
+<td>ML 做"因子增强+执行优化",非黑箱</td>
+</tr>
+<tr>
+<td></td>
+<td>幻方 High-Flyer</td>
+<td>纯 AI 私募,DeepSeek 母体</td>
+<td><strong>A 股为核心</strong>,港股有牌照</td>
+<td>端到端深度神经网络,万卡 A100</td>
+</tr>
+<tr>
+<td></td>
+<td>明汯/九坤/灵均</td>
+<td>A 股头部量化私募</td>
+<td>A 股核心,港/美经海外美元产品</td>
+<td>多因子+深度学习(九坤 Transformer 公开赛)</td>
+</tr>
+<tr>
+<td><strong>基础设施</strong></td>
+<td>微软 Qlib</td>
+<td>开源全链条 AI 量化平台★</td>
+<td>region: cn+us 原生;港股自接</td>
+<td>20+ 模型库+市场动态建模+RL 执行</td>
+</tr>
+<tr>
+<td></td>
+<td>微软 RD-Agent(Q)</td>
+<td>LLM 自动挖因子/进化模型</td>
+<td>CSI300/500、NASDAQ100</td>
+<td>多智能体:提假设→写码→回测→迭代</td>
+</tr>
+<tr>
+<td></td>
+<td>Bloomberg BQuant / Kensho</td>
+<td>机构数据+AI 底座</td>
+<td>全球(含 A/港数据)</td>
+<td>BloombergGPT(50B)、Kensho LLM-ready API</td>
+</tr>
+<tr>
+<td></td>
+<td>Qraft</td>
+<td>韩国 AI 资管,美股 AI ETF</td>
+<td><strong>仅美股</strong></td>
+<td>深度学习+深度强化学习执行(AXE)</td>
+</tr>
+<tr>
+<td></td>
+<td>RavenPack/Nasdaq Data Link/数库/通联</td>
+<td>另类数据军火商</td>
+<td>全球+中文本土</td>
+<td>NLP 情绪/事件、GNN 知识图谱、RAG</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="2-quantlib">2. 散户/个人层(和你 quantlib 最对标)——逐个带数字<a class="headerlink" href="#2-quantlib" title="Permanent link">&para;</a></h2>
+<p><strong>QuantConnect</strong> [证据]:2011 创立、2015 开源 LEAN;~11.5 万用户。AI 路径=Jupyter 里自带 sklearn/TF/Keras/PyTorch,官方标准范式就是"用过去 5 日价格预测次日收益率"(<strong>和你 quantlib 几乎一模一样</strong>)。<strong>港股无原生、A 股明确不支持</strong>,主战场美股+加密。跑一个实盘策略现实起步 ~$60/月。规模数字(81 亿交易额/300+ 基金)均公司自述、无审计。</p>
+<p><strong>Numerai</strong> [证据]:众包 ML 竞赛喂真实对冲基金。数据脱敏(1191 特征)、目标=未来 20 天收益、<strong>官方示例就用 LightGBM</strong>;质押 NMR 币,预测差<strong>烧币</strong>(经济机制硬筛过拟合)。基金 2024 +25.45%、<strong>2023 亏 -17%</strong>(负年份反证不是选择性披露)、AUM 经 JPM 配 5 亿后近 10 亿美元。散户只能"交模型赚币",不能作为 LP 投钱、也不能借它买港/美/A股。</p>
+<p><strong>Composer</strong>(2026 被 SoFi 收购)[证据/自述]:no-code 积木+2025 上线的 LLM"自然语言→策略"。<strong>关键打假:AI 只把话翻译成 if-then 规则树,选股仍是用户定的确定性阈值,不是 ML alpha</strong>;具体用哪个 LLM 未公开。仅美股/美国用户,~$30–40/月;所有亮眼数字都是回测(某例十年 +1647% vs 标普 +482%),回测只回溯 3 年、过拟合风险高。</p>
+<p><strong>Alpaca</strong> [证据]:持牌自清算券商 API,<strong>本身不做任何 AI</strong>——它的"AI"是开源 MCP Server 把 Claude/ChatGPT 桥接到下单 API。美股+2026 欧股,<strong>无港股(开发中)、无 A 股</strong>;数据 $99/月起。2026 年 Series D $1.5 亿 @ 估值 11.5 亿(Citadel Securities 参投)。</p>
+<p><strong>Trade Ideas / Tickeron / Kavout</strong> [自述+第三方]:三种"AI 选股信号"。Trade Ideas=夜间回测优选固定策略库(仅美股日内);Tickeron=神经网络+形态识别(宣传 43%–362% 年化极易误导);Kavout=多因子 ML 打 1–9 分,<strong>三者里唯一覆盖 A 股/港股</strong>。共同硬伤:<strong>亮眼数字全是自公布回测、无一家有第三方审计的实盘业绩</strong>;第三方评测直接指出 Tickeron"回测赢、实盘常无法复现"。</p>
+<p><strong>开源库/自建</strong> [证据]:QuantRocket(内置 Zipline/Alphalens/Moonshot/<strong>MoonshotML</strong>=walk-forward ML 框架,支持 sklearn/XGBoost;经 IBKR/EDI <strong>能回测港股腾讯、A 股中石油</strong>,但 A 股无境内实盘通道);vectorbt(Numba 向量化,千组参数秒扫;PRO 版 ~$500 终身,主打 MCP/LLM 接口);backtrader/zipline 免费但 IB 实盘失修。<strong>这一组和你 quantlib 是同类——引擎,不含 alpha。</strong></p>
+<h3 id="_1">中国散户平台<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h3>
+<p><strong>聚宽 JoinQuant</strong> [证据]:2015 年、~30 家券商合作、超百万注册;主 A 股。ML=平台给数百因子+Jupyter,你自己写 SVM/XGBoost。旗下私募聚宽投资 2021 破百亿、2025 重回百亿。<strong>港美股基本不支持</strong>。</p>
+<p><strong>米筐 RiceQuant</strong> [证据]:开源 RQalpha(6.5k★,仍活跃);重心已转券商/理财子 ToB(RQAMS)。<strong>"AI 量化"是营销包装</strong>——RQFactor 自称"因子挖掘机"但只有 IC 分析/分组回测等传统方法。A 股/期货,无港美股。RQData ¥3000–10000/年。</p>
+<p><strong>BigQuant</strong> [证据]:最主打"AI"的国产平台,技术栈<strong>相对具体</strong>:StockRanker=把选股做成排序学习(pairwise)+ GBDT,对全市场 ~3000 只联合训练输出每日排名买前 50;DeepAlpha 覆盖 DNN/CNN/LSTM/GAN/ResNet/TabNet;2000+ 因子库 + X2(ChatGPT 训练的因子助手)。<strong>但官方自己的 StockRanker 回测(2018–2022)年化只有 5.08%、最大回撤 24%</strong>——业绩平平,恰好印证"技术炫但 alpha 难"。A 股原生,港美股仅自定义数据回测。</p>
+<p><strong>掘金/迅投QMT/PTrade</strong> [证据]:<strong>这三个是"接券商真实下单"的执行工具,不是 AI 平台</strong>。QMT 约 76 家券商(门槛 1 万–300 万),PTrade 近 40 家;A 股+港股通,<strong>均无美股实盘</strong>。AI 只有 PTrade 2025 接 DeepSeek 做"自然语言→策略代码"助手(copilot,非 alpha)。</p>
+<p><strong>优矿/果仁/天软</strong> [证据]:优矿(通联,400+ 因子+优化器+Barra 风险模型,教育内容演示 XGBoost/AlphaNet);果仁(<strong>不用编程</strong>,Alpha101 因子拖拽,¥1080/¥6998 年,"AI"=参数寻优);天软(机构 TSL 数据底座)。A 股为主,部分港股,无美股。</p>
+<hr />
+<h2 id="3">3. 机构层(仰望层,买不到,只作对标)——带真实业绩与反面证据<a class="headerlink" href="#3" title="Permanent link">&para;</a></h2>
+<p><strong>Renaissance / Medallion</strong> [证据]:1988–2018 <strong>年化 ~66% 毛 / 39% 净、Sharpe&gt;2</strong>,$100→$3.987 亿;1993 封闭、2005 买断外部资金,员工专属,费率全行业最高 <strong>5% + 44%</strong>。技术是 HMM(源自语音识别)+核方法+统计套利,<strong>不是深度学习</strong>。<strong>关键反证</strong>:同公司对外开放的 RIEF 2020 巨亏 ~-20%——<strong>"RenTech=稳赚"是幻觉,只有封闭的 Medallion 有神话</strong>,且靠 ~100–150 亿容量上限;另有 70 亿美元 IRS 税务和解。</p>
+<p><strong>Two Sigma</strong> [证据]:~$70bn AUM、~2000 人;ML+深度序列+NLP+另类数据。2024 旗舰 Spectrum +10.9%,<strong>2025 骤降到 ~+3%</strong>;并遇创始人内斗(SEC 列"重大风险")+研究员篡改模型欺诈致客户损失 $1.65 亿。<strong>A 股实证</strong>:境内 WFOE"鼎量"中证 500 指增 2025 前 9 月 +52.5%、境内规模超 100 亿元。</p>
+<p><strong>D.E. Shaw + Citadel</strong> [证据]:Citadel 累计净利 ~$830 亿(史上最赚钱)、AUM ~$670 亿、<strong>pass-through 费</strong>(2022–24 收 125 亿费用,~110 亿是员工薪酬);Wellington 2025 +10.2%。D.E.Shaw ~$700 亿+,Composite 2024 ~+18%(2001 来年化 12.7%)、Oculus +36.1%;<strong>2018 设 ML 组,华盛顿大学教授 Pedro Domingos 领衔</strong>。两家 A 股都只是经陆股通/QFII 边缘参与。</p>
+<p><strong>AQR / Man AHL / Numeric</strong> [证据]:学术白盒派。AQR ~$179bn(2025),<strong>ML 现已驱动旗舰约 1/5 的信号</strong>,Asness 从 ML 怀疑者转信徒(其 AIPT 研究称 ML 相对线性提升 50–100% OOS,<strong>属自研口径</strong>)。Man AHL <strong>2014 年就实盘跑 ML</strong>,每天吃 15 亿 tick、用天气图。共性:ML 是"因子增强+执行优化"的增量,经济学先验仍主导。</p>
+<p><strong>幻方 High-Flyer</strong> [证据]:<strong>同类里少数"AI 真在跑主策略"且有论文实证</strong>——萤火二号 ~1 万张 A100、SC24 论文(HFReduce/3FS/HaiScale),2023 孵化 DeepSeek。峰值破千亿、现自营 ~700 亿;2025 收益均值 56.55%(百亿榜第二)。<strong>反面</strong>:2021 底 100+ 产品跌超 10% 公开致歉、2024 年 2 月中性产品逼空关停——<strong>并非稳赚</strong>。</p>
+<p><strong>明汯/九坤/灵均</strong> [证据]:A 股头部三巨头(800–900 亿梯队)。九坤(WorldQuant 系,2022 办 Kaggle A 股预测赛,金牌方案用 Transformer;研究院论文入选 NeurIPS 2025 Spotlight);明汯(首家破千亿,<strong>2021Q1 亏 27% 引发大赎回</strong>);灵均(2025 收益 73.51% 夺冠,但 <strong>2024/2 砸盘 25.67 亿被交易所限制交易</strong>)。<strong>高收益年与巨亏年反差极大 = 高波动高风险</strong>。</p>
+<hr />
+<h2 id="4">4. 基础设施层(你真正该抄作业的)<a class="headerlink" href="#4" title="Permanent link">&para;</a></h2>
+<p><strong>微软 Qlib</strong> [证据]:开源(MIT,45.6k★)全链条:两大特征集 <strong>Alpha158/Alpha360</strong> + <strong>20+ 模型库</strong>(LightGBM/XGBoost/CatBoost、LSTM/GRU/ALSTM、Transformer/TFT、GNN 类 GATs/HIST、处理市场漂移的 TRA/ADARNN)+ <strong>RL 订单执行(QlibRL,PPO 拆单)</strong>。region <strong>cn(A股)+us(美股)原生,港股需自接 Yahoo 数据</strong>。官方示例回测年化 17.8%/IR~2.0——<strong>但那是 Yahoo 免费数据的示例回测,非实盘,官方自己提示数据有瑕疵</strong>。→ 这就是"你在回测就停了,它后面还有风险模型/组合优化/执行"的具象。</p>
+<p><strong>微软 RD-Agent(Q)</strong> [证据]:NeurIPS 2025,LLM 多智能体自动"提因子假设→Co-STEER 写代码→Qlib 回测→多臂老虎机调度迭代"。CSI300(2017–2020)年化 <strong>14.21% vs Alpha360 的 7.92%</strong>、IR 1.74;单次优化周期 API 成本 <strong>&lt;$10</strong>。<strong>但全是回测、样本外区间偏早、无实盘</strong>;中文自媒体"3.6 万 star/稳定赚钱"是夸大。</p>
+<p><strong>Bloomberg BQuant / Kensho</strong> [证据]:BQuant=终端里的 Python/Jupyter 研究台+BQL 取数,AI 来自 NLP 情绪插件+2025 的 ASKB(自然语言→BQL);底层研究 <strong>BloombergGPT(500 亿参数)</strong>——但 <strong>GPT-4 已在多数金融任务反超它</strong>,且从未公开发布。Kensho(S&amp;P 2018 以 ~$5.5 亿收购)做"数据→AI-ready"组件+LLM-ready API。终端 ~$32k/席/年,<strong>华尔街级成本,个人不适用</strong>。</p>
+<p><strong>Qraft</strong> [证据]:韩国 AI 资管,美股 AI ETF(QRFT/AMOM/LQAI),<strong>技术叙事强(深度学习+深度强化学习执行 AXE)但实盘极弱</strong>——合计 AUM 仅 ~$5000 万、多只已清盘(QRFT 2026/7 清盘),费率 0.75% 偏贵,晨星只给 AMOM"中性"评级。典型"故事大于规模"。</p>
+<p><strong>另类数据军火商</strong> [证据]:RavenPack(70% 头部量化在用[自述]、1200 万实体/7000 事件类、2024 转 RAG 做 Bigdata.com);Nasdaq Data Link(另类数据超市);数库/通联(中文产业链知识图谱+GNN)。<strong>它们是上游,买了数据≠会赚钱</strong>,机构级授权 10 万–80 万美元/年,个人基本买不起。</p>
+<hr />
+<h2 id="5">5. 技术路线四代演进(带论文硬数字,均经对抗核实为"稳健")<a class="headerlink" href="#5" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>代</th>
+<th>解决了什么</th>
+<th>欠下什么债</th>
+<th>硬证据</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>① 多因子(线性)</strong></td>
+<td>可解释 alpha、风险归因</td>
+<td>困于"因子动物园"、抓不了非线性</td>
+<td>Fama-French 3/5 因子、Carhart 动量</td>
+</tr>
+<tr>
+<td><strong>② 机器学习</strong></td>
+<td>非线性、自动特征</td>
+<td>黑箱、过拟合</td>
+<td><strong>GKX 2020</strong>:30000 股/900+ 信号,NN 的多空组合 OOS <strong>Sharpe 1.35≈线性 2 倍</strong>(但月度 R² 仅 ~0.3–0.4%)</td>
+</tr>
+<tr>
+<td><strong>③ 深度学习</strong></td>
+<td>时序(LSTM)、截面注意力(Transformer)、关系(GNN)、端到端(RL)</td>
+<td>可解释性、样本外稳健、目标不对齐</td>
+<td><strong>MASTER(AAAI24)</strong>:CSI300 IC 0.064/IR 2.4/年化 0.27;FinRL 端到端 RL;AlphaGen 用 RL 挖公式化因子</td>
+</tr>
+<tr>
+<td><strong>④ LLM 智能体</strong></td>
+<td>多模态另类数据、自动挖因子、多智能体决策</td>
+<td><strong>落地/稳定性未验证,回测数字多自报</strong></td>
+<td>TradingAgents 自承"非赚钱工具";FinAgent(KDD24)利润 +36%,但见第 6 节反面</td>
+</tr>
+</tbody>
+</table>
+<p><strong>一句话:每一代都补上一代"建模/自动化"的短板,却几乎都在"可解释、样本外、目标对齐"上留新债——尤其 LLM 一代,亮眼回测多缺长周期独立验证。</strong></p>
+<hr />
+<h2 id="6">6. 最硬的诚实校准:为什么多数策略样本外失效(全是同行评审)<a class="headerlink" href="#6" title="Permanent link">&para;</a></h2>
+<p><strong>过拟合/多重检验(头号杀手)</strong>
+- <strong>McLean &amp; Pontiff (2016, JF)</strong>:97 个已发表因子,样本外收益降 <strong>26%</strong>,发表后降 <strong>58%</strong>。
+- <strong>Harvey-Liu-Zhu (2016, RFS)</strong>:清点 ~300 个因子,传统 t&gt;2 门槛太松,<strong>新因子应过 t&gt;3.0</strong>;隐含错误发现率高达两三成。
+- <strong>Hou-Xue-Zhang (2020, RFS)</strong>:452 个异象,<strong>65% 连 |t|&gt;1.96 都过不了</strong>,t&gt;2.78 时 82% 失败,交易摩擦类 96% 无法复现——<strong>主因是 p-hacking + 过度依赖微盘股</strong>。
+- <strong>Bailey &amp; López de Prado</strong>:数学证明<strong>只要试足够多配置,纯噪声也能造出高样本内 Sharpe</strong>;因几乎没人报告"试了多少次",投资者无法评估过拟合。<strong>去膨胀夏普 DSR</strong> 就是把"试了 N 次"正式纳入显著性判断的工具。
+- <strong>Falck-Rej-Thesmar (2022)</strong>:发表因子平均只交付 ~50% 样本内表现;<strong>发表年份单独解释 30% 的衰减方差</strong>,证据更支持"过拟合"而非"套利拥挤"是主因。</p>
+<p><strong>扛住样本外的少数"幸存者"因子</strong>
+- <strong>动量</strong>:Geczy-Samonov《212 年价格动量》,横跨两世纪、40+ 国,月均超额 ~0.4%、t≈5.7(但有过"动量崩溃")。
+- <strong>价值+动量</strong>:Asness《Value and Momentum Everywhere》,8 类资产/市场普遍存在,"普遍性"本身抗数据挖掘。价值近年跑输主要是<strong>估值利差扩大</strong>而非 alpha 消失。
+- <strong>低波/低 beta(BAB)</strong>:多方独立确认 + 有"杠杆约束"经济学机制。
+- <strong>有力反驳"一切皆假"</strong>:Chen-Zimmermann 复现了 ~98% 因子、主张发表偏差其实很小——所以别走到另一个极端。</p>
+<p><strong>LLM 的真相(证据分层)</strong>
+- <strong>正面</strong>:Lopez-Lira ChatGPT 情绪预测(引用最广);FinAgent(KDD24)利润 +36%、FinCon(NeurIPS24)有主会评审。
+- <strong>釜底抽薪的反面</strong>:同一作者的<strong>《记忆问题》(2025)</strong>——GPT-4o 对<strong>截止日前</strong>标普方向准确率 80.68%、失业率 99.26%,<strong>截止日后立刻崩到 45.97%(接近随机)</strong>,证明"神预测"大多是<strong>背答案</strong>不是预测。
+- <strong>最狠的长期实证(arXiv 2505.07078)</strong>:2004–2024、100+ 股,<strong>买入持有以 p 低至 3e-6 显著跑赢 FinMem/FinAgent,两个智能体都不产生显著 alpha(所有 p&gt;0.34)</strong>。原论文的优势来自精选窗口+选股偏差+前视偏差。
+- <strong>可靠性</strong>:《TradeTrap》发现 LLM 智能体常无视给定数据、编"听着合理但无依据"的分析、对 prompt 格式敏感、易受注入攻击。</p>
+<hr />
+<h2 id="7-a-ai">7. 中国 A 股 AI 量化专题<a class="headerlink" href="#7-a-ai" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>成交占比</strong>:量化占 A 股成交金额 <strong>~29–35%</strong>(证监会口径持股市值约 5%、交易金额约 29%)。</li>
+<li><strong>超额强周期衰减</strong>:中证 500 指增平均超额 2019→2023 = <strong>19.19% → 15.52% → 8.55% → 9.93% → 2.86%</strong>;2024 年初一度<strong>全行业负超额</strong>;2025 又回到 <strong>20–30%</strong>(指增大年)。<strong>超额靠成交量和风格,非稳定</strong>。</li>
+<li><strong>2024/2 量化危机</strong>:小微盘/DMA/中性策略"四天跌走一年收益",灵均砸盘被罚。</li>
+<li><strong>监管</strong>:2024/5《程序化交易管理规定》;2025/7 落地<strong>高频认定</strong>——单账户每秒申报+撤单 300 笔以上,或全日 2 万笔以上。</li>
+<li><strong>个人平台迁移</strong>:聚宽/米筐/优矿云回测 → 券商 QMT/PTrade 实盘,门槛降到万元级。</li>
+</ul>
+<hr />
+<h2 id="8-alpha">8. 另类数据:真 alpha 但有条件<a class="headerlink" href="#8-alpha" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>最硬正面证据</strong>:卫星停车场(Katona et al,480 万张图/6.7 万门店)财报前后 3 天 ~<strong>4–5%</strong> 收益;信用卡消费(Gupta et al,JPM 2022)多空 ~<strong>16%/年</strong>、能提前 3 个季度预测盈利惊喜。</li>
+<li><strong>但可持续性存疑</strong>:McLean-Pontiff 公开后衰减 58%;JP Morgan 280 页手册明说"<strong>单一数据源信号又弱又易逝,得组合很多弱信号</strong>";2020 抛售中各类另类数据<strong>普遍失灵</strong>;alpha 本质是"信息租金"(零和,从散户转移到大机构)。</li>
+<li><strong>价格量级</strong>:基础舆情 feed ~$5k/年,机构级卡/卫星数据 <strong>10 万–80 万美元/年</strong>;认真做的基金每 10 亿 AUM 每年数据预算 100–300 万美元。<strong>个人几乎买不起独家面板,只能用已被套利的商品化数据。</strong></li>
+</ul>
+<hr />
+<h2 id="9-vs-quantlib">9. 「成熟产品能力 vs 你的 quantlib」对照表<a class="headerlink" href="#9-vs-quantlib" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>能力</th>
+<th>行业成熟做法(代表)</th>
+<th>你的 quantlib</th>
+<th>差距/优先级</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>多市场数据</td>
+<td>全球+另类(Bloomberg/Qlib)</td>
+<td>✅ 港/美/A 股价量</td>
+<td>🟡 缺另类/消息面</td>
+</tr>
+<tr>
+<td>特征/因子</td>
+<td>2000+ 因子+表达式引擎+AI 挖掘(BigQuant/Qlib Alpha158)</td>
+<td>🟡 18 个技术指标</td>
+<td>🟡 可扩,非核心短板</td>
+</tr>
+<tr>
+<td>预测模型</td>
+<td>20+ 模型库(Qlib);LightGBM 在 tabular 仍最稳</td>
+<td>✅ LightGBM</td>
+<td>🟢 选型正确,别盲目上深度</td>
+</tr>
+<tr>
+<td>样本外验证</td>
+<td>walk-forward</td>
+<td>✅ 时序 CV + walk-forward</td>
+<td>🟢 达标</td>
+</tr>
+<tr>
+<td><strong>过拟合统计校正</strong></td>
+<td><strong>DSR/PBO/MinBTL</strong>(记录试验次数)</td>
+<td>❌ 无</td>
+<td>🔴 <strong>最该补、且最便宜</strong></td>
+</tr>
+<tr>
+<td><strong>可信度/广度验证</strong></td>
+<td>部分机构有</td>
+<td>✅ <strong>你有(领先多数 To C)</strong></td>
+<td>🟢 亮点</td>
+</tr>
+<tr>
+<td><strong>组合优化</strong></td>
+<td>优化器(Qlib/BigQuant/优矿)</td>
+<td>❌ 单标的</td>
+<td>🔴 高优先</td>
+</tr>
+<tr>
+<td>风险模型</td>
+<td>Barra 式风险归因</td>
+<td>❌ 仅最大回撤</td>
+<td>🟠 中</td>
+</tr>
+<tr>
+<td>执行/实盘</td>
+<td>券商 API+RL 最优执行(Qlib/Qraft)</td>
+<td>❌ 仅回测</td>
+<td>🟠 上真钱才需要</td>
+</tr>
+<tr>
+<td>LLM/自动因子</td>
+<td>RD-Agent 前沿</td>
+<td>❌ 无</td>
+<td>⚪ 想象大但未证收益</td>
+</tr>
+<tr>
+<td>工程成熟度</td>
+<td>—</td>
+<td>✅ 配置/测试/打包/双语</td>
+<td>🟢 达标</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="10-quantlib-5">10. 给 quantlib 的 5 条务实演进建议(按性价比)<a class="headerlink" href="#10-quantlib-5" title="Permanent link">&para;</a></h2>
+<ol>
+<li><strong>【最高优先·几乎零成本】把广度验证升级成统计严谨版</strong> —— 记录"试了多少参数组合 N",套用<strong>去膨胀夏普 DSR</strong> 或<strong>回测过拟合概率 PBO</strong>(有开源 pypbo)。用最小工程量,直击全行业最大黑洞、也是几乎所有商业产品刻意不给你的东西。<strong>这一条做完,你的工具在"诚实度"上就超过大多数 To C 产品。</strong></li>
+<li><strong>【高优先】从"单标的预测"走向"组合"</strong> —— 加一个最简单的组合层(等权/波动率倒数/均值方差),把"每只票的信号"变成"一个组合的仓位"。这是从"选股玩具"到"策略"的关键一步,也是 Qlib/BigQuant 都有而你没有的核心环节。</li>
+<li><strong>【高优先·呼应你第一天的直觉】接消息面(用 LLM 造特征)</strong> —— 你最早就想看"公司动态"。可以用 LLM 把财报/新闻转成情绪/事件特征。<strong>但务必</strong>用你的可信度验证去检验它真加分——记住第 6 节:LLM 智能体在严格实证里跑不赢买入持有,"记忆问题"和前视偏差是大坑,<strong>别把上 LLM 当印钞承诺</strong>。</li>
+<li><strong>【中优先】加基础风险模型</strong> —— 波动率目标、相关性/集中度约束、仓位上限。"先活下来"的工程化。</li>
+<li><strong>【想上真钱再做】接模拟盘/实盘执行</strong> —— 美股走 Alpaca,A 股/港股走券商 QMT/PTrade,跑通"实时→信号→模拟下单"闭环。那是 Day 8,别急。</li>
+</ol>
+<hr />
+<h2 id="_2">附:核心信源(节选,全部可查)<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p>Qlib github.com/microsoft/qlib · RD-Agent arXiv:2505.15155 · AI 量化综述 arXiv:2503.21422 · Numerai docs.numer.ai · GKX 2020 (RFS) · MASTER arXiv:2312.15235 · McLean-Pontiff 2016 (JF) · Harvey-Liu-Zhu 2016 (RFS) · Hou-Xue-Zhang 2020 (RFS) · DSR ssrn 2460551 · LLM 无 alpha arXiv:2505.07078 · 记忆问题 arXiv:2504.14765 · 卫星停车场 ssrn 3222741 · 信用卡 JPM 2022 · 幻方 SC24 arXiv:2408.14158</p>
+<p><em>说明:标 [自述] 的能力/规模来自厂商官方,只证"功能存在"非"真产生收益";机构收益数字多为媒体/第三方复原,非审计披露。</em></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.sections", "navigation.top", "content.code.copy", "search.highlight"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,1137 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="开源全链条 AI 量化平台 · 诚实优先 | Honest full-chain open-source AI quant platform">
+      
+      
+      
+        <link rel="canonical" href="https://AnnCYW-cm.github.io/QuantMill/ARCHITECTURE/">
+      
+      
+        <link rel="prev" href="..">
+      
+      
+        <link rel="next" href="../RESEARCH_NOTES/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>架构与 UML - QuantMill</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="teal">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#quantmill-uml-architecture-uml" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href=".." title="QuantMill" class="md-header__button md-logo" aria-label="QuantMill" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            QuantMill
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              架构与 UML
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="teal"  aria-label="切换深色"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换深色" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="teal"  aria-label="切换浅色"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换浅色" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/AnnCYW-cm/QuantMill" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    AnnCYW-cm/QuantMill
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="QuantMill" class="md-nav__button md-logo" aria-label="QuantMill" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    QuantMill
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/AnnCYW-cm/QuantMill" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    AnnCYW-cm/QuantMill
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页 Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    架构与 UML
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    架构与 UML
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-layered-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 分层架构总览 / Layered overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-package-component-diagram" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 模块依赖 / Package (component) diagram
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-class-diagrams" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 关键类图 / Class diagrams
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 关键类图 / Class diagrams">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 券商抽象(执行层)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-llm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 情绪打分器(LLM 层)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-cross" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 横截面模块(cross)函数式管线
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-sequence-diagrams" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 核心流程时序图 / Sequence diagrams
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. 核心流程时序图 / Sequence diagrams">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-quantmill-cross-backtest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 quantmill cross backtest(横截面选股回测)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-alpaca-yfinance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 网页实时行情(Alpaca 优先,yfinance 兜底)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 网页横截面页(后台计算 + 轮询)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-cross-sectional-data-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 横截面数据流 / Cross-sectional data flow
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-invariants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. 设计约束 / Invariants
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../RESEARCH_NOTES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    研究纪要 Research
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../CLI/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI 参考
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PRODUCT_DESIGN/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    产品设计
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../STATUS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    交付清单 Status
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ai-quant-landscape/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    行业调研 Landscape
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-layered-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 分层架构总览 / Layered overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-package-component-diagram" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 模块依赖 / Package (component) diagram
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-class-diagrams" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 关键类图 / Class diagrams
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 关键类图 / Class diagrams">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 券商抽象(执行层)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-llm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 情绪打分器(LLM 层)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-cross" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 横截面模块(cross)函数式管线
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-sequence-diagrams" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 核心流程时序图 / Sequence diagrams
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. 核心流程时序图 / Sequence diagrams">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-quantmill-cross-backtest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 quantmill cross backtest(横截面选股回测)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-alpaca-yfinance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 网页实时行情(Alpaca 优先,yfinance 兜底)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 网页横截面页(后台计算 + 轮询)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-cross-sectional-data-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 横截面数据流 / Cross-sectional data flow
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-invariants" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. 设计约束 / Invariants
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="quantmill-uml-architecture-uml">quantmill 架构与 UML / Architecture &amp; UML<a class="headerlink" href="#quantmill-uml-architecture-uml" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p>本文用 <a href="https://mermaid.js.org">Mermaid</a> 画图,GitHub 与多数 Markdown 预览器可直接渲染。
+覆盖:分层架构、模块依赖(组件图)、关键类图、核心流程时序图、数据流。</p>
+</blockquote>
+<hr />
+<h2 id="1-layered-overview">1. 分层架构总览 / Layered overview<a class="headerlink" href="#1-layered-overview" title="Permanent link">&para;</a></h2>
+<p>quantmill 是一条<strong>从数据到执行的全链条</strong>,横切一层<strong>可信度(credibility)</strong>贯穿始终。</p>
+<pre class="mermaid"><code>flowchart TD
+    subgraph SRC[数据源 External]
+        AK[akshare 港/A股]
+        YF[yfinance 美/港股]
+        ALP[Alpaca 美股实时/纸面]
+        NEWS[新闻/情绪源]
+    end
+
+    DATA[data&lt;br/&gt;多市场OHLCV·双源回退·缓存&lt;br/&gt;live.py 实时行情]
+    FACTOR[factor&lt;br/&gt;表达式引擎·40+因子·IC分析]
+    MODEL[model&lt;br/&gt;LightGBM·时序CV/walk-forward]
+    CROSS[cross ★&lt;br/&gt;横截面选股:面板·IC·模型·组合·回测]
+    BT[backtest&lt;br/&gt;单股回测·成本滑点]
+    PORT[portfolio&lt;br/&gt;等权/topk/逆波动/最小方差]
+    LLM[llm&lt;br/&gt;Claude情绪·词典兜底·PIT]
+    CRED[credibility ★&lt;br/&gt;DSR·PBO·广度·跨市场·偏差量化]
+    EXEC[execution&lt;br/&gt;Broker抽象·纸面/Alpaca]
+    REPORT[report / web&lt;br/&gt;信号面板·工作台·网页台]
+    CLI[workflow&lt;br/&gt;pipeline + cli 10命令]
+
+    SRC --&gt; DATA --&gt; FACTOR
+    FACTOR --&gt; MODEL --&gt; BT
+    FACTOR --&gt; CROSS
+    DATA --&gt; CROSS
+    CROSS --&gt; CRED
+    BT --&gt; CRED
+    MODEL --&gt; PORT --&gt; EXEC
+    NEWS --&gt; LLM --&gt; FACTOR
+    CRED -.贯穿校验.-&gt; REPORT
+    CROSS --&gt; REPORT
+    PORT --&gt; REPORT
+    CLI --&gt; DATA &amp; FACTOR &amp; CROSS &amp; PORT &amp; EXEC &amp; REPORT
+    ALP --&gt; DATA</code></pre>
+<p><strong>读法</strong>:实线=数据/控制流;<code>credibility</code> 是横切关注点(贯穿校验),不是链条末端的一站。</p>
+<hr />
+<h2 id="2-package-component-diagram">2. 模块依赖 / Package (component) diagram<a class="headerlink" href="#2-package-component-diagram" title="Permanent link">&para;</a></h2>
+<pre class="mermaid"><code>flowchart LR
+    config[config.py 中央配置/路径]
+    watchlist[watchlist.py]
+
+    data --&gt; config
+    factor --&gt; data
+    model --&gt; factor
+    backtest --&gt; model &amp; factor
+    credibility --&gt; factor &amp; model &amp; backtest
+    cross --&gt; data &amp; factor &amp; model &amp; credibility
+    portfolio --&gt; model &amp; factor
+    llm --&gt; config
+    execution --&gt; portfolio &amp; model
+    report --&gt; data &amp; factor &amp; model &amp; credibility &amp; portfolio
+    web --&gt; data &amp; cross &amp; credibility &amp; portfolio &amp; execution &amp; report
+    workflow --&gt; report &amp; cross &amp; portfolio &amp; execution &amp; llm
+    data --&gt; watchlist
+
+    classDef moat fill:#1f6f43,stroke:#2ecc71,color:#fff;
+    class credibility,cross moat;</code></pre>
+<blockquote>
+<p>依赖单向向下,<code>config</code> 是所有模块的单一配置来源。护城河模块(绿色)= <code>credibility</code> + <code>cross</code>。</p>
+</blockquote>
+<hr />
+<h2 id="3-class-diagrams">3. 关键类图 / Class diagrams<a class="headerlink" href="#3-class-diagrams" title="Permanent link">&para;</a></h2>
+<h3 id="31">3.1 券商抽象(执行层)<a class="headerlink" href="#31" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>classDiagram
+    class Broker {
+        &lt;&lt;abstract&gt;&gt;
+        +cash: float
+        +positions() dict
+        +submit(orders) list
+        +net_liq(prices) float
+    }
+    class PaperBroker {
+        -state_path: str
+        +submit(orders)
+        +reset(init_cash)
+    }
+    class AlpacaBroker {
+        -_client: TradingClient
+        -_real: bool
+        +submit(orders)
+    }
+    Broker &lt;|-- PaperBroker
+    Broker &lt;|-- AlpacaBroker
+    note for AlpacaBroker "需 ALPACA_API_KEY_ID / SECRET\n默认纸面端点;可注入 mock client 做离线测试"</code></pre>
+<h3 id="32-llm">3.2 情绪打分器(LLM 层)<a class="headerlink" href="#32-llm" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>classDiagram
+    class Scorer {
+        &lt;&lt;interface&gt;&gt;
+        +score(texts) list~float~
+    }
+    class LexiconScorer {
+        +score(texts) list
+        note_词典兜底_无需API
+    }
+    class AnthropicScorer {
+        -model_claude_haiku
+        +score(texts) list
+    }
+    Scorer &lt;|.. LexiconScorer
+    Scorer &lt;|.. AnthropicScorer
+    note for AnthropicScorer "无 ANTHROPIC_API_KEY 时\n自动退回 LexiconScorer"</code></pre>
+<h3 id="33-cross">3.3 横截面模块(cross)函数式管线<a class="headerlink" href="#33-cross" title="Permanent link">&para;</a></h3>
+<p><code>cross</code> 以函数管线为主(非重类),核心数据结构是 <strong>MultiIndex(date, symbol) 面板</strong>:</p>
+<pre class="mermaid"><code>classDiagram
+    class Panel {
+        &lt;&lt;Panel&gt;&gt;
+        +index_date_symbol
+        +量价因子列_40plus
+        +基本面_ey_bp_size
+        +fwd_未来收益标签
+    }
+    class universe {
+        +csi300() list
+        +csi300_pit(asof) PIT池
+        +universe(market) list
+    }
+    class panel_mod {
+        +build_panel(symbols, market) Panel
+        +factor_columns(panel) list
+    }
+    class ic {
+        +daily_ic(panel, factor)
+        +ic_table(panel, factors)
+    }
+    class model {
+        +rank_normalize(panel, cols)
+        +walk_forward_scores(panel) Series
+    }
+    class composite {
+        +ROBUST_RECIPE dict
+        +composite_score(panel) Series
+    }
+    class backtest {
+        +topk_backtest(panel, score) dict
+    }
+    class run {
+        +get_panel(market) Panel
+        +run_ic(market)
+        +run_backtest(market, model)
+        +run_validate(model) 跨市场
+        +run_survivorship(model) 偏差量化
+    }
+    universe --&gt; panel_mod
+    panel_mod --&gt; Panel
+    Panel --&gt; ic
+    Panel --&gt; model
+    Panel --&gt; composite
+    model --&gt; backtest
+    composite --&gt; backtest
+    run --&gt; panel_mod
+    run --&gt; model
+    run --&gt; composite
+    run --&gt; backtest</code></pre>
+<hr />
+<h2 id="4-sequence-diagrams">4. 核心流程时序图 / Sequence diagrams<a class="headerlink" href="#4-sequence-diagrams" title="Permanent link">&para;</a></h2>
+<h3 id="41-quantmill-cross-backtest">4.1 <code>quantmill cross backtest</code>(横截面选股回测)<a class="headerlink" href="#41-quantmill-cross-backtest" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>sequenceDiagram
+    actor U as 用户
+    participant CLI as workflow.cli
+    participant Run as cross.run
+    participant Panel as cross.panel
+    participant Data as data.get_ohlcv
+    participant Score as composite / walk_forward
+    participant BT as cross.backtest
+    participant Cred as credibility.stats
+
+    U-&gt;&gt;CLI: quantmill cross backtest --model composite
+    CLI-&gt;&gt;Run: run_backtest(market, model)
+    Run-&gt;&gt;Panel: get_panel(market) 有缓存直接读 panel_market.pkl
+    alt 无缓存
+        Panel-&gt;&gt;Data: get_ohlcv(每只票) + 估值
+        Data--&gt;&gt;Panel: OHLCV + PE/PB/市值
+        Panel--&gt;&gt;Run: MultiIndex(date,symbol) 面板 + 落盘缓存
+    end
+    Run-&gt;&gt;Score: 打分(composite=固定配方 / ml=purged walk-forward)
+    Score--&gt;&gt;Run: score(date,symbol)
+    Run-&gt;&gt;BT: topk_backtest(panel, score, k)
+    BT--&gt;&gt;Run: 策略 vs 等权基准 曲线+指标
+    Run-&gt;&gt;Cred: deflated_sharpe_ratio(收益, k变体做多重检验)
+    Cred--&gt;&gt;Run: DSR
+    Run--&gt;&gt;U: 指标表 + DSR + 诚实警告</code></pre>
+<h3 id="42-alpaca-yfinance">4.2 网页实时行情(Alpaca 优先,yfinance 兜底)<a class="headerlink" href="#42-alpaca-yfinance" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>sequenceDiagram
+    participant FE as 前端 loadQuotes
+    participant API as /api/quotes
+    participant Q as market._get_quotes
+    participant YF as yfinance
+    participant Live as data.live (Alpaca)
+
+    FE-&gt;&gt;API: GET /api/quotes?market=us
+    API-&gt;&gt;Q: market._get_quotes(syms, "us")
+    Q-&gt;&gt;YF: 下载日线(历史spark + 昨收)
+    YF--&gt;&gt;Q: 收盘序列
+    alt market==us 且有 .alpaca 密钥
+        Q-&gt;&gt;Live: alpaca_last_prices(syms)
+        Live--&gt;&gt;Q: 实时成交价 → 覆盖 price/chg, source=alpaca
+    else 无密钥/失败
+        Q--&gt;&gt;Q: 沿用 yfinance 延迟价, source=yfinance
+    end
+    Q--&gt;&gt;API: quotes + source
+    API--&gt;&gt;FE: JSON
+    FE-&gt;&gt;FE: 顶部标识 🟢实时 / 🕒延迟</code></pre>
+<h3 id="43">4.3 网页横截面页(后台计算 + 轮询)<a class="headerlink" href="#43" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>sequenceDiagram
+    participant FE as 前端 loadCross
+    participant API as /api/cross
+    participant TH as 后台线程 cross_view._compute_cross_bg
+    participant Cross as cross.run
+
+    FE-&gt;&gt;API: GET /api/cross?market=cn&amp;model=composite
+    API-&gt;&gt;TH: 启动线程(若未在跑)
+    API--&gt;&gt;FE: {status: computing}
+    loop 每2秒轮询
+        FE-&gt;&gt;API: GET /api/cross ...
+        alt 计算中
+            API--&gt;&gt;FE: {status: computing, stage}
+        else 完成
+            API--&gt;&gt;FE: {status: ready, data}
+        end
+    end
+    TH-&gt;&gt;Cross: 面板→打分→回测→DSR→跨市场验证
+    Cross--&gt;&gt;TH: 指标+曲线+IC+valid[]
+    TH-&gt;&gt;TH: 写入 _XCACHE[market:model]</code></pre>
+<hr />
+<h2 id="5-cross-sectional-data-flow">5. 横截面数据流 / Cross-sectional data flow<a class="headerlink" href="#5-cross-sectional-data-flow" title="Permanent link">&para;</a></h2>
+<p>从"每股单练"到"全市场选股"的范式,数据形态的转变:</p>
+<pre class="mermaid"><code>flowchart LR
+    A["每只票&lt;br/&gt;时间序列表&lt;br/&gt;OHLCV+因子"] --&gt;|堆叠 stack| B["面板 Panel&lt;br/&gt;MultiIndex(date, symbol)&lt;br/&gt;每行=某天某股的因子+未来收益"]
+    B --&gt;|每日横截面| C["横截面 IC&lt;br/&gt;同一天全市场&lt;br/&gt;因子 vs 未来收益排名相关"]
+    B --&gt;|按符号加权 / walk-forward| D["打分 score&lt;br/&gt;composite 或 ML"]
+    D --&gt;|每期 top-k 等权| E["组合回测&lt;br/&gt;vs 等权基准"]
+    E --&gt; F["可信度&lt;br/&gt;DSR / 跨市场 / 偏差量化"]</code></pre>
+<p><strong>关键区别</strong>:旧路子在 A(单股时序)上建模,学不到"今天买 A 还是 B";<code>cross</code> 在 B(横截面面板)上建模,学的是<strong>相对强弱</strong>——这才是选股。</p>
+<hr />
+<h2 id="6-invariants">6. 设计约束 / Invariants<a class="headerlink" href="#6-invariants" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>无未来函数</strong>:因子只用过去;<code>fwd</code> 标签含未来仅用于训练/评估;walk-forward 训练末尾 purge 掉 <code>horizon</code> 天。由 <code>tests/test_cross.py::test_walk_forward_no_future_leak</code>(砍未来数据不改过去打分)焊死。</li>
+<li><strong>单一配置源</strong>:所有路径/参数来自 <code>config.py</code>。</li>
+<li><strong>容错退回</strong>:数据源失败自动降级(akshare→yfinance;Alpaca→yfinance;Claude→词典)。</li>
+<li><strong>缓存</strong>:OHLCV/估值/面板均落盘缓存(<code>data/</code>),避免重复拉网。</li>
+<li><strong>可测试</strong>:所有测试离线、合成数据、确定性;券商/情绪可注入 mock。</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.sections", "navigation.top", "content.code.copy", "search.highlight"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

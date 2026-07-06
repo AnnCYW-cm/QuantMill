@@ -1,0 +1,1307 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="开源全链条 AI 量化平台 · 诚实优先 | Honest full-chain open-source AI quant platform">
+      
+      
+      
+        <link rel="canonical" href="https://AnnCYW-cm.github.io/QuantMill/CLI/">
+      
+      
+        <link rel="prev" href="../RESEARCH_NOTES/">
+      
+      
+        <link rel="next" href="../PRODUCT_DESIGN/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>CLI 参考 - QuantMill</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="teal">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#cli-command-reference" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href=".." title="QuantMill" class="md-header__button md-logo" aria-label="QuantMill" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            QuantMill
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              CLI 参考
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="teal"  aria-label="切换深色"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换深色" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="teal"  aria-label="切换浅色"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换浅色" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/AnnCYW-cm/QuantMill" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    AnnCYW-cm/QuantMill
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="QuantMill" class="md-nav__button md-logo" aria-label="QuantMill" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    QuantMill
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/AnnCYW-cm/QuantMill" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    AnnCYW-cm/QuantMill
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页 Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ARCHITECTURE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    架构与 UML
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../RESEARCH_NOTES/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    研究纪要 Research
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI 参考
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI 参考
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#cross" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        cross ★ —— 横截面选股(今天的主线)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#risk-vs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        risk ★ —— 风控/仓位层(等权满仓 vs 风控后)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#forward" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        forward ★ —— 前瞻纸面记录(只前进,不回测)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#experiment-yaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        experiment ★ —— 配置驱动的实验(YAML)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#textfactor-llm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        textfactor ★ —— LLM 文本 → 结构化因子
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="textfactor ★ —— LLM 文本 → 结构化因子">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#llm-claude" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        可插拔 LLM 后端(不锁死贵的 Claude)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#niche" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        niche ★ —— 散户结构性机会验证(诚实口径)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scan" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        scan —— 自选股「今日信号」面板
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#validate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        validate —— 批量可信度体检
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#analyze" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        analyze —— 深挖单只票
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#factors-ic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        factors —— 因子有效性排行(单股时序 IC)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#portfolio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        portfolio —— 组合回测
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#news-llm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        news —— 消息面情绪(LLM)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paper" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        paper —— 纸面交易闭环
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#web" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        web —— 网页台
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#home" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        home —— 刷新工作台首页
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#docs-pdf-pdf-uml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        docs-pdf —— 生成文档 PDF(含 UML 渲染)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        环境变量 / 密钥
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        数据文件 / 缓存
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PRODUCT_DESIGN/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    产品设计
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../STATUS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    交付清单 Status
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ai-quant-landscape/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    行业调研 Landscape
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#cross" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        cross ★ —— 横截面选股(今天的主线)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#risk-vs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        risk ★ —— 风控/仓位层(等权满仓 vs 风控后)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#forward" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        forward ★ —— 前瞻纸面记录(只前进,不回测)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#experiment-yaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        experiment ★ —— 配置驱动的实验(YAML)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#textfactor-llm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        textfactor ★ —— LLM 文本 → 结构化因子
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="textfactor ★ —— LLM 文本 → 结构化因子">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#llm-claude" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        可插拔 LLM 后端(不锁死贵的 Claude)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#niche" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        niche ★ —— 散户结构性机会验证(诚实口径)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scan" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        scan —— 自选股「今日信号」面板
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#validate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        validate —— 批量可信度体检
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#analyze" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        analyze —— 深挖单只票
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#factors-ic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        factors —— 因子有效性排行(单股时序 IC)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#portfolio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        portfolio —— 组合回测
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#news-llm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        news —— 消息面情绪(LLM)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#paper" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        paper —— 纸面交易闭环
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#web" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        web —— 网页台
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#home" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        home —— 刷新工作台首页
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#docs-pdf-pdf-uml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        docs-pdf —— 生成文档 PDF(含 UML 渲染)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        环境变量 / 密钥
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        数据文件 / 缓存
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="cli-command-reference">CLI 命令参考 / Command Reference<a class="headerlink" href="#cli-command-reference" title="Permanent link">&para;</a></h1>
+<p>装完 <code>pip install -e .</code> 后,<code>quantmill</code> 即为命令入口。通用参数:<code>--start</code>(默认 2018-01-01)、<code>--end</code>、<code>--horizon</code>(默认 5,cross 默认 20)。</p>
+<div class="highlight"><pre><span></span><code>quantmill &lt;命令&gt; [参数]
+</code></pre></div>
+<hr />
+<h2 id="cross">cross ★ —— 横截面选股(今天的主线)<a class="headerlink" href="#cross" title="Permanent link">&para;</a></h2>
+<p>全市场排名建模。<code>action</code> 四选一,<code>--model</code> 选策略。</p>
+<div class="highlight"><pre><span></span><code>quantmill cross &lt;action&gt; [--model composite|ml] [--market cn|hk|us] [--quick] [-k N] [--cost 0.0015] [--long-short] [--horizon 20]
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>action</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ic</code></td>
+<td>横截面因子 RankIC 排行(哪些因子在选股上有信息)</td>
+</tr>
+<tr>
+<td><code>backtest</code></td>
+<td>训练/组合打分 + top-k 回测 + DSR 可信度</td>
+</tr>
+<tr>
+<td><code>validate</code></td>
+<td><strong>跨市场验证</strong>:同一方法在 A股+港股各跑,看是否都为正</td>
+</tr>
+<tr>
+<td><code>survivorship</code></td>
+<td><strong>量化前视/幸存者偏差</strong>:全池 vs PIT(2023前已纳入)对比</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>--model</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>composite</code>(默认)</td>
+<td>稳健因子组合(ey+bp+动量+低波,固定配方零训练,跨市场验证过)</td>
+</tr>
+<tr>
+<td><code>ml</code></td>
+<td>43 因子 LightGBM 排名(A股漂亮但港股翻车,当反面对照)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>示例</strong>
+<div class="highlight"><pre><span></span><code>quantmill<span class="w"> </span>cross<span class="w"> </span>ic<span class="w"> </span>--market<span class="w"> </span>cn
+quantmill<span class="w"> </span>cross<span class="w"> </span>backtest<span class="w"> </span>--market<span class="w"> </span>hk<span class="w"> </span>--model<span class="w"> </span>composite<span class="w"> </span>-k<span class="w"> </span><span class="m">15</span>
+quantmill<span class="w"> </span>cross<span class="w"> </span>validate<span class="w"> </span>--model<span class="w"> </span>composite
+quantmill<span class="w"> </span>cross<span class="w"> </span>survivorship<span class="w"> </span>--model<span class="w"> </span>ml<span class="w">         </span><span class="c1"># 看 ML 去偏差后崩成负</span>
+</code></pre></div></p>
+<blockquote>
+<p>首次会拉全池数据(~15分钟)并缓存到 <code>data/panel_&lt;market&gt;.pkl</code>;之后秒开。<code>--quick</code> 用 10 只快速试。</p>
+</blockquote>
+<hr />
+<h2 id="risk-vs">risk ★ —— 风控/仓位层(等权满仓 vs 风控后)<a class="headerlink" href="#risk-vs" title="Permanent link">&para;</a></h2>
+<p>投资经理视角:alpha 弱时决定生死的是仓位和回撤。这一层给选股回测套上真实资金管理:<strong>逆波动加权 + 单只封顶 + 波动率目标(控总敞口)+ 回撤开关(跌多了自动降仓)</strong>,并与"等权满仓"对照。</p>
+<div class="highlight"><pre><span></span><code>quantmill risk [--market cn] [--sample] [--model composite|ml] [-k 20] \
+               [--target-vol 0.15] [--max-weight 0.15] [--dd-limit 0.12]
+</code></pre></div>
+<p>典型效果(真实 A股 ML 模型):波动 26%→18%、最大回撤 −12.6%→−7.4%、收益让渡但<strong>夏普反而略升</strong>。全部严格因果(波动/回撤只取到上一期)。</p>
+<hr />
+<h2 id="forward">forward ★ —— 前瞻纸面记录(只前进,不回测)<a class="headerlink" href="#forward" title="Permanent link">&para;</a></h2>
+<p>投资经理的唯一硬要求:别再看回测,给我一条<strong>不回看的前瞻曲线</strong>。本命令把"风控后的稳健组合"接成每天跑一次的前瞻纸面账户:取最新数据 → 算目标持仓 → 按<strong>当日真实收盘价</strong>标记市值 → <strong>只追加一个净值点</strong>,到换仓日才换成新目标并按回撤开关调敞口。<strong>历史净值点一旦写下就绝不改写</strong>(由 8 个测试焊死)——这才是用真实流逝的时间兑现平台立身之本("回测会骗人")。</p>
+<div class="highlight"><pre><span></span><code>quantmill forward [run|status] [--market cn|hk|us] [--model composite|ml] \
+                  [--cash 100000] [-k 20] [--horizon 20] [--dd-limit 0.12] [--refresh]
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>action</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>run</code>(默认)</td>
+<td>联网取最新面板+现价,推进一步,追加今日净值点,存档</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>看当前前瞻曲线:起始日/净值点数/累计收益/最大回撤/当前持仓</td>
+</tr>
+<tr>
+<td><code>auto</code></td>
+<td><strong>装每日自动推进</strong>(macOS→launchd,其它→给 cron 一行),再也不用记得手点</td>
+</tr>
+<tr>
+<td><code>unauto</code></td>
+<td>卸载自动推进</td>
+</tr>
+<tr>
+<td><code>loop</code></td>
+<td>前台常驻自动推进(不想动系统调度时用,Ctrl+C 退出)</td>
+</tr>
+<tr>
+<td><code>tick</code></td>
+<td>调度器内部调用:各市场推进一步即退出(一般不用手敲)</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>状态存 <code>results/forward_&lt;market&gt;_&lt;model&gt;.json</code>。<strong>每天/每周固定跑一次</strong>,几个月后你就有一条真前瞻曲线——这条曲线能不能兑现回测里那点微弱 alpha,才是这平台唯一可信的证据。</li>
+<li><code>--refresh</code> 强制拉最新数据(否则用缓存面板);首次拉全池较慢。</li>
+<li>⚠️ 它<strong>不能离线模拟</strong>(前瞻的意义就是真实时间流逝);要在你自己机器上、随时间反复跑。同一天重复跑=更新今天,不新增点、不动历史。</li>
+</ul>
+<p><strong>手动推进</strong>
+<div class="highlight"><pre><span></span><code>quantmill<span class="w"> </span>forward<span class="w"> </span>run<span class="w"> </span>--market<span class="w"> </span>cn<span class="w">                </span><span class="c1"># 今天:建仓/推进一步(A股稳健组合)</span>
+quantmill<span class="w"> </span>forward<span class="w"> </span>run<span class="w"> </span>--market<span class="w"> </span>us<span class="w"> </span>--model<span class="w"> </span>ml<span class="w">     </span><span class="c1"># 也可跟踪美股 ML 版做对照</span>
+quantmill<span class="w"> </span>forward<span class="w"> </span>status<span class="w"> </span>--market<span class="w"> </span>cn<span class="w">             </span><span class="c1"># 看这条只前进的曲线长到哪了</span>
+</code></pre></div></p>
+<p><strong>自动推进(装一次,天天自己跑)</strong>
+<div class="highlight"><pre><span></span><code>quantmill<span class="w"> </span>forward<span class="w"> </span>auto<span class="w"> </span>--markets<span class="w"> </span>cn,hk<span class="w"> </span>--at<span class="w"> </span><span class="m">16</span>:40<span class="w">   </span><span class="c1"># 每天 16:40 自动给 CN+HK 各推进一步(macOS)</span>
+quantmill<span class="w"> </span>forward<span class="w"> </span>unauto<span class="w">                            </span><span class="c1"># 不想跑了就卸载</span>
+quantmill<span class="w"> </span>forward<span class="w"> </span>loop<span class="w"> </span>--markets<span class="w"> </span>cn<span class="w"> </span>--at<span class="w"> </span><span class="m">16</span>:40<span class="w">      </span><span class="c1"># 或前台常驻(留个终端/tmux 挂着)</span>
+</code></pre></div>
+- macOS 用 <strong>launchd</strong>:即使到点时机器在睡觉,<strong>下次唤醒会补跑</strong>;日志在 <code>results/forward_auto.log</code>。
+- 因为按天幂等,<strong>多跑几次无害</strong>——重复跑只更新今天那个点,不会重复追加、不动历史。
+- 非 macOS 会打印一行 cron,<code>crontab -e</code> 粘进去即可(工作日按时跑)。</p>
+<hr />
+<h2 id="experiment-yaml">experiment ★ —— 配置驱动的实验(YAML)<a class="headerlink" href="#experiment-yaml" title="Permanent link">&para;</a></h2>
+<p>用一个 YAML 定义实验(市场/因子配方/模型/参数/日期),可复现地跑,结果自动存档到 <code>results/experiments/&lt;时间戳&gt;_&lt;名字&gt;/</code>。<strong>换因子/参数不用改代码。</strong></p>
+<div class="highlight"><pre><span></span><code>quantmill experiment run &lt;config.yaml&gt; [--no-save]
+quantmill experiment list
+</code></pre></div>
+<p><strong>示例</strong>
+<div class="highlight"><pre><span></span><code>quantmill<span class="w"> </span>experiment<span class="w"> </span>run<span class="w"> </span>examples/experiments/sample_demo.yaml<span class="w">   </span><span class="c1"># 离线样本,秒出</span>
+quantmill<span class="w"> </span>experiment<span class="w"> </span>run<span class="w"> </span>examples/experiments/cn_composite.yaml<span class="w">  </span><span class="c1"># A股稳健组合</span>
+quantmill<span class="w"> </span>experiment<span class="w"> </span>list
+</code></pre></div></p>
+<p>YAML 可配项:<code>name / market(cn/hk/us) / model(composite/ml) / horizon / k / cost / start / sample / recipe(因子配方) / init_train / step</code>。改 <code>recipe</code> 就能换因子组合:
+<div class="highlight"><pre><span></span><code><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-value-tilt</span>
+<span class="nt">market</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cn</span>
+<span class="nt">model</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">composite</span>
+<span class="nt">recipe</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> ey</span><span class="p">:</span><span class="w"> </span><span class="nv">1</span><span class="p p-Indicator">,</span><span class="nt"> bp</span><span class="p">:</span><span class="w"> </span><span class="nv">1</span><span class="p p-Indicator">,</span><span class="nt"> vol_20d</span><span class="p">:</span><span class="w"> </span><span class="nv">-1</span><span class="w"> </span><span class="p p-Indicator">}</span><span class="w">   </span><span class="c1"># 正=越大越好,负=越小越好</span>
+</code></pre></div>
+存档内容:<code>config.yaml</code>(可复现)+ <code>result.json</code>(指标/DSR/IC)+ <code>equity.csv</code> + <code>ic.csv</code>。</p>
+<hr />
+<h2 id="textfactor-llm">textfactor ★ —— LLM 文本 → 结构化因子<a class="headerlink" href="#textfactor-llm" title="Permanent link">&para;</a></h2>
+<p>比标量情绪深一层:让 LLM 从新闻/公告<strong>分类抽取</strong>三维结构化信号(展望 / 指引 / 风险),组合成因子,再严格 PIT 聚合成横截面因子,接进可信度框架。</p>
+<p><div class="highlight"><pre><span></span><code>quantmill textfactor [SYMBOL MARKET] [--demo] [--limit 10]
+</code></pre></div>
+- <code>--demo</code>:内置示例标题,离线看抽取效果。
+- 带 <code>SYMBOL MARKET</code>:抓真实新闻做抽取(你机器上跑)。
+- ⚠️ 只抽取"文本说了什么"(分类),<strong>不预测涨跌</strong>(防 LLM 用记忆的未来作弊);免费源无历史新闻 → alpha 暂不能回测,须过可信度层。</p>
+<h3 id="llm-claude">可插拔 LLM 后端(不锁死贵的 Claude)<a class="headerlink" href="#llm-claude" title="Permanent link">&para;</a></h3>
+<p>LLM 路径走 <strong>OpenAI 兼容</strong>接口,配 3 个环境变量即可换任意便宜/免费/本地方案,不改代码;不配则<strong>词典兜底</strong>(离线)。</p>
+<p><div class="highlight"><pre><span></span><code><span class="c1"># DeepSeek(便宜、中文强)</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">QUANTMILL_LLM_BASE_URL</span><span class="o">=</span>https://api.deepseek.com/v1
+<span class="nb">export</span><span class="w"> </span><span class="nv">QUANTMILL_LLM_MODEL</span><span class="o">=</span>deepseek-chat
+<span class="nb">export</span><span class="w"> </span><span class="nv">QUANTMILL_LLM_KEY</span><span class="o">=</span>sk-...
+
+<span class="c1"># 通义千问 qwen-turbo(全场最便宜、中文最准、送免费额度)</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">QUANTMILL_LLM_BASE_URL</span><span class="o">=</span>https://dashscope.aliyuncs.com/compatible-mode/v1
+<span class="nb">export</span><span class="w"> </span><span class="nv">QUANTMILL_LLM_MODEL</span><span class="o">=</span>qwen-turbo
+
+<span class="c1"># 本地 Ollama(零成本、隐私,先 `ollama run qwen3:4b`)</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">QUANTMILL_LLM_BASE_URL</span><span class="o">=</span>http://localhost:11434/v1
+<span class="nb">export</span><span class="w"> </span><span class="nv">QUANTMILL_LLM_MODEL</span><span class="o">=</span>qwen3:4b
+<span class="nb">export</span><span class="w"> </span><span class="nv">QUANTMILL_LLM_KEY</span><span class="o">=</span>ollama
+</code></pre></div>
+也兼容 <code>OPENAI_BASE_URL</code>/<code>OPENAI_API_KEY</code>;或退回 <code>ANTHROPIC_API_KEY</code> 走 Claude。CLI 会显示当前后端(如 <code>后端 api.deepseek.com(deepseek-chat)</code>)。</p>
+<p>代码里 <code>cross_text_factor(news_by_symbol, panel_index)</code> 直接产出 (date, symbol) 因子,可喂 <code>cross</code> 的横截面 IC / 可信度检验。</p>
+<hr />
+<h2 id="niche">niche ★ —— 散户结构性机会验证(诚实口径)<a class="headerlink" href="#niche" title="Permanent link">&para;</a></h2>
+<p>深度调研结论:免费横截面因子 alpha 真实但极弱;散户唯一有证据的真实机会在 A股结构性红利。本命令用平台的"诚实"框架验证它们<strong>到底还有多少肉</strong>——把营销口径("首日均涨20%!")翻译成诚实口径(扣中签率/成本后的每账户期望)。</p>
+<div class="highlight"><pre><span></span><code>quantmill niche cb [--sample] [--win-rate 0.00003]   # 可转债打新:破发率+首日分布+每账户期望
+quantmill niche etf [--cost 0.002]                   # ETF折溢价:当前够套利的只数
+</code></pre></div>
+<ul>
+<li><code>cb --sample</code>:用随包合成样本<strong>离线秒出</strong>;不带 <code>--sample</code> 则联网拉真实数据(需你自己机器,本环境 eastmoney 常不通)。</li>
+<li>⚠️ 可转债期望<strong>对中签率极敏感</strong>,<code>--win-rate</code> 填你账户的真实值;首日翻卖≠持有到期(信用违约是独立尾部风险)。</li>
+<li>ETF 是<strong>当前横截面监控</strong>(此刻有几只折溢价超成本),不是回测。</li>
+</ul>
+<hr />
+<h2 id="scan">scan —— 自选股「今日信号」面板<a class="headerlink" href="#scan" title="Permanent link">&para;</a></h2>
+<p><div class="highlight"><pre><span></span><code>quantmill scan [--quick]
+</code></pre></div>
+对 <code>watchlist.txt</code> 里的票逐只出模型信号(P(涨)+ 持有/空仓建议),刷新工作台首页。</p>
+<h2 id="validate">validate —— 批量可信度体检<a class="headerlink" href="#validate" title="Permanent link">&para;</a></h2>
+<p><div class="highlight"><pre><span></span><code>quantmill validate [--quick]
+</code></pre></div>
+对一篮子票跑 DSR/PBO/广度,回答"这套策略是不是靠运气/过拟合"。</p>
+<h2 id="analyze">analyze —— 深挖单只票<a class="headerlink" href="#analyze" title="Permanent link">&para;</a></h2>
+<p><div class="highlight"><pre><span></span><code>quantmill analyze &lt;symbol&gt; &lt;market&gt; [--no-cv]
+</code></pre></div>
+单票完整报告:特征 → 时序 CV → walk-forward 样本外 → 回测 vs 买入持有。<code>--no-cv</code> 跳过交叉验证更快。
+例:<code>quantmill analyze AAPL us</code> / <code>quantmill analyze 00700 hk</code></p>
+<h2 id="factors-ic">factors —— 因子有效性排行(单股时序 IC)<a class="headerlink" href="#factors-ic" title="Permanent link">&para;</a></h2>
+<p><div class="highlight"><pre><span></span><code>quantmill factors &lt;symbol&gt; &lt;market&gt;
+</code></pre></div>
+单票上每个因子的 IC/RankIC 排行。⚠️ 单股高 IC ≠ 能赚钱,需过可信度层。</p>
+<h2 id="portfolio">portfolio —— 组合回测<a class="headerlink" href="#portfolio" title="Permanent link">&para;</a></h2>
+<p><div class="highlight"><pre><span></span><code>quantmill portfolio &lt;market&gt; [--method topk|invvol|minvar|equal] [--k N] [--vol-target 0.15] [--quick]
+</code></pre></div>
+组合配置 + 回测 vs 等权基准。含收缩协方差、波动率目标、A股制度(涨跌停/印花税/T+1)。</p>
+<h2 id="news-llm">news —— 消息面情绪(LLM)<a class="headerlink" href="#news-llm" title="Permanent link">&para;</a></h2>
+<p><div class="highlight"><pre><span></span><code>quantmill news &lt;symbol&gt; &lt;market&gt; [--limit 12]
+</code></pre></div>
+LLM(Claude Haiku)给近期新闻打情绪分;无 <code>ANTHROPIC_API_KEY</code> 走词典兜底。⚠️ 情绪≠涨跌,免费源无历史新闻→暂不能回测其 alpha。</p>
+<h2 id="paper">paper —— 纸面交易闭环<a class="headerlink" href="#paper" title="Permanent link">&para;</a></h2>
+<p><div class="highlight"><pre><span></span><code>quantmill paper &lt;run|status|reset&gt; [market] [--method] [--k] [--cash] [--quick] [--broker paper|alpaca] [--horizon]
+</code></pre></div>
+- <code>run</code>:按组合方法生成目标持仓并下单(纸面/或 Alpaca 纸面盘)。
+- <code>status</code>:看纸面账户。<code>reset</code>:重置初始资金。
+- <code>--broker alpaca</code> 需 <code>pip install -e ".[broker]"</code> + <code>ALPACA_API_KEY_ID/SECRET</code>。</p>
+<h2 id="web">web —— 网页台<a class="headerlink" href="#web" title="Permanent link">&para;</a></h2>
+<p><div class="highlight"><pre><span></span><code>quantmill web [--port 8787] [--no-open]
+</code></pre></div>
+起本地 Flask 网页台(8 页:总览/行情/组合/可信度/因子/选股/<strong>前瞻曲线</strong>/消息面/个股)。<strong>前瞻曲线</strong>页可视化 <code>forward</code> 的只前进净值线(推进一步/看曲线)。美股配 Alpaca 密钥可转实时行情。</p>
+<h2 id="home">home —— 刷新工作台首页<a class="headerlink" href="#home" title="Permanent link">&para;</a></h2>
+<p><div class="highlight"><pre><span></span><code>quantmill home
+</code></pre></div>
+重建 <code>results/index.html</code>。</p>
+<h2 id="docs-pdf-pdf-uml">docs-pdf —— 生成文档 PDF(含 UML 渲染)<a class="headerlink" href="#docs-pdf-pdf-uml" title="Permanent link">&para;</a></h2>
+<p><div class="highlight"><pre><span></span><code>quantmill docs-pdf [--no-open]
+</code></pre></div>
+把 README + 架构&amp;UML + 研究纪要 + CLI + 交付清单渲成一本 <code>docs/quantmill-docs.pdf</code>(Mermaid 图真渲成矢量图)。等价于 <code>bash docs/build_pdf.sh</code>。首次会装 puppeteer(下 Chromium 约150MB,仅一次),之后秒级。</p>
+<hr />
+<h2 id="_1">环境变量 / 密钥<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>变量</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ANTHROPIC_API_KEY</code></td>
+<td>Claude 情绪(<code>news</code>);无则词典兜底</td>
+</tr>
+<tr>
+<td><code>ALPACA_API_KEY_ID</code> / <code>ALPACA_API_SECRET_KEY</code></td>
+<td>Alpaca 券商 + 美股实时行情;也可写进 <code>~/quant/.alpaca</code> 文件(双击启动也读)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_2">数据文件 / 缓存<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>路径</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>watchlist.txt</code></td>
+<td>自选股(<code>市场 代码</code>,如 <code>us AAPL</code>)</td>
+</tr>
+<tr>
+<td><code>data/</code></td>
+<td>OHLCV / 估值 / 面板缓存(<code>panel_&lt;market&gt;.pkl</code>)</td>
+</tr>
+<tr>
+<td><code>results/</code></td>
+<td>报告 / 图表 / 工作台首页</td>
+</tr>
+<tr>
+<td><code>paper_account.json</code></td>
+<td>纸面账户状态</td>
+</tr>
+<tr>
+<td><code>.alpaca</code></td>
+<td>Alpaca 密钥(不入库)</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.sections", "navigation.top", "content.code.copy", "search.highlight"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
