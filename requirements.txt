@@ -18,4 +18,4 @@ scikit-learn==1.6.1
 lightgbm==4.6.0          # 注意 macOS 需先 `brew install libomp` | on macOS run `brew install libomp` first
 
 # --- 测试 tests ---
-pytest==8.4.2
+pytest==9.1.1
