@@ -203,6 +203,39 @@ def cmd_risk(a):
     print("⚠️ 仅供研究;风控降回撤通常以让渡部分收益为代价——这是'活下去'的合理对价。")
 
 
+def cmd_forward(a):
+    """前瞻纸面记录:只前进不回测,每次跑追加一个真实净值点。"""
+    import json
+
+    from quantmill.paper import forward_summary, load_state, run_forward
+    if a.action == "status":
+        state = load_state(a.market, a.model)
+        if not state.get("nav"):
+            print(f"还没有前瞻记录({a.market}/{a.model})。先跑 `quantmill forward run --market {a.market}` 建仓。")
+            return
+        s = forward_summary(state)
+        print("=" * 66)
+        print(f"前瞻纸面 · {a.market.upper()} · {a.model} · 起始 {s['inception']}(不回看)")
+        print("=" * 66)
+        print(f"净值点数 {s['points']} · 初始 {s['notional']:.0f} → 现值 {s['nav']:.0f}"
+              f" · 累计 {s['return%']:+.2f}% · 最大回撤 {s['max_dd%']}% · 当前敞口 {s['exposure']}")
+        print(f"持仓 {s['n_positions']} 只:", ", ".join(list(state["positions"])[:12]))
+        print("最近净值:", " → ".join(f"{p['date']}:{p['nav']:.0f}" for p in state["nav"][-6:]))
+        return
+    # action == run(默认):联网取最新数据,推进一步,存档
+    print(f"⏳ 取 {a.market.upper()} 最新面板 + 目标票现价…(需联网,首次拉全池较慢)")
+    out = run_forward(market=a.market, model=a.model, notional=a.cash, k=a.topk,
+                      horizon=a.horizon, cost=a.cost, dd_limit=a.dd_limit, refresh=a.refresh)
+    s, st = out["summary"], out["state"]
+    print("=" * 66)
+    print(f"✅ 已追加今日净值点 · {a.market.upper()} · {a.model} · 现价命中 {out['prices_ok']}/{s['n_positions']}")
+    print("=" * 66)
+    print(f"起始 {s['inception']} · 净值点 {s['points']} · 现值 {s['nav']:.0f}"
+          f" · 累计 {s['return%']:+.2f}% · 最大回撤 {s['max_dd%']}% · 敞口 {s['exposure']}")
+    print(f"当前目标持仓:", ", ".join(f"{k}:{w:.0%}" for k, w in list(st['positions'].items())[:10]))
+    print("📌 只前进、不回看:历史净值点绝不改写。每天/每周跑一次,几个月后你就有一条真前瞻曲线。")
+
+
 def cmd_niche(a):
     from quantmill.niche import (analyze_cb_ipo, analyze_etf_premium,
                                  fetch_cb_first_days, fetch_etf_premium, load_sample_cb)
@@ -399,6 +432,18 @@ def main():
                     help="cb:单账户每手中签率(默认0.003%,对结果极敏感,请填你的真实值)")
     sp.add_argument("--cost", type=float, default=0.002, help="etf:往返成本(默认0.2%)")
     sp.set_defaults(func=cmd_niche)
+
+    sp = sub.add_parser("forward", help="前瞻纸面记录:只前进不回测的真实净值曲线 | forward paper track")
+    sp.add_argument("action", nargs="?", default="run", choices=["run", "status"])
+    sp.add_argument("--market", default="cn", choices=["cn", "hk", "us"])
+    sp.add_argument("--model", default="composite", choices=["composite", "ml"])
+    sp.add_argument("--cash", type=float, default=100000.0)
+    sp.add_argument("-k", "--topk", type=int, default=20)
+    sp.add_argument("--horizon", type=int, default=20)
+    sp.add_argument("--cost", type=float, default=0.0015)
+    sp.add_argument("--dd-limit", dest="dd_limit", type=float, default=0.12)
+    sp.add_argument("--refresh", action="store_true", help="强制拉最新数据(否则用缓存)")
+    sp.set_defaults(func=cmd_forward)
 
     sp = sub.add_parser("docs-pdf", help="生成带UML渲染的文档PDF | build docs PDF with UML")
     sp.add_argument("--no-open", action="store_true", help="不自动打开")

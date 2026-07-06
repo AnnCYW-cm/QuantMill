@@ -52,6 +52,33 @@ quantmill risk [--market cn] [--sample] [--model composite|ml] [-k 20] \
 
 ---
 
+## forward ★ —— 前瞻纸面记录(只前进,不回测)
+
+投资经理的唯一硬要求:别再看回测,给我一条**不回看的前瞻曲线**。本命令把"风控后的稳健组合"接成每天跑一次的前瞻纸面账户:取最新数据 → 算目标持仓 → 按**当日真实收盘价**标记市值 → **只追加一个净值点**,到换仓日才换成新目标并按回撤开关调敞口。**历史净值点一旦写下就绝不改写**(由 8 个测试焊死)——这才是用真实流逝的时间兑现平台立身之本("回测会骗人")。
+
+```
+quantmill forward [run|status] [--market cn|hk|us] [--model composite|ml] \
+                  [--cash 100000] [-k 20] [--horizon 20] [--dd-limit 0.12] [--refresh]
+```
+
+| action | 作用 |
+|---|---|
+| `run`(默认) | 联网取最新面板+现价,推进一步,追加今日净值点,存档 |
+| `status` | 看当前前瞻曲线:起始日/净值点数/累计收益/最大回撤/当前持仓 |
+
+- 状态存 `results/forward_<market>_<model>.json`。**每天/每周固定跑一次**,几个月后你就有一条真前瞻曲线——这条曲线能不能兑现回测里那点微弱 alpha,才是这平台唯一可信的证据。
+- `--refresh` 强制拉最新数据(否则用缓存面板);首次拉全池较慢。
+- ⚠️ 它**不能离线模拟**(前瞻的意义就是真实时间流逝);要在你自己机器上、随时间反复跑。同一天重复跑=更新今天,不新增点、不动历史。
+
+**示例**
+```bash
+quantmill forward run --market cn                # 今天:建仓/推进一步(A股稳健组合)
+quantmill forward run --market us --model ml     # 也可跟踪美股 ML 版做对照
+quantmill forward status --market cn             # 看这条只前进的曲线长到哪了
+```
+
+---
+
 ## experiment ★ —— 配置驱动的实验(YAML)
 
 用一个 YAML 定义实验(市场/因子配方/模型/参数/日期),可复现地跑,结果自动存档到 `results/experiments/<时间戳>_<名字>/`。**换因子/参数不用改代码。**
