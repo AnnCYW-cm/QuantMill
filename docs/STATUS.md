@@ -1,6 +1,6 @@
 # quantmill 交付清单 / Status
 
-> 截至 2026-07-06 · 15 层模块 · 137 测试全绿(+1 跳过)· 16 个 CLI 命令 · 网页台(8页,含前瞻曲线)· CI/docs 双绿 · 中英双语 · pip 可安装
+> 截至 2026-07-06 · 15 层模块 · 150 测试全绿(+1 跳过)· 16 个 CLI 命令 · 网页台(8页,含前瞻曲线)· CI/docs 双绿 · 三层可插拔(数据/LLM/模型)· 中英双语 · pip 可安装
 
 ---
 
@@ -33,7 +33,7 @@
 - ✅ Alpaca 美股实时行情接入(`data/live.py`),有 key 用实时、无 key 退回 yfinance。
 - ✅ 密钥支持环境变量或 `~/quant/.alpaca` 文件(双击启动也读);行情页显示 🟢实时/🕒延迟。
 
-### 三·补(2026-07-06 会话:往"合格底座"推的三步)
+### 三·补(2026-07-06 会话:往"合格开源底座"推的一串)
 - ✅ **前瞻实证**(`paper/`):把风控后组合接成**只前进、不回看**的前瞻纸面曲线——
   每次按当日真实收盘价追加一个净值点,**历史绝不改写**(8 测试焊死);网页「📜前瞻曲线」页
   可视化;`forward auto` 每日自动推进(macOS launchd,睡眠错过下次唤醒补跑;非 mac 给 cron)。
@@ -43,13 +43,20 @@
   前视 universe(见 `docs/DATAPROVIDER.md`)。
 - ✅ **严格 PIT**:`build_panel` 估值对齐升级为 `merge_asof(available_date)`——接带真实披露滞后的
   财报源不泄露未来(3 测试焊死),老缓存自动退化等价原行为。
+- ✅ **SharadarProvider 样板 + 打开美股基本面门**:PIT 干净的美股源(SF1 的 datekey=天然
+  available_date、SP500 的真实成分史),四接口全实现、映射测试焊死;`_valuation` 去掉 cn/hk-only
+  硬门,配了 Sharadar key 美股也走基本面(无 key 优雅退化纯量价)。
+- ✅ **可插拔 ModelProvider**(`model/`):模型层照 DataProvider 同构做成可插拔(fit/predict 契约,
+  按任务分 CLASSIFIERS/REGRESSORS 注册表),`lgbm`(默认,**与原写死参数逐值等价·零漂移**)+
+  sklearn `logistic`/`ridge`,`QUANTMILL_MODEL_RANKER/CLF` 一个环境变量换模型,可接自己的。
+  → **数据 / LLM / 模型 三层同一套可插拔哲学**。
 - ✅ **CI 自动化 + 修绿 docs**:`ci.yml`(matrix os×py 测试)长绿;`Deploy docs` 从一直红修成绿
   (改用 `mkdocs gh-deploy`,不依赖 Pages 设置)。
 
 ### 四、工程质量
-- **137 个离线测试全绿**(+1 跳过;合成数据、确定性、可复现);**CI matrix(ubuntu/macos × py3.9/3.12)双绿**。
-- **核心锁死**:「无未来函数」(特征/组合/情绪/cross walk-forward)+「只前进不回看」(前瞻记录)+「严格 PIT」(available_date 不早于数据日)+ DataProvider 契约。
-- 中英双语 · pip 可安装(`[dev][llm][broker][web][parquet]`)· GitHub 就绪(CI/Pages/PyPI 工作流)。
+- **150 个离线测试全绿**(+1 跳过;合成数据、确定性、可复现);**CI matrix(ubuntu/macos × py3.9/3.12)双绿**。
+- **核心锁死**:「无未来函数」(特征/组合/情绪/cross walk-forward)+「只前进不回看」(前瞻记录)+「严格 PIT」(available_date 不早于数据日)+ DataProvider/ModelProvider 契约 +「换源/换模型零漂移」(lgbm provider 逐值等于原生)。
+- 中英双语 · pip 可安装(`[dev][llm][broker][web][parquet][sharadar]`)· GitHub 就绪(CI/Pages/PyPI 工作流)。
 
 ### 五、文档
 - `README.md` — 项目门面(已更新)
