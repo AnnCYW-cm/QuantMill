@@ -11,7 +11,7 @@
 |---|---|---|
 | **data ★** | ✅ | **可插拔 DataProvider**:四接口(bars/基本面/universe/quotes)+ Chain回退 + Caching + 注册表,一个环境变量换源;`live.py` **Alpaca 美股实时行情**(纯数据) |
 | **factor** | ✅ | 表达式引擎 + 40+ 量价因子 + IC/RankIC 分析 |
-| **model** | ✅ | LightGBM + 时序 CV/walk-forward |
+| **model ★** | ✅ | **可插拔 ModelProvider**(fit/predict 契约,lgbm/logistic/ridge,环境变量换模型,可接自己的)+ 时序 CV/walk-forward |
 | **backtest** | ✅ | 单股回测,含成本滑点 |
 | **credibility ★** | ✅ | DSR(去膨胀夏普)+ PBO(CSCV)+ 广度稳健 |
 | **cross ★** | ✅ | 横截面选股全链:universe/panel/ic/model/composite/backtest/run |

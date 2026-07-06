@@ -30,23 +30,14 @@ from sklearn.model_selection import TimeSeriesSplit
 
 from quantmill import config
 from quantmill.factor import FEATURE_COLS
+from quantmill.model.models import make_lgbm_classifier
+from quantmill.model.provider import resolve_classifier
 
 
 def _make_model() -> LGBMClassifier:
-    """一个有意"收着点"的 LightGBM:浅树 + 强正则,防止过拟合(历史完美=未来必死)。
-    A deliberately "restrained" LightGBM: shallow trees + strong regularization to prevent overfitting (perfect on history = doomed in the future)."""
-    return LGBMClassifier(
-        n_estimators=300,
-        learning_rate=0.03,
-        max_depth=4,          # 树浅一点,别把噪声也学进去 | keep trees shallow so noise isn't learned
-        num_leaves=15,
-        subsample=0.8,        # 每棵树只用 80% 样本 | each tree uses only 80% of the samples
-        colsample_bytree=0.8,  # 每棵树只用 80% 特征 | each tree uses only 80% of the features
-        reg_lambda=1.0,
-        random_state=42,
-        n_jobs=-1,
-        verbose=-1,
-    )
+    """单股分类器(浅树+强正则防过拟合)。参数在 model.models,这里保持原名供 train_full 用。
+    A deliberately restrained LightGBM (shallow trees + strong regularization)."""
+    return make_lgbm_classifier()
 
 
 def time_series_cv(X: pd.DataFrame, y: pd.Series, n_splits: int = config.N_SPLITS) -> dict:
@@ -63,9 +54,9 @@ def time_series_cv(X: pd.DataFrame, y: pd.Series, n_splits: int = config.N_SPLIT
     for i, (tr, te) in enumerate(tscv.split(X), 1):
         Xtr, Xte = X.iloc[tr], X.iloc[te]
         ytr, yte = y.iloc[tr], y.iloc[te]
-        model = _make_model()
+        model = resolve_classifier()                  # 可插拔:QUANTMILL_MODEL_CLF 换模型
         model.fit(Xtr, ytr)
-        pred = model.predict(Xte)
+        pred = (model.predict(Xte) > 0.5).astype(int)  # 分数→硬标签(默认 lgbm 与原 predict 等价)
         acc = accuracy_score(yte, pred)
         # 基准:永远猜训练集里的多数类 | baseline: always guess the majority class in the training set
         base = max(ytr.mean(), 1 - ytr.mean())
@@ -93,9 +84,9 @@ def walk_forward(X: pd.DataFrame, y: pd.Series, n_splits: int = config.N_SPLITS)
     tscv = TimeSeriesSplit(n_splits=n_splits)
     proba = pd.Series(index=X.index, dtype=float)  # 默认全 NaN | all NaN by default
     for tr, te in tscv.split(X):
-        model = _make_model()
+        model = resolve_classifier()               # 可插拔:QUANTMILL_MODEL_CLF 换模型
         model.fit(X.iloc[tr], y.iloc[tr])
-        proba.iloc[te] = model.predict_proba(X.iloc[te])[:, 1]  # 第1类=涨的概率 | class 1 = probability of rising
+        proba.iloc[te] = model.predict(X.iloc[te])  # 分数=P(涨);默认 lgbm 与 predict_proba[:,1] 一致
     return proba
 
 

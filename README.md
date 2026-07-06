@@ -3,7 +3,7 @@
 [![CI](https://github.com/AnnCYW-cm/QuantMill/actions/workflows/ci.yml/badge.svg)](https://github.com/AnnCYW-cm/QuantMill/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 ![Python](https://img.shields.io/badge/python-3.9%2B-blue.svg)
-![Tests](https://img.shields.io/badge/tests-144%20passing-brightgreen.svg)
+![Tests](https://img.shields.io/badge/tests-150%20passing-brightgreen.svg)
 ![Coverage](https://img.shields.io/badge/coverage-42%25-yellow.svg)
 
 **一个会自己拆穿自己的诚实量化平台**:从多市场数据 → 因子 → 模型 → 组合 → 执行,每一步都内建**抗过拟合的可信度检验**。它不给你看漂亮回测就让你上头,而是当面告诉你"这个策略到底成不成立"。
@@ -41,7 +41,7 @@
 | **数据 ★** | 港/美/A 股,**可插拔 DataProvider**(四接口 bars/基本面/universe/quotes,akshare+yfinance 回退链 + 缓存,**一个环境变量换成你自己的付费/机构数据**);**美股 Alpaca 实时行情**(纯数据,不下单) |
 | **因子** | 40+ 量价因子(表达式引擎)+ 基本面(PE/PB/市值)+ IC/RankIC 分析 |
 | **横截面选股** | 全市场排名建模(非单股预测):`cross` 模块,面板 → 横截面 IC → 模型 → top-k 回测 |
-| **两种策略** | **稳健因子组合**(固定配方零训练,跨市场验证过)vs **ML 排名**(LightGBM,对照反面教材) |
+| **两种策略** | **稳健因子组合**(固定配方零训练)vs **ML 排名**;**模型可插拔 ModelProvider**(lgbm/logistic/ridge,一个环境变量换模型,可接自己的) |
 | **可信度 ★** | DSR / PBO(CSCV)/ 广度稳健性 / **跨市场验证** / **前视偏差量化** |
 | **组合** | 等权 / TopK / 逆波动 / 最小方差(收缩协方差、波动率目标、A股制度) |
 | **LLM 文本因子** | 情绪打分 + **结构化抽取**(LLM 读文本→展望/指引/风险→PIT 横截面因子);**可插拔后端**(DeepSeek/Qwen/Gemini/本地Ollama/Claude,OpenAI 兼容)+ 词典兜底 |
@@ -119,7 +119,7 @@ quantmill/
 ├── web/             网页台(Flask 蓝图:market/cross_view/forward_view/research/trading + static 前端)
 ├── workflow/        编排:pipeline + cli(16 命令)
 └── watchlist.py     自选股加载
-tests/               144 个离线测试(含「无未来函数」「只前进不回看」锁)
+tests/               150 个离线测试(含「无未来函数」「只前进不回看」锁)
 docs/                产品/架构/UML/研究纪要/行业调研
 ```
 
@@ -153,7 +153,7 @@ docs/                产品/架构/UML/研究纪要/行业调研
 ## 开发 / Dev
 
 ```bash
-./.venv/bin/python -m pytest -q        # 144 个离线测试
+./.venv/bin/python -m pytest -q        # 150 个离线测试
 bash docs/build_pdf.sh                 # 生成带 UML 渲染的文档 PDF -> docs/quantmill-docs.pdf
 ```
 

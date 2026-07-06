@@ -40,13 +40,13 @@ def walk_forward_scores(panel: pd.DataFrame, feature_cols: list[str],
 
     init_train 首个训练窗(交易日数),step 每隔多少天重训一次并预测下一段。
     """
-    from lightgbm import LGBMRegressor
-
-    # deterministic=True + force_row_wise=True:同机同输入可复现(可信度平台的底线)
-    params = params or dict(n_estimators=300, learning_rate=0.03, num_leaves=31,
-                            min_child_samples=80, subsample=0.8, colsample_bytree=0.8,
-                            reg_lambda=1.0, random_state=0, n_jobs=-1, verbose=-1,
-                            deterministic=True, force_row_wise=True)
+    # 模型工厂:传了 params 用自定义 LGBM;否则走可插拔 ModelProvider(QUANTMILL_MODEL_RANKER 换模型)
+    if params is not None:
+        from lightgbm import LGBMRegressor
+        make_model = lambda: LGBMRegressor(**params)   # noqa: E731
+    else:
+        from quantmill.model.provider import resolve_regressor
+        make_model = resolve_regressor
 
     Xall = rank_normalize(panel, feature_cols)
     yall = _demean(panel, label)
@@ -64,7 +64,7 @@ def walk_forward_scores(panel: pd.DataFrame, feature_cols: list[str],
         if ok.sum() < 500:                            # 训练样本太少就跳过这段
             i += step
             continue
-        model = LGBMRegressor(**params)
+        model = make_model()
         model.fit(Xtr[ok], ytr[ok])
         n_fit += 1
 

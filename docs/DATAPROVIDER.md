@@ -85,6 +85,21 @@ assert_bar_contract(MyVendor(), "600519", "cn", "2023-01-01", "2024-01-01")
 # 基本面源必须带 available_date 且不早于数据日,否则测试直接拦下(防未来函数)
 ```
 
+## 同款:可插拔 ModelProvider(AI 能力集成)
+
+模型层照同一套哲学做成可插拔(`quantmill/model/provider.py`)——数据、LLM、**模型**三层同构。
+
+- **契约**:`fit(X, y) -> self` + `predict(X) -> 实数分数`(越大越看多;分类器=P涨∈[0,1],回归器=预测收益)。
+- **按任务两个注册表**:`CLASSIFIERS`(单股 P涨)/ `REGRESSORS`(横截面打分)。
+- **自带实现**:`lgbm`(默认,与原写死参数逐值等价——零回归)、`logistic`、`ridge`(sklearn,证明可插拔)。
+- **换模型一个环境变量**:
+  ```bash
+  export QUANTMILL_MODEL_RANKER=ridge      # 横截面打分器(cross)
+  export QUANTMILL_MODEL_CLF=logistic      # 单股分类器
+  ```
+- **接你自己的模型**(XGBoost / 神经网 / LLM-as-ranker):写个类实现 `fit/predict`、
+  `REGRESSORS.register(你的类)`,过 `assert_model_contract` 即可——和接数据源一样。
+
 ## 现状与边界(诚实标注)
 
 - ✅ bars(cn/hk/us)、fundamentals(cn/hk)、universe(**cn/hk/us 全走注册表**)。
