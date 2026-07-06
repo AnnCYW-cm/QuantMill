@@ -112,12 +112,21 @@ def cmd_web(a):
 
 
 def cmd_cross(a):
-    from quantmill.cross.run import (run_backtest, run_ic, run_ic_decay,
-                                     run_survivorship, run_validate)
+    from quantmill.cross.run import (run_attribution, run_backtest, run_ic,
+                                     run_ic_decay, run_neutralize,
+                                     run_riskmodel, run_survivorship,
+                                     run_validate)
     if a.action == "ic":
         run_ic(market=a.market, quick=a.quick, horizon=a.horizon, sample=a.sample)
     elif a.action == "ic-decay":
         run_ic_decay(market=a.market, quick=a.quick, sample=a.sample)
+    elif a.action == "neutralize":
+        run_neutralize(market=a.market, quick=a.quick, sample=a.sample, horizon=a.horizon)
+    elif a.action == "riskmodel":
+        run_riskmodel(market=a.market, quick=a.quick, sample=a.sample, horizon=a.horizon, top=a.topk)
+    elif a.action == "attribution":
+        run_attribution(market=a.market, quick=a.quick, sample=a.sample,
+                        horizon=a.horizon, k=a.topk, cost=a.cost, model=a.model)
     elif a.action == "validate":
         run_validate(model=a.model, markets=("cn", "hk"), horizon=a.horizon, cost=a.cost)
     elif a.action == "survivorship":
@@ -439,8 +448,10 @@ def main():
     sp.set_defaults(func=cmd_paper)
 
     sp = sub.add_parser("cross", help="横截面选股:全市场排名+top-k回测 | cross-sectional selection")
-    sp.add_argument("action", choices=["ic", "ic-decay", "backtest", "validate", "survivorship"],
-                    help="ic=因子排行 / ic-decay=IC衰减矩阵 / backtest=选股回测 / validate=跨市场验证 / survivorship=量化前视偏差")
+    sp.add_argument("action", choices=["ic", "ic-decay", "backtest", "validate", "survivorship",
+                                       "neutralize", "riskmodel", "attribution"],
+                    help="ic/ic-decay/backtest/validate/survivorship + neutralize=因子中性化 / "
+                         "riskmodel=因子风险模型 / attribution=绩效归因")
     sp.add_argument("--model", default="composite", choices=["composite", "ml"],
                     help="composite=稳健因子组合(默认,跨市场验证过)/ ml=LightGBM排名")
     sp.add_argument("--market", default="cn", choices=["cn", "hk", "us"])

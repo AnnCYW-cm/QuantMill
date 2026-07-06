@@ -47,6 +47,7 @@ def topk_backtest(panel: pd.DataFrame, score: pd.Series, k: int = 20,
     rebal = dates[::horizon]                         # 不重叠换仓点
 
     rows, picks = [], []                             # picks:每期 top-k 标的,算换手用
+    picks_by_date = {}                               # {date:[symbols]},供归因用
     for d in rebal:
         g = df.xs(d, level="date")
         if len(g) < 2 * k + 5:
@@ -56,6 +57,7 @@ def topk_backtest(panel: pd.DataFrame, score: pd.Series, k: int = 20,
         long_ret = top[ret_col].mean()
         bench_ret = g[ret_col].mean()
         picks.append(list(top.index))                # index = symbol
+        picks_by_date[d] = list(top.index)
         rec = {"date": d, "long": long_ret, "bench": bench_ret}
         if long_short:
             short_ret = g.tail(k)[ret_col].mean()
@@ -69,7 +71,7 @@ def topk_backtest(panel: pd.DataFrame, score: pd.Series, k: int = 20,
             bt["ls"] -= 2 * cost
 
     ppy = 252.0 / horizon                             # 每年换仓期数
-    out = {"equity": bt, "metrics": {
+    out = {"equity": bt, "picks": picks_by_date, "metrics": {
         "策略 top-k": _metrics(bt["long"], ppy),
         "基准 等权": _metrics(bt["bench"], ppy),
     }}

@@ -1,6 +1,6 @@
 # quantmill 交付清单 / Status
 
-> 截至 2026-07-06 · 15 层模块 · 150 测试全绿(+1 跳过)· 16 个 CLI 命令 · 网页台(8页,含前瞻曲线)· CI/docs 双绿 · 三层可插拔(数据/LLM/模型)· 中英双语 · pip 可安装
+> 截至 2026-07-06 · 15 层模块 · 163 测试全绿(+1 跳过)· 16 个 CLI 命令 · 网页台(8页,含前瞻曲线)· CI/docs 双绿 · 三层可插拔(数据/LLM/模型)· 中英双语 · pip 可安装
 
 ---
 
@@ -50,11 +50,15 @@
   按任务分 CLASSIFIERS/REGRESSORS 注册表),`lgbm`(默认,**与原写死参数逐值等价·零漂移**)+
   sklearn `logistic`/`ridge`,`QUANTMILL_MODEL_RANKER/CLF` 一个环境变量换模型,可接自己的。
   → **数据 / LLM / 模型 三层同一套可插拔哲学**。
+- ✅ **回测/分析补齐(发布前体检)**:标准绩效指标 Sortino/Calmar/信息比IR/换手率(接进 cross/
+  组合/单股)、**IC 衰减**矩阵(`cross ic-decay`)、**因子中性化**(`cross neutralize`,揪市值替身)、
+  **因子风险模型**(`cross riskmodel`,风险=因子⊕特质+各因子贡献)、**绩效归因**(`cross attribution`,
+  超额=因子暴露+选股α)——研究半功能齐到量化人挑不出低级缺失。
 - ✅ **CI 自动化 + 修绿 docs**:`ci.yml`(matrix os×py 测试)长绿;`Deploy docs` 从一直红修成绿
   (改用 `mkdocs gh-deploy`,不依赖 Pages 设置)。
 
 ### 四、工程质量
-- **150 个离线测试全绿**(+1 跳过;合成数据、确定性、可复现);**CI matrix(ubuntu/macos × py3.9/3.12)双绿**。
+- **163 个离线测试全绿**(+1 跳过;合成数据、确定性、可复现);**CI matrix(ubuntu/macos × py3.9/3.12)双绿**。
 - **核心锁死**:「无未来函数」(特征/组合/情绪/cross walk-forward)+「只前进不回看」(前瞻记录)+「严格 PIT」(available_date 不早于数据日)+ DataProvider/ModelProvider 契约 +「换源/换模型零漂移」(lgbm provider 逐值等于原生)。
 - 中英双语 · pip 可安装(`[dev][llm][broker][web][parquet][sharadar]`)· GitHub 就绪(CI/Pages/PyPI 工作流)。
 

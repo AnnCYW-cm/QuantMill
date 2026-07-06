@@ -99,6 +99,75 @@ def run_ic_decay(market: str = "cn", quick: bool = False, sample: bool = False,
     return mat
 
 
+def run_riskmodel(market: str = "cn", quick: bool = False, sample: bool = False,
+                  horizon: int = 20, top: int = 20, **kw) -> dict:
+    """因子风险模型:因子波动 + 当前 top-k 组合的风险分解(因子 vs 特质 + 各因子贡献)。"""
+    from quantmill.cross.composite import composite_score
+    from quantmill.cross.model import rank_normalize
+    from quantmill.cross.riskmodel import factor_risk_model, risk_decompose
+    panel = get_panel(market=market, quick=quick, sample=sample, horizon=horizon, **kw)
+    cols = factor_columns(panel)
+    ppy = 252.0 / horizon
+    m = factor_risk_model(panel, cols, periods_per_year=ppy)
+    score = composite_score(panel)
+    d = panel.index.get_level_values("date").unique()[-1]
+    exp = rank_normalize(panel, cols).xs(d, level="date")
+    sc = score[score.index.get_level_values("date") == d]
+    sc.index = sc.index.get_level_values("symbol")
+    held = sc.sort_values(ascending=False).head(top).index
+    w = pd.Series(1 / len(held), index=held)
+    r = risk_decompose(w, exp, m)
+    print("\n" + "=" * 66)
+    print(f"因子风险模型 · {market.upper()} · 当前 top-{len(held)} 组合(年化口径)")
+    print("=" * 66)
+    print(f"总波动 {r['total_vol']*100:.1f}%  =  因子 {r['factor_vol']*100:.1f}%  ⊕  特质 {r['specific_vol']*100:.1f}%")
+    print("各因子风险贡献(方差口径,绝对值大=风险来源):")
+    print((r["factor_contrib"] * 100).round(2).to_string())
+    print("⚠️ 统计型风格因子风险模型(非完整 Barra);机构级另需商业风险模型。")
+    return {"model": m, "decomp": r}
+
+
+def run_attribution(market: str = "cn", quick: bool = False, sample: bool = False,
+                    horizon: int = 20, k: int = 20, cost: float = 0.0015,
+                    model: str = "composite", **kw) -> pd.DataFrame:
+    """绩效归因:把 top-k 组合的累计收益分解成 市场 / 各因子 / 特质。"""
+    from quantmill.cross.riskmodel import return_attribution
+    panel = get_panel(market=market, quick=quick, sample=sample, horizon=horizon, **kw)
+    cols = factor_columns(panel)
+    score = _score_for(panel, cols, model, horizon, min(504, len(panel) // 2), 63)
+    res = topk_backtest(panel, score, k=k, horizon=horizon, cost=cost)
+    att = return_attribution(panel, cols, res["picks"])
+    print("\n" + "=" * 66)
+    print(f"绩效归因 · {market.upper()} · {model} top-{k} · 收益从哪来")
+    print("=" * 66)
+    print(att.to_string(index=False))
+    print("👉 特质占比高=靠选股(α);某因子占比高=其实在吃那个因子的 β(风格暴露)。")
+    return att
+
+
+def run_neutralize(market: str = "cn", quick: bool = False, sample: bool = False,
+                   horizon: int = 20, by=("size",), **kw) -> pd.DataFrame:
+    """因子中性化前后对比:各因子横截面 IC(原始 vs 对 size 中性化后)。"""
+    from quantmill.cross.ic import ic_summary
+    from quantmill.cross.neutralize import neutralize
+    panel = get_panel(market=market, quick=quick, sample=sample, horizon=horizon, **kw)
+    cols = [c for c in factor_columns(panel) if c not in by]
+    rows = []
+    for f in cols:
+        ic0 = ic_summary(panel, f)["IC"]
+        p2 = panel.assign(_n=neutralize(panel, f, by=by))
+        ic1 = ic_summary(p2, "_n")["IC"]
+        rows.append({"factor": f, "IC原始": ic0, f"IC中性化({'+'.join(by)})": ic1,
+                     "IC变化": round((ic1 or 0) - (ic0 or 0), 4)})
+    tab = pd.DataFrame(rows)
+    print("\n" + "=" * 66)
+    print(f"因子中性化对比 · {market.upper()} · 对 {'+'.join(by)} 中性化")
+    print("=" * 66)
+    print(tab.to_string(index=False))
+    print("👉 中性化后 IC 大降的因子,原来多半是市值/行业的替身,不是独立 α。")
+    return tab
+
+
 def _score_for(panel, cols, model, horizon, init_train, step):
     """按 model 产出打分:composite=固定配方零训练;ml=walk-forward LightGBM。"""
     if model == "composite":

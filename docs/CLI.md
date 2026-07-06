@@ -23,6 +23,9 @@ quantmill cross <action> [--model composite|ml] [--market cn|hk|us] [--quick] [-
 | `backtest` | 训练/组合打分 + top-k 回测 + DSR 可信度;指标含**夏普/Sortino/Calmar/信息比IR/换手率** |
 | `validate` | **跨市场验证**:同一方法在 A股+港股各跑,看是否都为正 |
 | `survivorship` | **量化前视/幸存者偏差**:全池 vs PIT(2023前已纳入)对比 |
+| `neutralize` | **因子中性化**:各因子横截面 IC 原始 vs 对 size 中性化后(揪出"市值替身"因子) |
+| `riskmodel` | **因子风险模型**:当前 top-k 组合的风险分解(因子波动 ⊕ 特质波动 + 各因子风险贡献) |
+| `attribution` | **绩效归因**:把超额收益拆成 各因子主动暴露贡献 + 选股α(钱从哪来) |
 
 | --model | 说明 |
 |---|---|

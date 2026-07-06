@@ -16,6 +16,9 @@ from quantmill.cross.backtest import topk_backtest
 from quantmill.cross.composite import ROBUST_RECIPE, composite_score
 from quantmill.cross.ic import daily_ic, ic_decay, ic_summary, ic_table
 from quantmill.cross.model import rank_normalize, walk_forward_scores
+from quantmill.cross.neutralize import add_beta, neutralize
+from quantmill.cross.riskmodel import (factor_returns, factor_risk_model,
+                                       return_attribution, risk_decompose)
 from quantmill.cross.panel import VALUE_COLS, build_panel, factor_columns
 from quantmill.cross.run import (
                                  get_panel,
@@ -33,6 +36,8 @@ __all__ = [
     "daily_ic", "ic_decay", "ic_summary", "ic_table",
     "rank_normalize", "walk_forward_scores", "topk_backtest",
     "composite_score", "ROBUST_RECIPE", "csi300_pit",
+    "neutralize", "add_beta", "factor_returns", "factor_risk_model",
+    "risk_decompose", "return_attribution",
     "get_panel", "load_sample_panel",
     "run_ic", "run_backtest", "run_validate", "run_survivorship",
 ]
