@@ -43,3 +43,35 @@ def test_error_handler_returns_json_and_real_code():
     assert r.status_code == 404
     assert r.is_json
     assert "error" in r.get_json()
+
+
+def test_forward_page_wired():
+    """前瞻曲线页:导航项 + 视图容器 + 前端渲染函数都在。"""
+    h = _client().get("/").get_data(as_text=True)
+    assert 'data-v="forward"' in h and 'id="v-forward"' in h
+    js = _client().get("/static/app.js").get_data(as_text=True)
+    assert "renderForward" in js and "navchart" in js
+
+
+def test_forward_api_empty_state(tmp_path, monkeypatch):
+    """无记录时 /api/forward 返回 empty(不联网、不建仓)。"""
+    from quantmill import config
+    monkeypatch.setattr(config, "RESULTS_DIR", str(tmp_path))
+    j = _client().get("/api/forward?market=cn&model=composite").get_json()
+    assert j["empty"] is True and j["market"] == "cn"
+
+
+def test_forward_api_reads_saved_curve(tmp_path, monkeypatch):
+    """有落盘状态时 /api/forward 返回净值曲线 + 持仓 + 汇总(纯读,不联网)。"""
+    from quantmill import config
+    from quantmill.paper.forward import save_state, step_forward
+    monkeypatch.setattr(config, "RESULTS_DIR", str(tmp_path))
+    tgt = {"A": 0.5, "B": 0.5}
+    st = step_forward({}, tgt, {"A": 10.0, "B": 20.0}, "2026-01-01")
+    st = step_forward(st, tgt, {"A": 11.0, "B": 20.0}, "2026-01-02", horizon=20)
+    save_state(st, "cn", "composite")
+    j = _client().get("/api/forward?market=cn&model=composite").get_json()
+    assert j["empty"] is False
+    assert j["points"] == 2 and len(j["curve"]) == 2
+    assert j["curve"][0]["dd"] == 0.0            # 首点回撤为 0
+    assert len(j["positions"]) == 2

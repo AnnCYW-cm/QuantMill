@@ -13,3 +13,4 @@ _XCACHE: dict = {}    # market:model -> 横截面结果      cross-sectional res
 _XPROG: dict = {}     # market:model -> 横截面进度      cross-compute progress
 _QSRC: dict = {}      # market -> 行情源(alpaca/yfinance)
 _BCACHE: dict = {}    # (market, method) -> 组合回测结果 portfolio backtest
+_FPROG: dict = {}     # market:model -> 前瞻推进进度      forward-run progress

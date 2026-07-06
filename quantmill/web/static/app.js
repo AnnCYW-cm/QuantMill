@@ -1,5 +1,5 @@
 let market="us", view="markets", quotes={}, signals=null, sigLoading=false, sortBy="sig", sigProg={done:0,total:0};
-let chartType="candle", lastData=null, lastSym="", crossModel="composite";
+let chartType="candle", lastData=null, lastSym="", crossModel="composite", fwdModel="composite", fwdPolling=false;
 let maCfg=[{n:5,c:'#f59e0b',on:true},{n:10,c:'#a855f7',on:false},{n:20,c:'#3b82f6',on:true},{n:60,c:'#ec4899',on:false}];
 const PAL=['#3b82f6','#22c55e','#f59e0b','#ef4444','#a855f7','#06b6d4','#ec4899','#84cc16'];
 const $=id=>document.getElementById(id);
@@ -236,13 +236,75 @@ async function loadCross(refresh){const el=$("cross");
   }
   poll();}
 
+/* ---- 前瞻曲线页 ---- */
+function navchart(curve,base,w=760,h=300){const pL=58,pR=16,pT=16,pB=26,iw=w-pL-pR,ih=h-pT-pB;
+  const navs=curve.map(p=>p.nav),all=navs.concat([base]);
+  const mn=Math.min(...all),mx=Math.max(...all),rg=(mx-mn)||1,Y=v=>pT+ih-(v-mn)/rg*ih;
+  const n=curve.length,X=i=>n<2?pL+iw/2:pL+iw*i/(n-1);
+  let grid="";for(let i=0;i<=4;i++){const v=mn+rg*i/4,y=Y(v);
+    grid+=`<line x1="${pL}" y1="${y.toFixed(1)}" x2="${w-pR}" y2="${y.toFixed(1)}" stroke="#262b36"/>`;
+    grid+=`<text x="${pL-7}" y="${(y+3.5).toFixed(1)}" text-anchor="end" font-size="10.5" fill="#8b93a1">${Math.round(v).toLocaleString()}</text>`;}
+  const by=Y(base);const bl=`<line x1="${pL}" y1="${by.toFixed(1)}" x2="${w-pR}" y2="${by.toFixed(1)}" stroke="#6b7280" stroke-width="1" stroke-dasharray="4 4"/>
+    <text x="${w-pR-2}" y="${(by-4).toFixed(1)}" text-anchor="end" font-size="10.5" fill="#9ca3af">初始 ${Math.round(base).toLocaleString()}</text>`;
+  const last=navs[n-1],col=last>=base?'#22c55e':'#ef4444';
+  const pts=curve.map((p,i)=>`${X(i).toFixed(1)},${Y(p.nav).toFixed(1)}`).join(" ");
+  const line=n<2?"":`<polyline fill="none" stroke="${col}" stroke-width="2" points="${pts}"/>`;
+  const dots=curve.map((p,i)=>`<circle cx="${X(i).toFixed(1)}" cy="${Y(p.nav).toFixed(1)}" r="${n<8?3:2}" fill="${col}"/>`).join("");
+  let xl="";const idx=n<=6?curve.map((_,i)=>i):[0,(n/3)|0,(2*n/3)|0,n-1];
+  idx.forEach(i=>{xl+=`<text x="${X(i).toFixed(1)}" y="${h-8}" text-anchor="middle" font-size="10" fill="#8b93a1">${curve[i].d.slice(5)}</text>`;});
+  return `<svg viewBox="0 0 ${w} ${h}" style="width:100%;background:#12151b;border-radius:8px">${grid}${bl}${line}${dots}${xl}
+    <line x1="${pL}" y1="${pT}" x2="${pL}" y2="${h-pB}" stroke="#3a4150"/>
+    <line x1="${pL}" y1="${h-pB}" x2="${w-pR}" y2="${h-pB}" stroke="#3a4150"/></svg>`;}
+function setForwardModel(m){fwdModel=m;$("fm-composite").classList.toggle("on2",m==="composite");$("fm-ml").classList.toggle("on2",m==="ml");renderForward();}
+async function renderForward(){const el=$("forward");
+  if(market!=="cn"&&market!=="hk"&&market!=="us"){el.innerHTML='<div class="muted">前瞻曲线支持 CN/HK/US —— 左下角切换市场。</div>';return;}
+  let d;try{d=await (await fetch(`/api/forward?market=${market}&model=${fwdModel}`)).json();}
+  catch(e){el.innerHTML='<div class="muted" style="color:var(--red)">连接失败</div>';return;}
+  const running=d.running?`<div class="muted" style="margin-bottom:10px"><span class="spin"></span> ${d.stage||"推进中…"}</div>`:"";
+  if(d.run_error){el.innerHTML=`${running}<div class="muted" style="color:var(--red)">推进失败:${d.run_error}<br>(前瞻推进需联网拉最新数据,本机网络或数据源不通时会失败;可命令行 <code>quantmill forward run --market ${market}</code> 排障)</div>`;return;}
+  if(d.empty){el.innerHTML=`${running}<div class="muted">还没有前瞻记录(${market.toUpperCase()} · ${fwdModel==="ml"?"ML排名":"稳健组合"})。点上面「推进一步」,今天就建仓、写下第一个净值点。</div>`;return;}
+  const up=d.ret>=0;
+  const strip=`<div class="strip">
+    <div><div class="k">起始</div><div class="v" style="font-size:15px">${d.inception}</div></div>
+    <div><div class="k">现值</div><div class="v">${Math.round(d.nav).toLocaleString()}</div></div>
+    <div><div class="k">累计收益</div><div class="v ${up?'up':'down'}">${up?'+':''}${d.ret}%</div></div>
+    <div><div class="k">最大回撤</div><div class="v down">${d.max_dd}%</div></div>
+    <div><div class="k">净值点</div><div class="v">${d.points}</div></div>
+    <div><div class="k">当前敞口</div><div class="v ${d.exposure<1?'down':''}">${(d.exposure*100).toFixed(0)}%</div></div></div>`;
+  const posrows=d.positions.map(p=>`<tr><td>${p.sym}</td><td>${p.w}%</td></tr>`).join("")||'<tr><td colspan=2 class="muted">空仓</td></tr>';
+  const chartBlock=d.points<2
+    ? `<div class="panel" style="text-align:center;color:var(--dim)">只有 1 个净值点 —— 明天(或下次)再来点一次「推进一步」,曲线才会长出来。前瞻的意义就是真实时间要一天天过去。</div>`
+    : navchart(d.curve,d.base);
+  el.innerHTML=`${running}<div class="sub">${market.toUpperCase()} · ${fwdModel==="ml"?"ML排名":"稳健组合"} · 起始 ${d.inception} · 上次换仓 ${d.last_rebalance||'—'} · <b style="color:var(--grn)">只前进不回看</b></div>
+    ${strip}${chartBlock}
+    <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:12px">
+      <div class="panel" style="flex:0 0 auto;min-width:200px"><div class="sub">当前目标持仓(${d.positions.length}只)</div>
+        <table><tr><th>标的</th><th>权重</th></tr>${posrows}</table></div>
+      <div class="panel" style="flex:1;min-width:280px"><div class="sub">⚠️ 怎么读这条线</div>
+        <div style="font-size:13px;line-height:1.75">这是纸面、不回看的<b>前瞻</b>净值:虚线是初始本金,绿/红线是实际净值,历史点<b>绝不改写</b>。<br>
+        它能不能兑现回测里那点微弱 alpha,要看它<b>几个月后</b>的样子——现在点数少,别急着下结论。<br>
+        每天/每周固定点一次「推进一步」即可(同一天重复点=更新今天,不新增点)。</div></div>
+    </div>`;}
+async function runForwardStep(){const b=$("runfwd");b.disabled=true;$("fwdmsg").textContent="推进中:取最新面板+现价…(需联网,首次较慢)";
+  try{const r=await (await fetch(`/api/forward/run?market=${market}&model=${fwdModel}`,{method:"POST"})).json();
+    if(r.status==="already_running")toast("已经在推进了,稍候");
+    if(!fwdPolling){fwdPolling=true;const poll=async()=>{
+      let d;try{d=await (await fetch(`/api/forward?market=${market}&model=${fwdModel}`)).json();}catch(e){d={};}
+      if(d.running){if(view==="forward")renderForward();setTimeout(poll,2500);}
+      else{fwdPolling=false;b.disabled=false;$("fwdmsg").textContent="";
+        if(view==="forward")renderForward();
+        toast(d.run_error?("推进失败:"+d.run_error.slice(0,40)):"已追加今日净值点 ✓");}};
+      setTimeout(poll,1500);}}
+  catch(e){b.disabled=false;$("fwdmsg").textContent="";toast("推进失败");}}
+
 /* ---- 导航 / 市场 ---- */
 function setView(v){view=v;document.querySelectorAll(".nav").forEach(n=>n.classList.toggle("on",n.dataset.v===v));
   document.querySelectorAll(".view").forEach(s=>s.classList.toggle("on",s.id==="v-"+v));
-  if(v==="portfolio")renderPortfolio();if(v==="overview")loadOverview();}
+  if(v==="portfolio")renderPortfolio();if(v==="overview")loadOverview();if(v==="forward")renderForward();}
 function setMarket(m){market=m;quotes={};signals=null;
   document.querySelectorAll(".mt").forEach(t=>t.classList.toggle("on",t.dataset.m===m));
   loadQuotes();loadSignals();if(view==="portfolio")renderPortfolio();if(view==="overview")loadOverview();
+  if(view==="forward")renderForward();
   $("cred").innerHTML='<div class="muted">点上面按钮开始体检</div>';}
 
 document.querySelector(".side").addEventListener("click",e=>{
@@ -281,6 +343,9 @@ $("runbt").addEventListener("click",runBacktest);
 $("runcross").addEventListener("click",()=>loadCross(true));
 $("cm-composite").addEventListener("click",()=>setCrossModel("composite"));
 $("cm-ml").addEventListener("click",()=>setCrossModel("ml"));
+$("runfwd").addEventListener("click",runForwardStep);
+$("fm-composite").addEventListener("click",()=>setForwardModel("composite"));
+$("fm-ml").addEventListener("click",()=>setForwardModel("ml"));
 $("export").addEventListener("click",()=>{window.open("/api/export?market="+market);toast("已导出快照 HTML");});
 let autoTimer=null;
 $("autosig").addEventListener("change",e=>{clearInterval(autoTimer);

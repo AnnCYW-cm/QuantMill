@@ -214,7 +214,7 @@ quantmill paper <run|status|reset> [market] [--method] [--k] [--cash] [--quick] 
 ```
 quantmill web [--port 8787] [--no-open]
 ```
-起本地 Flask 网页台(7 页:总览/行情/组合/可信度/因子/选股/个股/消息面)。美股配 Alpaca 密钥可转实时行情。
+起本地 Flask 网页台(8 页:总览/行情/组合/可信度/因子/选股/**前瞻曲线**/消息面/个股)。**前瞻曲线**页可视化 `forward` 的只前进净值线(推进一步/看曲线)。美股配 Alpaca 密钥可转实时行情。
 
 ## home —— 刷新工作台首页
 

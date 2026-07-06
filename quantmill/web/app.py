@@ -5,6 +5,7 @@ app.py —— Flask 网页应用(装配层)| Flask web app (assembly)
 各领域逻辑在蓝图里 | domain logic lives in blueprints:
     market.py      行情 / 信号            | quotes / signals
     cross_view.py  横截面选股             | cross-sectional selection
+    forward_view.py 前瞻纸面曲线          | forward paper track
     research.py    K线 / 因子 / 消息 / 可信度 | chart / factors / news / credibility
     trading.py     纸面 / 组合 / 总览 / 导出 / 自选 | paper / portfolio / overview / export / watchlist
 共享缓存在 state.py;前端在 static/{index.html, app.css, app.js}。
@@ -29,9 +30,10 @@ def index():
 
 
 # 注册各领域蓝图 | register domain blueprints
-from quantmill.web import cross_view, market, research, trading  # noqa: E402
+from quantmill.web import (cross_view, forward_view, market,  # noqa: E402
+                          research, trading)
 
-for _mod in (market, cross_view, research, trading):
+for _mod in (market, cross_view, forward_view, research, trading):
     app.register_blueprint(_mod.bp)
 
 
