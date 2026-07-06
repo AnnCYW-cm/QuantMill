@@ -500,6 +500,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#2026-07-06" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        三·补(2026-07-06 会话:往"合格底座"推的三步)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -577,10 +588,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#15" class="md-nav__link">
+  <a href="#16" class="md-nav__link">
     <span class="md-ellipsis">
       
-        附:15 命令速查
+        附:16 命令速查
       
     </span>
   </a>
@@ -694,6 +705,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#2026-07-06" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        三·补(2026-07-06 会话:往"合格底座"推的三步)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -771,10 +793,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#15" class="md-nav__link">
+  <a href="#16" class="md-nav__link">
     <span class="md-ellipsis">
       
-        附:15 命令速查
+        附:16 命令速查
       
     </span>
   </a>
@@ -803,7 +825,7 @@
 
 <h1 id="quantmill-status">quantmill 交付清单 / Status<a class="headerlink" href="#quantmill-status" title="Permanent link">&para;</a></h1>
 <blockquote>
-<p>截至 2026-07-05 · 14 层模块 · 43 个 Python 文件 · 105 测试全绿 · 15 个 CLI 命令 · 网页台(8页)· 中英双语 · pip 可安装</p>
+<p>截至 2026-07-06 · 15 层模块 · 137 测试全绿(+1 跳过)· 16 个 CLI 命令 · 网页台(8页,含前瞻曲线)· CI/docs 双绿 · 中英双语 · pip 可安装</p>
 </blockquote>
 <hr />
 <h2 id="_1">✅ 已完成<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
@@ -818,9 +840,9 @@
 </thead>
 <tbody>
 <tr>
-<td><strong>data</strong></td>
+<td><strong>data ★</strong></td>
 <td>✅</td>
-<td>港/美/A 股,akshare+yfinance 双源回退+缓存;<code>live.py</code> <strong>Alpaca 美股实时行情</strong>(纯数据)</td>
+<td><strong>可插拔 DataProvider</strong>:四接口(bars/基本面/universe/quotes)+ Chain回退 + Caching + 注册表,一个环境变量换源;<code>live.py</code> <strong>Alpaca 美股实时行情</strong>(纯数据)</td>
 </tr>
 <tr>
 <td><strong>factor</strong></td>
@@ -863,14 +885,19 @@
 <td>纸面账户 + Alpaca 适配器</td>
 </tr>
 <tr>
+<td><strong>paper ★</strong></td>
+<td>✅</td>
+<td><strong>前瞻纸面记录</strong>:只前进不回看的净值曲线 + 每日自动推进(launchd/cron)</td>
+</tr>
+<tr>
 <td><strong>report / web</strong></td>
 <td>✅</td>
-<td>信号面板 + 工作台首页 + Flask 网页台(8页)</td>
+<td>信号面板 + 工作台首页 + Flask 网页台(8页,含前瞻曲线)</td>
 </tr>
 <tr>
 <td><strong>workflow</strong></td>
 <td>✅</td>
-<td>pipeline + cli(15 命令)</td>
+<td>pipeline + cli(16 命令)</td>
 </tr>
 </tbody>
 </table>
@@ -887,11 +914,25 @@
 <li>✅ Alpaca 美股实时行情接入(<code>data/live.py</code>),有 key 用实时、无 key 退回 yfinance。</li>
 <li>✅ 密钥支持环境变量或 <code>~/quant/.alpaca</code> 文件(双击启动也读);行情页显示 🟢实时/🕒延迟。</li>
 </ul>
+<h3 id="2026-07-06">三·补(2026-07-06 会话:往"合格底座"推的三步)<a class="headerlink" href="#2026-07-06" title="Permanent link">&para;</a></h3>
+<ul>
+<li>✅ <strong>前瞻实证</strong>(<code>paper/</code>):把风控后组合接成<strong>只前进、不回看</strong>的前瞻纸面曲线——
+  每次按当日真实收盘价追加一个净值点,<strong>历史绝不改写</strong>(8 测试焊死);网页「📜前瞻曲线」页
+  可视化;<code>forward auto</code> 每日自动推进(macOS launchd,睡眠错过下次唤醒补跑;非 mac 给 cron)。
+  已在本机按 A股收盘 15:10 装上、首个净值点已建仓。</li>
+<li>✅ <strong>可插拔 DataProvider</strong>(<code>data/</code>):把数据源从焊死改为可插拔(四小接口 + 组合器 + 注册表),
+  换成自己的付费/机构数据只改一个环境变量、零改 15 处调用点;契约测试拒未来 <code>available_date</code>/
+  前视 universe(见 <code>docs/DATAPROVIDER.md</code>)。</li>
+<li>✅ <strong>严格 PIT</strong>:<code>build_panel</code> 估值对齐升级为 <code>merge_asof(available_date)</code>——接带真实披露滞后的
+  财报源不泄露未来(3 测试焊死),老缓存自动退化等价原行为。</li>
+<li>✅ <strong>CI 自动化 + 修绿 docs</strong>:<code>ci.yml</code>(matrix os×py 测试)长绿;<code>Deploy docs</code> 从一直红修成绿
+  (改用 <code>mkdocs gh-deploy</code>,不依赖 Pages 设置)。</li>
+</ul>
 <h3 id="_3">四、工程质量<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>105 个离线测试全绿</strong>(合成数据、确定性、可复现)。</li>
-<li><strong>核心锁死「无未来函数」</strong>:特征层 / 组合层 / 情绪因子 / <strong>cross walk-forward(砍未来数据不改过去打分)</strong>。</li>
-<li>中英双语 · pip 可安装(<code>[dev][llm][broker][web]</code>)· git 就绪。</li>
+<li><strong>137 个离线测试全绿</strong>(+1 跳过;合成数据、确定性、可复现);<strong>CI matrix(ubuntu/macos × py3.9/3.12)双绿</strong>。</li>
+<li><strong>核心锁死</strong>:「无未来函数」(特征/组合/情绪/cross walk-forward)+「只前进不回看」(前瞻记录)+「严格 PIT」(available_date 不早于数据日)+ DataProvider 契约。</li>
+<li>中英双语 · pip 可安装(<code>[dev][llm][broker][web][parquet]</code>)· GitHub 就绪(CI/Pages/PyPI 工作流)。</li>
 </ul>
 <h3 id="_4">五、文档<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
 <ul>
@@ -899,6 +940,7 @@
 <li><code>docs/ARCHITECTURE.md</code> — 架构 + UML(Mermaid 组件/类/时序/数据流)</li>
 <li><code>docs/RESEARCH_NOTES.md</code> — 横截面调查全记录(ML幻觉 vs 稳健组合、跨市场、偏差)</li>
 <li><code>docs/CLI.md</code> — 全命令参考</li>
+<li><code>docs/DATAPROVIDER.md</code> — 可插拔数据层设计 + 接入你自己的数据</li>
 <li><code>docs/PRODUCT_DESIGN.md</code> — 产品设计蓝图</li>
 <li><code>docs/ai-quant-landscape.md</code> — 全球 AI 量化调研(22家)</li>
 </ul>
@@ -942,7 +984,11 @@
 <tbody>
 <tr>
 <td><strong>修全幸存者偏差</strong></td>
-<td>PIT 只修了"前视纳入"一半;"后被踢出"的股需付费 PIT 数据</td>
+<td>PIT 只修了"前视纳入"一半;"后被踢出"的股需付费成分史。<strong>数据层已可插拔</strong>,接了付费源就能补(hk/us 亦然)</td>
+</tr>
+<tr>
+<td>真实前瞻曲线</td>
+<td><code>forward</code> 已挂上每日自动推进,但真正可信要<strong>积累几个月</strong>前瞻净值——时间问题,非代码</td>
 </tr>
 <tr>
 <td>拉长历史</td>
@@ -952,10 +998,6 @@
 <td>ROE/成长因子</td>
 <td>现只接了估值(ey/bp/size),质量/成长基本面待接</td>
 </tr>
-<tr>
-<td>cross 并入网页更多页</td>
-<td>因子权重可调、PIT 开关等</td>
-</tr>
 </tbody>
 </table>
 <hr />
@@ -964,8 +1006,8 @@
 <p><strong>平台本身很成熟,但装在里面的策略只有"真但弱"的边际。</strong> 经过四道关(可信度→子区间→跨市场→偏差)的拷问:复杂 ML 是过拟合幻觉,简单价值/低波/动量因子是真但弱、不可重仓。这也正是平台最值钱的地方 —— 它会当面拆穿漂亮回测,而不是拿它骗你。详见 <code>docs/RESEARCH_NOTES.md</code>。</p>
 </blockquote>
 <hr />
-<h2 id="15">附:15 命令速查<a class="headerlink" href="#15" title="Permanent link">&para;</a></h2>
-<p><code>scan · validate · analyze · factors · portfolio · news · paper · cross · risk · experiment · niche · textfactor · web · home · docs-pdf</code>
+<h2 id="16">附:16 命令速查<a class="headerlink" href="#16" title="Permanent link">&para;</a></h2>
+<p><code>scan · validate · analyze · factors · portfolio · news · paper · cross · risk · experiment · niche · textfactor · forward · web · home · docs-pdf</code>
 （详见 <code>docs/CLI.md</code>）</p>
 
 
