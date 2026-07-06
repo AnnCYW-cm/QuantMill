@@ -509,6 +509,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#sharadarproviderpit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        已内置样板:SharadarProvider(PIT 干净的美股)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -602,6 +613,50 @@
 <span class="nb">export</span><span class="w"> </span><span class="nv">QUANTMILL_FUNDAMENTALS_CN</span><span class="o">=</span>myvendor
 </code></pre></div>
 格式:<code>QUANTMILL_&lt;能力&gt;_&lt;市场&gt;=provider1,provider2</code>(能力 = BARS/FUNDAMENTALS/UNIVERSE/QUOTES)。</p>
+<h2 id="sharadarproviderpit">已内置样板:SharadarProvider(PIT 干净的美股)<a class="headerlink" href="#sharadarproviderpit" title="Permanent link">&para;</a></h2>
+<p><code>data/sharadar.py</code> 是"接付费数据修天花板"的头号样板(经 Nasdaq Data Link),<strong>四接口全实现</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>接口</th>
+<th>Sharadar 表</th>
+<th>为什么关键</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>bars</code></td>
+<td>SEP</td>
+<td>复权日线(<code>closeadj</code>,O/H/L 同因子缩放)</td>
+</tr>
+<tr>
+<td><code>fundamentals</code></td>
+<td>SF1(dim=ARQ)</td>
+<td><strong><code>datekey</code>=SEC 备案日=天然 <code>available_date</code></strong> → 严格 PIT 基本面(免费源没有)</td>
+</tr>
+<tr>
+<td><code>universe</code></td>
+<td>SP500</td>
+<td><strong>含 added/removed 动作 → 真实成分史,survivorship-free</strong>(填平 hk/us 天花板)</td>
+</tr>
+<tr>
+<td><code>quotes</code></td>
+<td>SEP 末行</td>
+<td>最新收盘</td>
+</tr>
+</tbody>
+</table>
+<p>用法:
+<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;.[sharadar]&quot;</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;NASDAQ_DATA_LINK_API_KEY=你的key&quot;</span><span class="w"> </span>&gt;<span class="w"> </span>~/quant/.sharadar<span class="w">   </span><span class="c1"># 或设环境变量</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">QUANTMILL_BARS_US</span><span class="o">=</span>sharadar,yfinance<span class="w">          </span><span class="c1"># 美股 bars 优先 Sharadar</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">QUANTMILL_FUNDAMENTALS_US</span><span class="o">=</span>sharadar<span class="w">           </span><span class="c1"># 解锁美股基本面(平台原来没有)</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">QUANTMILL_UNIVERSE_US</span><span class="o">=</span>sharadar<span class="w">               </span><span class="c1"># 用真实 S&amp;P500 成分史,不再幸存者偏差</span>
+</code></pre></div></p>
+<blockquote>
+<p>⚠️ 这是<strong>模板</strong>:列名按 Sharadar 官方 schema 映射、映射逻辑有离线测试焊死(<code>tests/test_sharadar.py</code>),
+但作者无真实账号未跑通端到端;接上你的 key 后若某列名有出入,改 <code>_MAP_SF1</code> 即可。</p>
+</blockquote>
 <h2 id="_4">接入你自己的数据(三步)<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <p><strong>A. 最快:用自带的 <code>ParquetProvider</code> 模板(零代码)</strong>
 1. <code>pip install -e ".[parquet]"</code>(装 pyarrow)。
