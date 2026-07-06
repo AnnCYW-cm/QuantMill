@@ -28,6 +28,31 @@ def daily_ic(panel: pd.DataFrame, factor: str, ret_col: str = "fwd",
     return panel.groupby(level="date").apply(_one).dropna()
 
 
+def ic_decay(panel: pd.DataFrame, factor: str, horizons=(1, 2, 3, 5, 10, 20),
+             price_col: str = "close", method: str = "spearman") -> pd.DataFrame:
+    """IC 衰减曲线:同一因子对【未来 h 天】收益的横截面 IC 随 h 如何衰减。
+
+    需面板含 close 列(build_panel(keep_close=True));逐 horizon 从 close 现算前瞻收益。
+    返回 [horizon, IC, ICIR, pos%, days]。信号越快衰减,换仓越要跟得上,否则 alpha 漏光。
+    """
+    if price_col not in panel.columns:
+        raise ValueError(f"ic_decay 需要面板含 '{price_col}' 列(build_panel(keep_close=True))")
+    base = panel[[factor, price_col]].sort_index(level=["symbol", "date"])
+    rows = []
+    for h in horizons:
+        fwd_h = base.groupby(level="symbol")[price_col].transform(
+            lambda s: s.shift(-h) / s - 1)
+        ics = daily_ic(base.assign(_r=fwd_h), factor, "_r", method=method)
+        if len(ics) == 0:
+            rows.append({"horizon": h, "IC": np.nan, "ICIR": np.nan, "pos%": np.nan, "days": 0})
+            continue
+        mean, std = ics.mean(), ics.std(ddof=1)
+        rows.append({"horizon": h, "IC": round(mean, 4),
+                     "ICIR": round(mean / std, 3) if std else np.nan,
+                     "pos%": round((ics > 0).mean() * 100, 1), "days": len(ics)})
+    return pd.DataFrame(rows)
+
+
 def ic_summary(panel: pd.DataFrame, factor: str, ret_col: str = "fwd",
                method: str = "spearman") -> dict:
     """单因子横截面 IC 汇总:均值 / ICIR / t / 正比例 / 天数。"""

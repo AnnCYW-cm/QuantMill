@@ -18,6 +18,7 @@ import pandas as pd
 def _metrics(rets: pd.Series, periods_per_year: float) -> dict:
     if len(rets) == 0:
         return {}
+    from quantmill.evaluation.metrics import calmar, sortino
     eq = (1 + rets).cumprod()
     total = eq.iloc[-1] - 1
     ann = (1 + total) ** (periods_per_year / len(rets)) - 1
@@ -26,8 +27,9 @@ def _metrics(rets: pd.Series, periods_per_year: float) -> dict:
     peak = eq.cummax()
     mdd = (eq / peak - 1).min()
     return {"总收益": round(total * 100, 1), "年化": round(ann * 100, 1),
-            "夏普": round(sharpe, 2), "最大回撤": round(mdd * 100, 1),
-            "期数": len(rets)}
+            "夏普": round(sharpe, 2), "Sortino": round(sortino(rets, periods_per_year), 2),
+            "Calmar": round(calmar(rets, periods_per_year), 2),
+            "最大回撤": round(mdd * 100, 1), "期数": len(rets)}
 
 
 def topk_backtest(panel: pd.DataFrame, score: pd.Series, k: int = 20,
@@ -44,14 +46,16 @@ def topk_backtest(panel: pd.DataFrame, score: pd.Series, k: int = 20,
     dates = df.index.get_level_values("date").unique().sort_values()
     rebal = dates[::horizon]                         # 不重叠换仓点
 
-    rows = []
+    rows, picks = [], []                             # picks:每期 top-k 标的,算换手用
     for d in rebal:
         g = df.xs(d, level="date")
         if len(g) < 2 * k + 5:
             continue
         g = g.sort_values("score", ascending=False)
-        long_ret = g.head(k)[ret_col].mean()
+        top = g.head(k)
+        long_ret = top[ret_col].mean()
         bench_ret = g[ret_col].mean()
+        picks.append(list(top.index))                # index = symbol
         rec = {"date": d, "long": long_ret, "bench": bench_ret}
         if long_short:
             short_ret = g.tail(k)[ret_col].mean()
@@ -71,7 +75,11 @@ def topk_backtest(panel: pd.DataFrame, score: pd.Series, k: int = 20,
     }}
     if long_short:
         out["metrics"]["多空 L/S"] = _metrics(bt["ls"], ppy)
-    # 超额
+    # 超额 + 信息比 IR + 换手率(量化人一打开就找的)
+    from quantmill.evaluation.metrics import information_ratio, turnover_from_sets
     out["metrics"]["策略 top-k"]["超额年化"] = round(
         out["metrics"]["策略 top-k"]["年化"] - out["metrics"]["基准 等权"]["年化"], 1)
+    out["metrics"]["策略 top-k"]["信息比IR"] = round(
+        information_ratio(bt["long"], bt["bench"], ppy), 2)
+    out["metrics"]["策略 top-k"]["换手率%"] = round(turnover_from_sets(picks) * 100, 1)
     return out

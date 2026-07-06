@@ -212,6 +212,10 @@ async function loadCross(refresh){const el=$("cross");
       <div><div class="k">策略年化</div><div class="v up">${s.年化}%</div></div>
       <div><div class="k">超额年化</div><div class="v ${s.超额年化>=0?'up':'down'}">${s.超额年化>=0?'+':''}${s.超额年化}%</div></div>
       <div><div class="k">夏普</div><div class="v">${s.夏普}</div></div>
+      <div><div class="k">Sortino</div><div class="v">${s.Sortino}</div></div>
+      <div><div class="k">Calmar</div><div class="v">${s.Calmar}</div></div>
+      <div><div class="k">信息比IR</div><div class="v">${s['信息比IR']}</div></div>
+      <div><div class="k">换手率</div><div class="v">${s['换手率%']}%</div></div>
       <div><div class="k">最大回撤</div><div class="v down">${s.最大回撤}%</div></div>
       <div><div class="k">胜基准</div><div class="v">${x.winrate}%</div></div>
       <div><div class="k">DSR</div><div class="v ${x.dsr>0.95?'up':''}">${(x.dsr*100).toFixed(0)}%</div></div></div>`;

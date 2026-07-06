@@ -83,7 +83,7 @@ def _pit_align(v: pd.DataFrame, index: pd.DatetimeIndex) -> pd.DataFrame:
 
 def build_panel(symbols, market: str = "cn", start=None, end=None, horizon: int = 20,
                 with_value: bool = True, min_rows: int = 80,
-                verbose: bool = True) -> pd.DataFrame:
+                keep_close: bool = False, verbose: bool = True) -> pd.DataFrame:
     """构建横截面面板。| Build the cross-sectional panel.
 
     market: cn/hk/us(cn/hk 带基本面因子;us 配了 Sharadar key 才带基本面,否则退化为纯量价)。
@@ -102,6 +102,8 @@ def build_panel(symbols, market: str = "cn", start=None, end=None, horizon: int 
             continue
         feats = compute_factors(df)                                   # 量价因子
         feats["fwd"] = df["Close"].shift(-horizon) / df["Close"] - 1  # 标签:未来收益
+        if keep_close:
+            feats["close"] = df["Close"]                              # 供 IC 衰减算多 horizon 前瞻收益
         if with_value:
             v = _valuation(sym, market)
             if v is not None:

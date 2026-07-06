@@ -56,6 +56,8 @@ def summarize(stats, close: pd.Series) -> dict:
         "买入持有最大回撤%": round(bh_dd, 1),
         "回撤更小": strat_dd > bh_dd,     # 回撤是负数,更大(更接近0)=更小的亏 | Drawdown is negative; larger (closer to 0) = smaller loss
         "夏普": round(float(stats["Sharpe Ratio"]), 2),
+        "Sortino": round(float(stats.get("Sortino Ratio", float("nan"))), 2),
+        "Calmar": round(float(stats.get("Calmar Ratio", float("nan"))), 2),
         "交易次数": int(stats["# Trades"]),
         "胜率%": round(float(stats["Win Rate [%]"]), 1),
     }

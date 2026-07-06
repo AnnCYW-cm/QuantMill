@@ -19,7 +19,8 @@ quantmill cross <action> [--model composite|ml] [--market cn|hk|us] [--quick] [-
 | action | 作用 |
 |---|---|
 | `ic` | 横截面因子 RankIC 排行(哪些因子在选股上有信息) |
-| `backtest` | 训练/组合打分 + top-k 回测 + DSR 可信度 |
+| `ic-decay` | **IC 衰减矩阵**:因子×未来h天横截面 IC,看信号多快衰减(定换仓频率)。需真实池(不支持 --sample) |
+| `backtest` | 训练/组合打分 + top-k 回测 + DSR 可信度;指标含**夏普/Sortino/Calmar/信息比IR/换手率** |
 | `validate` | **跨市场验证**:同一方法在 A股+港股各跑,看是否都为正 |
 | `survivorship` | **量化前视/幸存者偏差**:全池 vs PIT(2023前已纳入)对比 |
 

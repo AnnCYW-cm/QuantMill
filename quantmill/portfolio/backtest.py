@@ -93,11 +93,16 @@ def portfolio_metrics(result: dict, periods_per_year: int = 252) -> dict:
     ann_vol = float(r.std() * np.sqrt(periods_per_year))
     sharpe = float(ann_return / ann_vol) if ann_vol > 0 else 0.0
     max_dd = float((eq / eq.cummax() - 1.0).min())
+    from quantmill.evaluation.metrics import (calmar, sortino,
+                                              turnover_from_weights)
     return {
         "total_return": round(total_return * 100, 1),
         "sharpe": round(sharpe, 2),
+        "sortino": round(sortino(r, periods_per_year), 2),
+        "calmar": round(calmar(r, periods_per_year), 2),
         "ann_return": round(ann_return * 100, 1),
         "ann_vol": round(ann_vol * 100, 1),
         "max_drawdown": round(max_dd * 100, 1),
+        "turnover%": round(turnover_from_weights(result["weights"]) * 100, 1),
         "total_cost": round(float(result["cost"].sum()) * 100, 2),
     }

@@ -14,7 +14,7 @@ from __future__ import annotations
 
 from quantmill.cross.backtest import topk_backtest
 from quantmill.cross.composite import ROBUST_RECIPE, composite_score
-from quantmill.cross.ic import daily_ic, ic_summary, ic_table
+from quantmill.cross.ic import daily_ic, ic_decay, ic_summary, ic_table
 from quantmill.cross.model import rank_normalize, walk_forward_scores
 from quantmill.cross.panel import VALUE_COLS, build_panel, factor_columns
 from quantmill.cross.run import (
@@ -30,7 +30,7 @@ from quantmill.cross.universe import csi300, csi300_pit, sample, universe
 __all__ = [
     "csi300", "sample", "universe",
     "build_panel", "factor_columns", "VALUE_COLS",
-    "daily_ic", "ic_summary", "ic_table",
+    "daily_ic", "ic_decay", "ic_summary", "ic_table",
     "rank_normalize", "walk_forward_scores", "topk_backtest",
     "composite_score", "ROBUST_RECIPE", "csi300_pit",
     "get_panel", "load_sample_panel",
