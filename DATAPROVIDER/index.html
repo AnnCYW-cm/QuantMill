@@ -624,9 +624,14 @@
 </code></pre></div></p>
 <h2 id="_5">现状与边界(诚实标注)<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
 <ul>
-<li>✅ bars(cn/hk/us)、fundamentals(cn/hk)、universe(cn 真实成分+纳入日期)已走注册表。</li>
-<li>⚠️ <strong>universe 的 hk/us 仍是 <code>cross/universe</code> 的静态蓝筹清单</strong>(未接真实成分史),这一半待补。</li>
-<li>⚠️ <code>available_date</code> 对百度估值=当日(比率由当日价算得,当日可知);接<strong>带真实披露滞后的财报源</strong>时,<code>build_panel</code> 应从 <code>reindex+ffill</code> 升级为 <code>merge_asof(available_date)</code> 才算严格 PIT——接口已留好这个位。</li>
+<li>✅ bars(cn/hk/us)、fundamentals(cn/hk)、universe(<strong>cn/hk/us 全走注册表</strong>)。</li>
+<li>✅ <strong>严格 PIT 已接</strong>:<code>build_panel</code> 用 <code>_pit_align</code>(<code>merge_asof(available_date, backward)</code>)——
+  每个交易日只用当日<strong>已公开</strong>的估值;接带真实披露滞后的财报源不会泄露未来(测试焊死)。
+  无 <code>available_date</code> 的老缓存自动退化为 <code>reindex+ffill</code>(等价原行为)。</li>
+<li>⚠️ <strong>hk/us universe 是【当前】蓝筹静态清单,带幸存者偏差</strong> —— 这不是没做完,是<strong>免费数据的天花板本身</strong>:
+  真实 PIT 成分史(含被踢出的股票)无免费源。已诚实标注,且<strong>现在可被替换</strong>:实现一个
+  <code>UniverseSource</code> 注册到对应市场即可(<code>QUANTMILL_UNIVERSE_HK</code>)。cn 用真实成分+纳入日期(半修:
+  含"后纳入"前视的修复,仍缺"被踢出"的那半,需付费 PIT)。</li>
 <li>bars 缓存默认仍是 CSV(沿用已缓存的数百只,零失效);parquet store 可选。</li>
 </ul>
 
