@@ -28,8 +28,10 @@ nav:
   - 架构与 UML: ARCHITECTURE.md
   - 研究纪要 Research: RESEARCH_NOTES.md
   - CLI 参考: CLI.md
+  - 数据接入 DataProvider: DATAPROVIDER.md
   - 产品设计: PRODUCT_DESIGN.md
   - 交付清单 Status: STATUS.md
+  - Roadmap: ROADMAP.md
   - 行业调研 Landscape: ai-quant-landscape.md
 
 markdown_extensions:

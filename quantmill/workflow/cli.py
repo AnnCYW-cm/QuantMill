@@ -1,12 +1,12 @@
 """
-cli.py —— 统一命令入口(打包后暴露为 `quant` 命令)
-cli.py —— Unified command entry (exposed as the `quant` command after install)
+cli.py —— 统一命令入口(打包后暴露为 `quantmill` 命令)
+cli.py —— Unified command entry (exposed as the `quantmill` command after install)
 ==============================================================================
 子命令 / Subcommands:
-    quant scan                刷新自选股信号面板 | refresh signal panel
-    quant validate            批量可信度验证     | batch credibility check
-    quant analyze AAPL us      深挖单只票         | deep-dive one stock
-    quant home                 只刷新主页         | rebuild the home page
+    quantmill scan            刷新自选股信号面板 | refresh signal panel
+    quantmill validate        批量可信度验证     | batch credibility check
+    quantmill analyze AAPL us  深挖单只票         | deep-dive one stock
+    quantmill home             只刷新主页         | rebuild the home page
 
 加 --quick 用小股票池快速试跑 | add --quick for a small, fast run
 自选股在 watchlist.txt 里改   | edit your watchlist in watchlist.txt

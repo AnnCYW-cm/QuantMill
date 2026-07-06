@@ -33,3 +33,11 @@ def test_e2e_composite_backtest():
     assert "基准 等权" in res["metrics"]
     assert len(res["equity"]) > 0
     assert "超额年化" in res["metrics"]["策略 top-k"]
+
+
+def test_sample_run_backtest_with_credibility():
+    """CLI 同款样本回测应连 DSR 可信度试算一起离线跑通。"""
+    from quantmill.cross.run import run_backtest
+    res = run_backtest(sample=True, k=20, horizon=20, credibility=True)
+    assert len(res["equity"]) > 0
+    assert "dsr" in res

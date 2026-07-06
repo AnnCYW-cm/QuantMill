@@ -201,20 +201,32 @@ def run_backtest(market: str = "cn", quick: bool = False, k: int = 20,
     print(pd.DataFrame(res["metrics"]).T.to_string())
 
     eq = res["equity"]
-    print(f"\n样本外 {len(eq)} 期  {eq.index[0].date()} ~ {eq.index[-1].date()}  "
-          f"胜基准期数 {(eq['long'] > eq['bench']).mean()*100:.0f}%")
+    if len(eq):
+        print(f"\n样本外 {len(eq)} 期  {eq.index[0].date()} ~ {eq.index[-1].date()}  "
+              f"胜基准期数 {(eq['long'] > eq['bench']).mean()*100:.0f}%")
+    else:
+        print("\n样本外 0 期:当前股票池/k/horizon 组合没有可用换仓点。")
 
     if credibility and len(eq) > 3:
         # DSR:用不同 k 当尝试基准,扣多重检验 | DSR corrected for a small k-search
         trials = []
-        for kk in (10, 20, 30, 50):
+        max_valid_k = max(2, (n_uni - 5) // 2)        # topk_backtest 要求每天至少 2k+5 只
+        trial_ks = sorted({
+            kk for kk in (max(2, k // 2), k, min(max_valid_k, k + 2),
+                          min(max_valid_k, 10), min(max_valid_k, 20),
+                          min(max_valid_k, 30), min(max_valid_k, 50))
+            if 2 <= kk <= max_valid_k and 2 * kk + 5 <= n_uni
+        })
+        for kk in trial_ks:
             r = topk_backtest(panel, score, k=kk, horizon=horizon, cost=cost)
             from quantmill.credibility.stats import sharpe
-            trials.append(sharpe(r["equity"]["long"]))
-        dsr = deflated_sharpe_ratio(eq["long"], sr_trials=trials, n_trials=max(len(trials), 20))
-        print(f"\n[可信度] DSR = {dsr['dsr']:.3f}  (P(真夏普>0),>0.95 才算扣多重检验后显著)")
-        print("          ⚠️ 幸存者偏差未修(用当前成分股)—— 别把回测收益当真实 alpha。")
-        res["dsr"] = dsr
+            if len(r["equity"]):
+                trials.append(sharpe(r["equity"]["long"]))
+        if trials:
+            dsr = deflated_sharpe_ratio(eq["long"], sr_trials=trials, n_trials=max(len(trials), 20))
+            print(f"\n[可信度] DSR = {dsr['dsr']:.3f}  (P(真夏普>0),>0.95 才算扣多重检验后显著)")
+            print("          ⚠️ 幸存者偏差未修(用当前成分股)—— 别把回测收益当真实 alpha。")
+            res["dsr"] = dsr
     return res
 
 

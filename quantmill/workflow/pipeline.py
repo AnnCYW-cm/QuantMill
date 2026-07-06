@@ -2,7 +2,7 @@
 pipeline.py —— 单只标的的完整流程(数据→特征→模型→回测→报告)
 pipeline.py —— Full single-stock pipeline (data→features→model→backtest→report)
 ================================================================================
-把"深挖一只票"的业务逻辑收进包里,供 CLI(quant analyze / main.py)复用。
+把"深挖一只票"的业务逻辑收进包里,供 CLI(quantmill analyze)复用。
 Keeps the "deep-dive one stock" logic inside the package, reused by the CLI.
 """
 

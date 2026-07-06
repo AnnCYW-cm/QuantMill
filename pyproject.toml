@@ -1,6 +1,6 @@
 # pyproject.toml —— 打包与项目元数据 | packaging & project metadata
 # 安装 install:  ./.venv/bin/pip install -e .
-# 装完后可直接用命令 | then use the command directly:  quant scan / quant analyze AAPL us
+# 装完后可直接用命令 | then use the command directly:  quantmill scan / quantmill analyze AAPL us
 
 [build-system]
 requires = ["setuptools>=61"]
@@ -8,8 +8,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "quantmill"
-version = "0.1.0"
-description = "开源全链条 AI 量化平台,内建抗过拟合可信度检验(港股/美股/A股) | Open-source full-chain AI quant platform with built-in overfit-resistant credibility checks (HK/US/A-share)"
+version = "1.0.0"
+description = "开源全链条 AI 量化研究验证平台,内建抗过拟合可信度检验(港股/美股/A股) | Open-source full-chain AI quant research platform with built-in overfit-resistant credibility checks (HK/US/A-share)"
 readme = "README.md"
 requires-python = ">=3.9"
 license = { text = "MIT" }
@@ -17,7 +17,7 @@ authors = [{ name = "quantmill contributors", email = "wootilehq@gmail.com" }]
 keywords = ["quant", "trading", "backtest", "factor", "cross-sectional",
             "credibility", "DSR", "PBO", "A-share", "HK", "US", "LightGBM"]
 classifiers = [
-    "Development Status :: 3 - Alpha",
+    "Development Status :: 4 - Beta",
     "Intended Audience :: Financial and Insurance Industry",
     "Intended Audience :: Science/Research",
     "License :: OSI Approved :: MIT License",

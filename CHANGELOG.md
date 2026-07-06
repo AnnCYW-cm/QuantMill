@@ -4,6 +4,14 @@
 
 ## [Unreleased]
 
+- 下一阶段计划见 `docs/ROADMAP.md`。
+
+## [1.0.0] - 2026-07-06
+
+### Release boundary / 发布边界
+- 封版为 **QuantMill v1.0.0 研究验证平台**:可插拔数据 + 可插拔模型 + 横截面研究主线 + 内建可信度检验 + 前瞻纸面记录。
+- 明确不把 v1.0.0 定位为完整自动实盘交易系统;实盘级订单状态机、账户对账、前置风控和数据治理进入下一阶段 roadmap。
+
 ### Added 新增
 - **横截面选股(`cross` 模块)**:从"单股时序预测"升级到"全市场横截面排名选股"——universe / panel / ic / model / composite / backtest / run。
 - **稳健因子组合**:固定配方零训练策略(价值+动量+低波),经跨市场验证(A股+港股都为正,DSR 0.989)。
@@ -18,6 +26,7 @@
 - `walk_forward_scores` 返回的 Series 恢复 `(date, symbol)` 索引名。
 - 估值缓存逐列容错(缺列不再报错)。
 - 网页全局异常处理返回真实 HTTP 状态码(保留 JSON 错误体)。
+- CLI 文档统一为 `quantmill` 命令名,修正 `cross` action 数量描述。
 
 ### 关键研究结论 / Key finding
 经四道关(可信度 → 子区间 → 跨市场 → 前视偏差)拷问:**复杂 ML 排名模型是过拟合幻觉;简单价值/低波/动量因子组合是"真但弱"的边际,不可重仓。** 详见 `docs/RESEARCH_NOTES.md`。

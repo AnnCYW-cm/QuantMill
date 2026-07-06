@@ -3,7 +3,8 @@
 [![CI](https://github.com/AnnCYW-cm/QuantMill/actions/workflows/ci.yml/badge.svg)](https://github.com/AnnCYW-cm/QuantMill/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 ![Python](https://img.shields.io/badge/python-3.9%2B-blue.svg)
-![Tests](https://img.shields.io/badge/tests-163%20passing-brightgreen.svg)
+![Release](https://img.shields.io/badge/release-v1.0.0-blueviolet.svg)
+![Tests](https://img.shields.io/badge/tests-164%20passing-brightgreen.svg)
 ![Coverage](https://img.shields.io/badge/coverage-42%25-yellow.svg)
 
 **一个会自己拆穿自己的诚实量化平台**:从多市场数据 → 因子 → 模型 → 组合 → 执行,每一步都内建**抗过拟合的可信度检验**。它不给你看漂亮回测就让你上头,而是当面告诉你"这个策略到底成不成立"。
@@ -21,6 +22,20 @@
 - **简单因子组合(价值+动量+低波)是"真但弱"的边际**:跨 A股/港股两个市场都为正、DSR 0.989,但档内超额只有 ~0.2–0.7%/期、胜率 52–55%,**能当研究基线,绝不可重仓**。
 
 任何信号仅供研究,**别拿真钱跟**。详见 [`docs/RESEARCH_NOTES.md`](docs/RESEARCH_NOTES.md)。
+
+---
+
+## V1.0 定位 / Release boundary
+
+**v1.0.0 是研究验证平台版本,不是全自动实盘交易系统。** 本版本已经稳定覆盖:
+
+- 可插拔数据层(DataProvider):`bars / fundamentals / universe / quotes` 四接口 + 缓存 + 回退链。
+- 可插拔模型层(ModelProvider):`lgbm / logistic / ridge` 默认实现,可通过环境变量替换。
+- 横截面研究主线:面板构建、IC、稳健因子组合、ML 排名对照、top-k 回测。
+- 可信度检验:DSR/PBO、跨市场验证、前视/幸存者偏差量化、严格 PIT 测试。
+- 前瞻纸面记录:只前进、不回看,用于沉淀真实 live track record。
+
+下一阶段重点是把它从"研究验证平台"推进到"更接近生产级交易系统":数据治理、实验注册、执行风控、账户对账。详见 [`docs/ROADMAP.md`](docs/ROADMAP.md)。
 
 ---
 
@@ -121,7 +136,7 @@ quantmill/
 ├── web/             网页台(Flask 蓝图:market/cross_view/forward_view/research/trading + static 前端)
 ├── workflow/        编排:pipeline + cli(16 命令)
 └── watchlist.py     自选股加载
-tests/               163 个离线测试(含「无未来函数」「只前进不回看」锁)
+tests/               164 个离线测试(含「无未来函数」「只前进不回看」锁)
 docs/                产品/架构/UML/研究纪要/行业调研
 ```
 
@@ -150,12 +165,13 @@ docs/                产品/架构/UML/研究纪要/行业调研
 | [`docs/DATAPROVIDER.md`](docs/DATAPROVIDER.md) | 可插拔数据层:换成你自己的付费/机构数据,零改调用点 |
 | [`docs/PRODUCT_DESIGN.md`](docs/PRODUCT_DESIGN.md) | 产品设计蓝图(定位/架构/路线图) |
 | [`docs/STATUS.md`](docs/STATUS.md) | 交付清单 / 当前状态 |
+| [`docs/ROADMAP.md`](docs/ROADMAP.md) | V1.0 之后的产品路线图 |
 | [`docs/ai-quant-landscape.md`](docs/ai-quant-landscape.md) | 全球 AI 量化深度调研(22 家) |
 
 ## 开发 / Dev
 
 ```bash
-./.venv/bin/python -m pytest -q        # 163 个离线测试
+./.venv/bin/python -m pytest -q        # 164 个离线测试
 bash docs/build_pdf.sh                 # 生成带 UML 渲染的文档 PDF -> docs/quantmill-docs.pdf
 ```
 

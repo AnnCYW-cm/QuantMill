@@ -10,7 +10,7 @@ quantmill <命令> [参数]
 
 ## cross ★ —— 横截面选股(今天的主线)
 
-全市场排名建模。`action` 四选一,`--model` 选策略。
+全市场排名建模。`action` 选择要跑的分析/回测流程,`--model` 选策略。
 
 ```
 quantmill cross <action> [--model composite|ml] [--market cn|hk|us] [--quick] [-k N] [--cost 0.0015] [--long-short] [--horizon 20]

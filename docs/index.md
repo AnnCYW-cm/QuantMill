@@ -25,7 +25,9 @@ quantmill web                       # 起本地网页台
 - [**架构与 UML**](ARCHITECTURE.md) —— 分层架构 + 组件/类/时序图(Mermaid)
 - [**研究纪要**](RESEARCH_NOTES.md) —— ML 幻觉 vs 稳健组合、跨市场验证、前视偏差量化的完整调查
 - [**CLI 参考**](CLI.md) —— 全部命令
+- [**DataProvider**](DATAPROVIDER.md) —— 可插拔数据层和自备数据接入
 - [**产品设计**](PRODUCT_DESIGN.md) —— 定位、路线图、对标 Qlib
+- [**Roadmap**](ROADMAP.md) —— v1.0.0 之后的数据治理、实验注册、前瞻验证和执行风控路线
 
 ## 核心铁律 / Iron rules
 

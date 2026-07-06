@@ -1,6 +1,14 @@
-# quantmill 交付清单 / Status
+# quantmill v1.0.0 交付清单 / Status
 
-> 截至 2026-07-06 · 15 层模块 · 163 测试全绿(+1 跳过)· 16 个 CLI 命令 · 网页台(8页,含前瞻曲线)· CI/docs 双绿 · 三层可插拔(数据/LLM/模型)· 中英双语 · pip 可安装
+> 截至 2026-07-06 · **v1.0.0 研究验证平台封版** · 15 层模块 · 164 测试全绿(+1 跳过)· 16 个 CLI 命令 · 网页台(8页,含前瞻曲线)· CI/docs 双绿 · 三层可插拔(数据/LLM/模型)· 中英双语 · pip 可安装
+
+---
+
+## v1.0.0 发布边界
+
+QuantMill v1.0.0 的定位是**量化研究验证平台**,核心能力是可插拔数据/模型、横截面研究、可信度检验和前瞻纸面记录。它已经能把一个策略从想法推进到可复现回测、跨市场验证、偏差体检和 live track record。
+
+它**不是完整自动实盘交易系统**:订单状态机、账户对账、前置风控、数据版本治理、生产监控和多券商执行适配进入下一阶段 roadmap。详见 `docs/ROADMAP.md`。
 
 ---
 
@@ -58,7 +66,7 @@
   (改用 `mkdocs gh-deploy`,不依赖 Pages 设置)。
 
 ### 四、工程质量
-- **163 个离线测试全绿**(+1 跳过;合成数据、确定性、可复现);**CI matrix(ubuntu/macos × py3.9/3.12)双绿**。
+- **164 个离线测试全绿**(+1 跳过;合成数据、确定性、可复现);**CI matrix(ubuntu/macos × py3.9/3.12)双绿**。
 - **核心锁死**:「无未来函数」(特征/组合/情绪/cross walk-forward)+「只前进不回看」(前瞻记录)+「严格 PIT」(available_date 不早于数据日)+ DataProvider/ModelProvider 契约 +「换源/换模型零漂移」(lgbm provider 逐值等于原生)。
 - 中英双语 · pip 可安装(`[dev][llm][broker][web][parquet][sharadar]`)· GitHub 就绪(CI/Pages/PyPI 工作流)。
 
@@ -69,6 +77,7 @@
 - `docs/CLI.md` — 全命令参考
 - `docs/DATAPROVIDER.md` — 可插拔数据层设计 + 接入你自己的数据
 - `docs/PRODUCT_DESIGN.md` — 产品设计蓝图
+- `docs/ROADMAP.md` — v1.0.0 之后的产品路线图
 - `docs/ai-quant-landscape.md` — 全球 AI 量化调研(22家)
 
 ---

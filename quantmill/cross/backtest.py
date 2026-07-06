@@ -64,7 +64,12 @@ def topk_backtest(panel: pd.DataFrame, score: pd.Series, k: int = 20,
             rec["ls"] = long_ret - short_ret         # 多空:买强卖弱
         rows.append(rec)
 
-    bt = pd.DataFrame(rows).set_index("date")
+    if rows:
+        bt = pd.DataFrame(rows).set_index("date")
+    else:
+        cols = ["long", "bench"] + (["ls"] if long_short else [])
+        bt = pd.DataFrame(columns=cols)
+        bt.index = pd.DatetimeIndex([], name="date")
     if cost:                                          # 换手成本(每期两边各扣一次)
         bt["long"] -= cost
         if long_short:
@@ -79,9 +84,10 @@ def topk_backtest(panel: pd.DataFrame, score: pd.Series, k: int = 20,
         out["metrics"]["多空 L/S"] = _metrics(bt["ls"], ppy)
     # 超额 + 信息比 IR + 换手率(量化人一打开就找的)
     from quantmill.evaluation.metrics import information_ratio, turnover_from_sets
-    out["metrics"]["策略 top-k"]["超额年化"] = round(
-        out["metrics"]["策略 top-k"]["年化"] - out["metrics"]["基准 等权"]["年化"], 1)
-    out["metrics"]["策略 top-k"]["信息比IR"] = round(
-        information_ratio(bt["long"], bt["bench"], ppy), 2)
-    out["metrics"]["策略 top-k"]["换手率%"] = round(turnover_from_sets(picks) * 100, 1)
+    if out["metrics"]["策略 top-k"] and out["metrics"]["基准 等权"]:
+        out["metrics"]["策略 top-k"]["超额年化"] = round(
+            out["metrics"]["策略 top-k"]["年化"] - out["metrics"]["基准 等权"]["年化"], 1)
+        out["metrics"]["策略 top-k"]["信息比IR"] = round(
+            information_ratio(bt["long"], bt["bench"], ppy), 2)
+        out["metrics"]["策略 top-k"]["换手率%"] = round(turnover_from_sets(picks) * 100, 1)
     return out
