@@ -61,6 +61,28 @@ def _valuation(symbol: str, market: str = "cn", period: str = "近三年") -> pd
         return None
 
 
+def _pit_align(v: pd.DataFrame, index: pd.DatetimeIndex) -> pd.DataFrame:
+    """把估值严格 PIT 对齐到交易日:每个交易日 t 只取 available_date ≤ t 的最新一行。
+
+    有 available_date(新 provider)→ merge_asof(backward),真实披露滞后不会泄露未来;
+    无 available_date(老缓存/available==数据日)→ 退化为 reindex+ffill,与原行为等价。
+    """
+    if "available_date" not in v.columns:
+        return v.reindex(index).ffill()
+    vv = v.copy()
+    vv["available_date"] = pd.to_datetime(vv["available_date"], errors="coerce")
+    cols = [c for c in vv.columns if c != "available_date"]
+    vv = vv.dropna(subset=["available_date"]).sort_values("available_date")
+    if vv.empty:
+        return v.reindex(index).ffill()
+    left = pd.DataFrame({"_t": pd.DatetimeIndex(index)}).sort_values("_t")
+    out = pd.merge_asof(left, vv[["available_date"] + cols],
+                        left_on="_t", right_on="available_date", direction="backward")
+    out = out.set_index("_t")[cols]
+    out.index = index                                     # 保回原索引对象
+    return out
+
+
 def build_panel(symbols, market: str = "cn", start=None, end=None, horizon: int = 20,
                 with_value: bool = True, min_rows: int = 80,
                 verbose: bool = True) -> pd.DataFrame:
@@ -85,7 +107,7 @@ def build_panel(symbols, market: str = "cn", start=None, end=None, horizon: int 
         if with_value:
             v = _valuation(sym, market)
             if v is not None:
-                v = v.reindex(df.index).ffill()          # 对齐交易日+前向填充(当天可知,PIT)
+                v = _pit_align(v, df.index)               # 严格 PIT:每个交易日只用当日已公开的估值
                 if "pe" in v:                             # 逐列容错:缺哪列就不加哪个因子
                     feats["ey"] = 1.0 / v["pe"].replace(0, np.nan)
                 if "pb" in v:

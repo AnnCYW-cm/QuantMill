@@ -65,7 +65,12 @@ assert_bar_contract(MyVendor(), "600519", "cn", "2023-01-01", "2024-01-01")
 
 ## 现状与边界(诚实标注)
 
-- ✅ bars(cn/hk/us)、fundamentals(cn/hk)、universe(cn 真实成分+纳入日期)已走注册表。
-- ⚠️ **universe 的 hk/us 仍是 `cross/universe` 的静态蓝筹清单**(未接真实成分史),这一半待补。
-- ⚠️ `available_date` 对百度估值=当日(比率由当日价算得,当日可知);接**带真实披露滞后的财报源**时,`build_panel` 应从 `reindex+ffill` 升级为 `merge_asof(available_date)` 才算严格 PIT——接口已留好这个位。
+- ✅ bars(cn/hk/us)、fundamentals(cn/hk)、universe(**cn/hk/us 全走注册表**)。
+- ✅ **严格 PIT 已接**:`build_panel` 用 `_pit_align`(`merge_asof(available_date, backward)`)——
+  每个交易日只用当日**已公开**的估值;接带真实披露滞后的财报源不会泄露未来(测试焊死)。
+  无 `available_date` 的老缓存自动退化为 `reindex+ffill`(等价原行为)。
+- ⚠️ **hk/us universe 是【当前】蓝筹静态清单,带幸存者偏差** —— 这不是没做完,是**免费数据的天花板本身**:
+  真实 PIT 成分史(含被踢出的股票)无免费源。已诚实标注,且**现在可被替换**:实现一个
+  `UniverseSource` 注册到对应市场即可(`QUANTMILL_UNIVERSE_HK`)。cn 用真实成分+纳入日期(半修:
+  含"后纳入"前视的修复,仍缺"被踢出"的那半,需付费 PIT)。
 - bars 缓存默认仍是 CSV(沿用已缓存的数百只,零失效);parquet store 可选。

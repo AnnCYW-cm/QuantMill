@@ -124,6 +124,15 @@ def test_env_swaps_source(monkeypatch):
 
 
 # ---- ParquetProvider:接自己的本地数据 -----------------------------------
+def test_universe_hk_us_through_abstraction():
+    """hk/us universe 现在也走 UniverseSource,返回统一 PIT 形状并过契约(离线)。"""
+    import quantmill.data as d
+    for m in ("hk", "us"):
+        df = assert_universe_contract(d.REGISTRY.universe(m), m, "-", "2023-01-01")
+        assert len(df) > 10 and {"symbol", "in_date", "out_date"} <= set(df.columns)
+    assert d.universe_df("us", asof="2023-01-01")["symbol"].str.len().gt(0).all()
+
+
 def test_parquet_provider_reads_local(tmp_path):
     pytest.importorskip("pyarrow")               # 自备数据模板用 parquet,需 pyarrow(可选依赖)
     from quantmill.data.sources import ParquetProvider

@@ -48,7 +48,8 @@ from quantmill.data._util import (  # noqa: E402,F401
 from quantmill.data.provider import (  # noqa: E402
     CachingSource, ChainSource, Registry)
 from quantmill.data.sources import (  # noqa: E402
-    AkshareProvider, ParquetProvider, StaticUniverseProvider, YFinanceProvider)
+    AkshareProvider, CN_FALLBACK, HK_BLUE, ParquetProvider,
+    StaticUniverseProvider, US_BLUE, YFinanceProvider)
 
 # ----------------------------------------------------------------------
 # 组装默认数据源注册表 | assemble the default provider registry
@@ -81,8 +82,12 @@ def _build_registry() -> Registry:
     # fundamentals:cn/hk 百度估值(akshare);us 无免费历史估值 → 不注册(调用方自行退化)
     for m in ("cn", "hk"):
         r.set("fundamentals", m, _env_chain("fundamentals", m, ["akshare"]))
-    # universe:cn 用真实成分股(带纳入日期,PIT);hk/us 暂留 cross.universe 的静态清单(不在此注册)
-    r.set("universe", "cn", _env_chain("universe", "cn", ["akshare"]))
+    # universe:cn 用真实成分股(带纳入日期,PIT),失败回退静态兜底池;
+    #          hk/us 无免费真实成分史 → 静态蓝筹(带幸存者偏差,已诚实标注,可被自备源替换)
+    r.set("universe", "cn", ChainSource(
+        [_PROVIDERS["akshare"], StaticUniverseProvider("cn", CN_FALLBACK)]))
+    r.set("universe", "hk", StaticUniverseProvider("hk", HK_BLUE))
+    r.set("universe", "us", StaticUniverseProvider("us", US_BLUE))
     # quotes:三市场先用 yfinance(美股可另配 alpaca 实时,见 data/live.py)
     for m in ("cn", "hk", "us"):
         r.set("quotes", m, _PROVIDERS["yfinance"])
