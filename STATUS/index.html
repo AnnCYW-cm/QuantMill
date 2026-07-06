@@ -16,7 +16,7 @@
         <link rel="prev" href="../PRODUCT_DESIGN/">
       
       
-        <link rel="next" href="../ai-quant-landscape/">
+        <link rel="next" href="../ROADMAP/">
       
       
         
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#quantmill-status" class="md-skip">
+        <a href="#quantmill-v100-status" class="md-skip">
           跳转至
         </a>
       
@@ -368,6 +368,33 @@
   
   
     <li class="md-nav__item">
+      <a href="../DATAPROVIDER/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    数据接入 DataProvider
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../PRODUCT_DESIGN/" class="md-nav__link">
         
   
@@ -453,6 +480,17 @@
       目录
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#v100" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v1.0.0 发布边界
+      
+    </span>
+  </a>
+  
+</li>
       
         <li class="md-nav__item">
   <a href="#_1" class="md-nav__link">
@@ -613,6 +651,33 @@
   
   
     <li class="md-nav__item">
+      <a href="../ROADMAP/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roadmap
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../ai-quant-landscape/" class="md-nav__link">
         
   
@@ -658,6 +723,17 @@
       目录
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#v100" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v1.0.0 发布边界
+      
+    </span>
+  </a>
+  
+</li>
       
         <li class="md-nav__item">
   <a href="#_1" class="md-nav__link">
@@ -823,10 +899,14 @@
   
 
 
-<h1 id="quantmill-status">quantmill 交付清单 / Status<a class="headerlink" href="#quantmill-status" title="Permanent link">&para;</a></h1>
+<h1 id="quantmill-v100-status">quantmill v1.0.0 交付清单 / Status<a class="headerlink" href="#quantmill-v100-status" title="Permanent link">&para;</a></h1>
 <blockquote>
-<p>截至 2026-07-06 · 15 层模块 · 150 测试全绿(+1 跳过)· 16 个 CLI 命令 · 网页台(8页,含前瞻曲线)· CI/docs 双绿 · 三层可插拔(数据/LLM/模型)· 中英双语 · pip 可安装</p>
+<p>截至 2026-07-06 · <strong>v1.0.0 研究验证平台封版</strong> · 15 层模块 · 164 测试全绿(+1 跳过)· 16 个 CLI 命令 · 网页台(8页,含前瞻曲线)· CI/docs 双绿 · 三层可插拔(数据/LLM/模型)· 中英双语 · pip 可安装</p>
 </blockquote>
+<hr />
+<h2 id="v100">v1.0.0 发布边界<a class="headerlink" href="#v100" title="Permanent link">&para;</a></h2>
+<p>QuantMill v1.0.0 的定位是<strong>量化研究验证平台</strong>,核心能力是可插拔数据/模型、横截面研究、可信度检验和前瞻纸面记录。它已经能把一个策略从想法推进到可复现回测、跨市场验证、偏差体检和 live track record。</p>
+<p>它<strong>不是完整自动实盘交易系统</strong>:订单状态机、账户对账、前置风控、数据版本治理、生产监控和多券商执行适配进入下一阶段 roadmap。详见 <code>docs/ROADMAP.md</code>。</p>
 <hr />
 <h2 id="_1">✅ 已完成<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <h3 id="data">一、全链条模块(data → 执行)<a class="headerlink" href="#data" title="Permanent link">&para;</a></h3>
@@ -932,12 +1012,16 @@
   按任务分 CLASSIFIERS/REGRESSORS 注册表),<code>lgbm</code>(默认,<strong>与原写死参数逐值等价·零漂移</strong>)+
   sklearn <code>logistic</code>/<code>ridge</code>,<code>QUANTMILL_MODEL_RANKER/CLF</code> 一个环境变量换模型,可接自己的。
   → <strong>数据 / LLM / 模型 三层同一套可插拔哲学</strong>。</li>
+<li>✅ <strong>回测/分析补齐(发布前体检)</strong>:标准绩效指标 Sortino/Calmar/信息比IR/换手率(接进 cross/
+  组合/单股)、<strong>IC 衰减</strong>矩阵(<code>cross ic-decay</code>)、<strong>因子中性化</strong>(<code>cross neutralize</code>,揪市值替身)、
+  <strong>因子风险模型</strong>(<code>cross riskmodel</code>,风险=因子⊕特质+各因子贡献)、<strong>绩效归因</strong>(<code>cross attribution</code>,
+  超额=因子暴露+选股α)——研究半功能齐到量化人挑不出低级缺失。</li>
 <li>✅ <strong>CI 自动化 + 修绿 docs</strong>:<code>ci.yml</code>(matrix os×py 测试)长绿;<code>Deploy docs</code> 从一直红修成绿
   (改用 <code>mkdocs gh-deploy</code>,不依赖 Pages 设置)。</li>
 </ul>
 <h3 id="_3">四、工程质量<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>150 个离线测试全绿</strong>(+1 跳过;合成数据、确定性、可复现);<strong>CI matrix(ubuntu/macos × py3.9/3.12)双绿</strong>。</li>
+<li><strong>164 个离线测试全绿</strong>(+1 跳过;合成数据、确定性、可复现);<strong>CI matrix(ubuntu/macos × py3.9/3.12)双绿</strong>。</li>
 <li><strong>核心锁死</strong>:「无未来函数」(特征/组合/情绪/cross walk-forward)+「只前进不回看」(前瞻记录)+「严格 PIT」(available_date 不早于数据日)+ DataProvider/ModelProvider 契约 +「换源/换模型零漂移」(lgbm provider 逐值等于原生)。</li>
 <li>中英双语 · pip 可安装(<code>[dev][llm][broker][web][parquet][sharadar]</code>)· GitHub 就绪(CI/Pages/PyPI 工作流)。</li>
 </ul>
@@ -949,6 +1033,7 @@
 <li><code>docs/CLI.md</code> — 全命令参考</li>
 <li><code>docs/DATAPROVIDER.md</code> — 可插拔数据层设计 + 接入你自己的数据</li>
 <li><code>docs/PRODUCT_DESIGN.md</code> — 产品设计蓝图</li>
+<li><code>docs/ROADMAP.md</code> — v1.0.0 之后的产品路线图</li>
 <li><code>docs/ai-quant-landscape.md</code> — 全球 AI 量化调研(22家)</li>
 </ul>
 <hr />

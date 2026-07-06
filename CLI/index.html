@@ -16,7 +16,7 @@
         <link rel="prev" href="../RESEARCH_NOTES/">
       
       
-        <link rel="next" href="../PRODUCT_DESIGN/">
+        <link rel="next" href="../DATAPROVIDER/">
       
       
         
@@ -630,6 +630,33 @@
   
   
     <li class="md-nav__item">
+      <a href="../DATAPROVIDER/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    数据接入 DataProvider
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../PRODUCT_DESIGN/" class="md-nav__link">
         
   
@@ -665,6 +692,33 @@
     
   
     交付清单 Status
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ROADMAP/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roadmap
   
 
     
@@ -971,7 +1025,7 @@
 </code></pre></div>
 <hr />
 <h2 id="cross">cross ★ —— 横截面选股(今天的主线)<a class="headerlink" href="#cross" title="Permanent link">&para;</a></h2>
-<p>全市场排名建模。<code>action</code> 四选一,<code>--model</code> 选策略。</p>
+<p>全市场排名建模。<code>action</code> 选择要跑的分析/回测流程,<code>--model</code> 选策略。</p>
 <div class="highlight"><pre><span></span><code>quantmill cross &lt;action&gt; [--model composite|ml] [--market cn|hk|us] [--quick] [-k N] [--cost 0.0015] [--long-short] [--horizon 20]
 </code></pre></div>
 <table>
@@ -1001,6 +1055,18 @@
 <tr>
 <td><code>survivorship</code></td>
 <td><strong>量化前视/幸存者偏差</strong>:全池 vs PIT(2023前已纳入)对比</td>
+</tr>
+<tr>
+<td><code>neutralize</code></td>
+<td><strong>因子中性化</strong>:各因子横截面 IC 原始 vs 对 size 中性化后(揪出"市值替身"因子)</td>
+</tr>
+<tr>
+<td><code>riskmodel</code></td>
+<td><strong>因子风险模型</strong>:当前 top-k 组合的风险分解(因子波动 ⊕ 特质波动 + 各因子风险贡献)</td>
+</tr>
+<tr>
+<td><code>attribution</code></td>
+<td><strong>绩效归因</strong>:把超额收益拆成 各因子主动暴露贡献 + 选股α(钱从哪来)</td>
 </tr>
 </tbody>
 </table>
