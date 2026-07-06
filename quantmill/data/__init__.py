@@ -38,156 +38,62 @@ import pandas as pd
 
 from quantmill import config
 
-# data/ 缓存目录(相对本文件定位,和当前工作目录无关) | data/ cache directory (located relative to this file, independent of the current working directory)
-_DATA_DIR = config.DATA_DIR
+logger = logging.getLogger(__name__)
 
-# backtesting.py 要求的标准列 | Standard columns required by backtesting.py
-_STD_COLS = ["Open", "High", "Low", "Close", "Volume"]
+# 向后兼容:这些底件已搬到 _util,原路径仍可 import(news/market 等依赖它们)。
+# Backward compat: these helpers moved to _util; old import paths still work.
+from quantmill.data._util import (  # noqa: E402,F401
+    _cache_path, _cache_sufficient, _cn_to_yahoo, _CN_RENAME, _DATA_DIR,
+    _hk_to_yahoo, _normalize, _retry, _STD_COLS)
+from quantmill.data.provider import (  # noqa: E402
+    CachingSource, ChainSource, Registry)
+from quantmill.data.sources import (  # noqa: E402
+    AkshareProvider, ParquetProvider, StaticUniverseProvider, YFinanceProvider)
 
-# A股 / 港股(akshare)中文列名 -> 标准列名 | A-shares / HK (akshare) Chinese column names -> standard column names
-_CN_RENAME = {
-    "日期": "Date",
-    "开盘": "Open",
-    "最高": "High",
-    "最低": "Low",
-    "收盘": "Close",
-    "成交量": "Volume",
+# ----------------------------------------------------------------------
+# 组装默认数据源注册表 | assemble the default provider registry
+# ----------------------------------------------------------------------
+# 命名的 provider 实例池:环境变量可按名字换源(见 _env_chain)。
+_PROVIDERS = {
+    "yfinance": YFinanceProvider(),
+    "akshare": AkshareProvider(),
+    "parquet": ParquetProvider(),
 }
 
 
-logger = logging.getLogger(__name__)
-
-def _cache_path(symbol: str, market: str) -> str:
-    safe = symbol.replace("/", "_").replace(".", "_")
-    return os.path.join(_DATA_DIR, f"{market}_{safe}.csv")
-
-
-def _normalize(df: pd.DataFrame) -> pd.DataFrame:
-    """把任意来源的行情整理成标准格式:标准列 + 排序的 DatetimeIndex + 去空。
-    Normalize market data from any source into the standard format: standard columns +
-    sorted DatetimeIndex + dropped nulls.
-    """
-    df = df[_STD_COLS].copy()
-    # 强制转成数字,脏数据变 NaN | Force numeric conversion; dirty data becomes NaN
-    for c in _STD_COLS:
-        df[c] = pd.to_numeric(df[c], errors="coerce")
-    df = df[~df.index.duplicated(keep="last")]  # 去掉重复日期 | Drop duplicate dates
-    df = df.sort_index()                          # 时间从早到晚 | Sort from earliest to latest
-    df = df.dropna(subset=["Open", "High", "Low", "Close"])  # 价格不能缺 | Prices must not be missing
-    df["Volume"] = df["Volume"].fillna(0)
-    return df
+def _env_chain(cap: str, market: str, default_names: list):
+    """按 QUANTMILL_<CAP>_<MARKET> 环境变量选源(逗号分隔的 provider 名),否则用默认。
+    例:QUANTMILL_BARS_CN=parquet,yfinance —— 优先自备数据,回退 yfinance。这就是"换源"。"""
+    env = os.environ.get(f"QUANTMILL_{cap.upper()}_{market.upper()}")
+    names = [n.strip() for n in env.split(",")] if env else list(default_names)
+    srcs = [_PROVIDERS[n] for n in names if n in _PROVIDERS]
+    if not srcs:
+        srcs = [_PROVIDERS[default_names[0]]]
+    return ChainSource(srcs) if len(srcs) > 1 else srcs[0]
 
 
-# ----------------------------------------------------------------------
-# 各市场的抓取实现 | Per-market fetch implementations
-# ----------------------------------------------------------------------
-def _fetch_us(symbol: str, start: str, end: str) -> pd.DataFrame:
-    """美股/ETF:yfinance。auto_adjust=True 用复权价(把分红拆股的跳空抹平)。
-    US stocks/ETF: yfinance. auto_adjust=True uses adjusted prices (smooths out gaps
-    from dividends and stock splits).
-    """
-    import yfinance as yf
-
-    df = yf.download(symbol, start=start, end=end, auto_adjust=True,
-                     progress=False)
-    if df is None or df.empty:
-        raise ValueError(f"yfinance 没返回数据:{symbol}(代码对吗?)")
-    # 新版 yfinance 列是 MultiIndex (字段, 代码),拍平取第一层 | Newer yfinance returns MultiIndex columns (field, symbol); flatten and take the first level
-    if isinstance(df.columns, pd.MultiIndex):
-        df.columns = df.columns.get_level_values(0)
-    df.index = pd.to_datetime(df.index)
-    return df
+def _build_registry() -> Registry:
+    r = Registry()
+    # bars:cn/hk 先 akshare(qfq)后 yfinance 回退,us 用 yfinance;都套 CSV 缓存(沿用现有缓存)
+    for m in ("cn", "hk"):
+        r.set("bars", m, CachingSource(_env_chain("bars", m, ["akshare", "yfinance"])))
+    r.set("bars", "us", CachingSource(_env_chain("bars", "us", ["yfinance"])))
+    # fundamentals:cn/hk 百度估值(akshare);us 无免费历史估值 → 不注册(调用方自行退化)
+    for m in ("cn", "hk"):
+        r.set("fundamentals", m, _env_chain("fundamentals", m, ["akshare"]))
+    # universe:cn 用真实成分股(带纳入日期,PIT);hk/us 暂留 cross.universe 的静态清单(不在此注册)
+    r.set("universe", "cn", _env_chain("universe", "cn", ["akshare"]))
+    # quotes:三市场先用 yfinance(美股可另配 alpaca 实时,见 data/live.py)
+    for m in ("cn", "hk", "us"):
+        r.set("quotes", m, _PROVIDERS["yfinance"])
+    return r
 
 
-def _retry(fn, tries: int = 3):
-    """把不稳定的联网调用重试几次(eastmoney 数据源常抽风)。
-    Retry an unstable network call a few times (the eastmoney data source often flakes out).
-    """
-    last = None
-    for i in range(tries):
-        try:
-            return fn()
-        except Exception as e:  # noqa: BLE001
-            last = e
-    raise last
-
-
-def _cn_to_yahoo(symbol: str) -> str:
-    """A股代码转 yfinance 格式:6开头=沪市.SS,其余=深市.SZ。
-    Convert an A-share code to yfinance format: starts with 6 = Shanghai .SS, otherwise = Shenzhen .SZ.
-    """
-    return f"{symbol}.SS" if symbol.startswith("6") else f"{symbol}.SZ"
-
-
-def _fetch_cn(symbol: str, start: str, end: str) -> pd.DataFrame:
-    """A股:akshare(qfq前复权)优先,连不上自动回退 yfinance。
-    A-shares: prefer akshare (qfq forward-adjusted); fall back to yfinance automatically if unreachable.
-    """
-    import akshare as ak
-
-    try:
-        df = _retry(lambda: ak.stock_zh_a_hist(
-            symbol=symbol, period="daily",
-            start_date=start.replace("-", ""), end_date=end.replace("-", ""),
-            adjust="qfq",
-        ))
-        if df is None or df.empty:
-            raise ValueError("akshare 返回空")
-        df = df.rename(columns=_CN_RENAME)
-        df["Date"] = pd.to_datetime(df["Date"])
-        return df.set_index("Date")
-    except Exception as e:
-        yahoo_sym = _cn_to_yahoo(symbol)
-        logger.warning(f"[A股] akshare 失败({type(e).__name__}),回退 yfinance:{yahoo_sym}")
-        return _fetch_us(yahoo_sym, start, end)
-
-
-def _hk_to_yahoo(symbol: str) -> str:
-    """港股代码转 yfinance 格式:akshare 用5位 00700,yahoo 用 0700.HK。
-    Convert an HK code to yfinance format: akshare uses 5 digits like 00700, yahoo uses 0700.HK.
-    """
-    digits = symbol.replace(".HK", "").lstrip("0") or "0"
-    return f"{digits.zfill(4)}.HK"
-
-
-def _fetch_hk(symbol: str, start: str, end: str) -> pd.DataFrame:
-    """港股:akshare 优先,连不上自动回退 yfinance。代码用5位,如腾讯 00700。
-    HK stocks: prefer akshare; fall back to yfinance automatically if unreachable. Use 5-digit codes, e.g. Tencent 00700.
-    """
-    import akshare as ak
-
-    try:
-        df = _retry(lambda: ak.stock_hk_hist(
-            symbol=symbol, period="daily",
-            start_date=start.replace("-", ""), end_date=end.replace("-", ""),
-            adjust="qfq",
-        ))
-        if df is None or df.empty:
-            raise ValueError("akshare 返回空")
-        df = df.rename(columns=_CN_RENAME)
-        df["Date"] = pd.to_datetime(df["Date"])
-        return df.set_index("Date")
-    except Exception as e:
-        # akshare(eastmoney)连不上就回退 yahoo,走的是另一套服务器 | If akshare (eastmoney) is unreachable, fall back to yahoo, which uses a different set of servers
-        yahoo_sym = _hk_to_yahoo(symbol)
-        logger.warning(f"[港股] akshare 失败({type(e).__name__}),回退 yfinance:{yahoo_sym}")
-        return _fetch_us(yahoo_sym, start, end)
-
-
-_FETCHERS = {"us": _fetch_us, "cn": _fetch_cn, "hk": _fetch_hk}
-
-
-def _cache_sufficient(cached_index, start_ts, end_ts):
-    """判断缓存够不够用:够早(覆盖历史)且够新(不过期)。返回 (early_ok, fresh_ok)。
-    Is the cache good enough: early enough (covers history) and fresh enough (not stale)?
-    Returns (early_ok, fresh_ok). 允许几天误差应对周末/假日。| A few days' slack for weekends/holidays."""
-    early_ok = cached_index[0] <= start_ts + pd.Timedelta(days=7)
-    fresh_ok = cached_index[-1] >= end_ts - pd.Timedelta(days=5)
-    return early_ok, fresh_ok
+REGISTRY = _build_registry()
 
 
 # ----------------------------------------------------------------------
-# 对外统一入口 | Unified public entry point
+# 对外统一入口(薄门面,底层走 REGISTRY;调用点无需改)| public facades
 # ----------------------------------------------------------------------
 def get_ohlcv(
     symbol: str,
@@ -196,65 +102,42 @@ def get_ohlcv(
     end: str | None = None,
     use_cache: bool = True,
 ) -> pd.DataFrame:
-    """
-    抓取任意市场的日线行情,返回标准化 OHLCV。
-    Fetch daily bars for any market and return standardized OHLCV.
+    """抓任意市场日线,返回标准化 OHLCV(列 [Open,High,Low,Close,Volume],DatetimeIndex)。
+    Fetch daily bars for any market; standardized OHLCV. 现在底层走可插拔 REGISTRY,行为不变。
 
-    参数:
-    Parameters:
-        symbol : 代码。美股 "AAPL";A股 "000001";港股 "00700"
-        symbol : code. US "AAPL"; A-share "000001"; HK "00700"
-        market : "us" | "cn" | "hk"
-        start / end : 日期 "YYYY-MM-DD"。end 默认今天
-        start / end : dates "YYYY-MM-DD". end defaults to today
-        use_cache : True 时优先读本地缓存,没有再联网并缓存
-        use_cache : when True, read the local cache first; if absent, fetch online and cache it
-
-    返回:
-    Returns:
-        DataFrame,列 = [Open, High, Low, Close, Volume],索引 = DatetimeIndex
-        DataFrame, columns = [Open, High, Low, Close, Volume], index = DatetimeIndex
+    use_cache=False 时绕过缓存直连数据源(取最新)。
     """
     market = market.lower()
-    if market not in _FETCHERS:
-        raise ValueError(f"不支持的市场:{market},可选 {list(_FETCHERS)}")
     if end is None:
         end = datetime.now().strftime("%Y-%m-%d")
+    src = REGISTRY.bars(market)                       # CachingSource(链)
+    if not use_cache and isinstance(src, CachingSource):
+        src = src.inner                               # 绕过缓存,直连源
+        df = _normalize(src.bars(symbol, market, start, end))
+        return df.loc[pd.Timestamp(start):pd.Timestamp(end)]
+    return src.bars(symbol, market, start, end)
 
-    os.makedirs(_DATA_DIR, exist_ok=True)
-    cache = _cache_path(symbol, market)
 
-    start_ts, end_ts = pd.Timestamp(start), pd.Timestamp(end)
+def fundamentals(symbol: str, market: str = "cn",
+                 start: str = config.START, end: str | None = None):
+    """基本面(PE/PB/市值 等)+ available_date(PIT)。us 无免费源 → 抛/None 由调用方兜底。"""
+    if end is None:
+        end = datetime.now().strftime("%Y-%m-%d")
+    return REGISTRY.fundamentals(market).fundamentals(symbol, market, start, end)
 
-    if use_cache and os.path.exists(cache):
-        cached = _normalize(pd.read_csv(cache, index_col=0, parse_dates=True))
-        # 缓存要满足两头:① 最早日期够早(<= start,覆盖历史);② 最新日期够新
-        # (>= end 附近,别拿过期数据当"今日")。允许几天误差(周末/假日非交易日)。
-        # 任一不满足就重新下载。
-        # The cache must satisfy both ends: (1) early enough (<= start, covers history);
-        # (2) fresh enough (near end, so we don't treat stale data as "today"). Allow a few
-        # days of slack (weekends/holidays are non-trading). If either fails, re-download.
-        early_ok, fresh_ok = _cache_sufficient(cached.index, start_ts, end_ts)
-        if early_ok and fresh_ok:
-            sub = cached.loc[start_ts:end_ts]
-            logger.info(f"[缓存] {market}:{symbol}  {len(sub)} 根K线  "
-                  f"{sub.index[0].date()} ~ {sub.index[-1].date()}")
-            return sub
-        reason = "历史不够早" if not early_ok else f"数据过期(止于 {cached.index[-1].date()})"
-        logger.info(f"[缓存刷新] {market}:{symbol} {reason},重新下载")
 
-    logger.info(f"[下载] {market}:{symbol} ...")
-    raw = _FETCHERS[market](symbol, start, end)
-    df = _normalize(raw)
-    df.to_csv(cache)               # 缓存存下载到的全量 | Cache the full downloaded range
-    df = df.loc[start_ts:end_ts]   # 返回请求区间 | Return only the requested range
-    logger.info(f"[完成] {len(df)} 根K线  {df.index[0].date()} ~ {df.index[-1].date()}  "
-                f"已缓存 -> {os.path.relpath(cache)}")
-    return df
+def universe_df(market: str = "cn", index: str = "000300", asof: str = "2023-01-01"):
+    """成分股面板:cols=[symbol,in_date,out_date],只含 asof 前已纳入(无前视/幸存偏差)。"""
+    return REGISTRY.universe(market).universe(market, index, asof)
+
+
+def quotes(symbols, market: str = "us"):
+    """最新报价:index=symbol,含 price 列。"""
+    return REGISTRY.quotes(market).quotes(list(symbols), market)
 
 
 if __name__ == "__main__":
-    # 自测:三个市场各抓一个,确认统一格式 | Self-test: fetch one symbol from each of the three markets to confirm the unified format
+    # 自测:三个市场各抓一个,确认统一格式 | Self-test: one symbol per market
     for sym, mkt in [("AAPL", "us"), ("000001", "cn"), ("00700", "hk")]:
         print("=" * 60)
         try:

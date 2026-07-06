@@ -37,9 +37,10 @@ def _val_cache(symbol: str, market: str) -> str:
 
 
 def _valuation(symbol: str, market: str = "cn", period: str = "近三年") -> pd.DataFrame | None:
-    """百度源估值:PE-TTM / PB / 总市值 -> DataFrame(index=date)。缓存到 data/。
-    A股/港股有免费每日历史(baidu);美股无免费历史估值,返回 None(退化为纯量价)。
-    Daily valuation via Baidu (CN & HK only); US has no free history -> None."""
+    """基本面估值:PE-TTM / PB / 总市值 -> DataFrame(index=date)。缓存到 data/。
+    现在底层走可插拔 data.fundamentals(默认 akshare 百度源,可换)。cn/hk 有免费每日历史,
+    us 无 → None(退化为纯量价)。返回含 available_date 列(PIT);build_panel 只用 pe/pb/mktcap。
+    Daily valuation via the pluggable data.fundamentals provider; CN & HK only, else None."""
     if market not in ("cn", "hk"):
         return None
     cache = _val_cache(symbol, market)
@@ -49,18 +50,10 @@ def _valuation(symbol: str, market: str = "cn", period: str = "近三年") -> pd
         except Exception:
             pass
     try:
-        import akshare as ak
-        fn = ak.stock_zh_valuation_baidu if market == "cn" else ak.stock_hk_valuation_baidu
-        out = {}
-        for ind, col in [("市盈率(TTM)", "pe"), ("市净率", "pb"), ("总市值", "mktcap")]:
-            try:                                   # 逐列容错:某一项挂了不影响其它
-                d = fn(symbol=symbol, indicator=ind, period=period)
-                out[col] = pd.Series(d["value"].to_numpy(), index=pd.to_datetime(d["date"]))
-            except Exception:
-                pass
-        if not out:
+        from quantmill.data import fundamentals
+        v = fundamentals(symbol, market)          # pe/pb/mktcap + available_date(PIT 契约)
+        if v is None or not len(v):
             return None
-        v = pd.DataFrame(out).sort_index()
         os.makedirs(config.DATA_DIR, exist_ok=True)
         v.to_csv(cache)
         return v
