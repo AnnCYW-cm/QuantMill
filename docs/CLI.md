@@ -65,17 +65,31 @@ quantmill forward [run|status] [--market cn|hk|us] [--model composite|ml] \
 |---|---|
 | `run`(默认) | 联网取最新面板+现价,推进一步,追加今日净值点,存档 |
 | `status` | 看当前前瞻曲线:起始日/净值点数/累计收益/最大回撤/当前持仓 |
+| `auto` | **装每日自动推进**(macOS→launchd,其它→给 cron 一行),再也不用记得手点 |
+| `unauto` | 卸载自动推进 |
+| `loop` | 前台常驻自动推进(不想动系统调度时用,Ctrl+C 退出) |
+| `tick` | 调度器内部调用:各市场推进一步即退出(一般不用手敲) |
 
 - 状态存 `results/forward_<market>_<model>.json`。**每天/每周固定跑一次**,几个月后你就有一条真前瞻曲线——这条曲线能不能兑现回测里那点微弱 alpha,才是这平台唯一可信的证据。
 - `--refresh` 强制拉最新数据(否则用缓存面板);首次拉全池较慢。
 - ⚠️ 它**不能离线模拟**(前瞻的意义就是真实时间流逝);要在你自己机器上、随时间反复跑。同一天重复跑=更新今天,不新增点、不动历史。
 
-**示例**
+**手动推进**
 ```bash
 quantmill forward run --market cn                # 今天:建仓/推进一步(A股稳健组合)
 quantmill forward run --market us --model ml     # 也可跟踪美股 ML 版做对照
 quantmill forward status --market cn             # 看这条只前进的曲线长到哪了
 ```
+
+**自动推进(装一次,天天自己跑)**
+```bash
+quantmill forward auto --markets cn,hk --at 16:40   # 每天 16:40 自动给 CN+HK 各推进一步(macOS)
+quantmill forward unauto                            # 不想跑了就卸载
+quantmill forward loop --markets cn --at 16:40      # 或前台常驻(留个终端/tmux 挂着)
+```
+- macOS 用 **launchd**:即使到点时机器在睡觉,**下次唤醒会补跑**;日志在 `results/forward_auto.log`。
+- 因为按天幂等,**多跑几次无害**——重复跑只更新今天那个点,不会重复追加、不动历史。
+- 非 macOS 会打印一行 cron,`crontab -e` 粘进去即可(工作日按时跑)。
 
 ---
 

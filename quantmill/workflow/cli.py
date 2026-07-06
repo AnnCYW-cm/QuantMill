@@ -205,9 +205,72 @@ def cmd_risk(a):
 
 def cmd_forward(a):
     """前瞻纸面记录:只前进不回测,每次跑追加一个真实净值点。"""
-    import json
-
     from quantmill.paper import forward_summary, load_state, run_forward
+    markets = [m.strip() for m in a.markets.split(",") if m.strip()] if getattr(a, "markets", None) else [a.market]
+
+    if a.action == "tick":                                    # 调度器每天调用:各市场推进一步,永不致命
+        for mk in markets:
+            try:
+                out = run_forward(market=mk, model=a.model, horizon=a.horizon)
+                s = out["summary"]
+                print(f"[tick] {mk.upper()}/{a.model} 现值 {s['nav']:.0f} 累计 {s['return%']:+.2f}%"
+                      f" 净值点 {s['points']} 现价命中 {out['prices_ok']}/{s['n_positions']}")
+            except Exception as e:  # noqa: BLE001
+                print(f"[tick] {mk.upper()} 推进失败:{type(e).__name__}: {e}")
+        return
+
+    if a.action == "auto":                                    # 安装每日自动推进
+        import os
+
+        from quantmill import config
+        from quantmill.paper.schedule import install
+        log = os.path.join(config.RESULTS_DIR, "forward_auto.log")
+        os.makedirs(config.RESULTS_DIR, exist_ok=True)
+        r = install(markets, a.model, a.at, os.path.expanduser("~/quant"), log)
+        print("=" * 66)
+        if r["backend"] == "launchd" and r["ok"]:
+            print(f"✅ 已装每日自动推进(launchd)· 市场 {','.join(markets)} · {a.model} · 每天 {a.at}")
+            print(f"   代理:{r['path']}\n   日志:{log}")
+            print("   睡眠错过会在下次唤醒补跑;同一天重复跑只更新今天(幂等)。")
+            print(f"   卸载:quantmill forward unauto")
+        elif r["backend"] == "launchd":
+            print(f"⚠️ 写入了 {r['path']} 但 launchctl load 失败:{r['err']}")
+            print("   可手动:launchctl load " + r["path"])
+        else:                                                  # 非 macOS:给 cron 指引
+            print(f"本系统非 macOS,请手动加一条 cron(工作日 {a.at}):")
+            print("   crontab -e  然后粘贴下面这行 ↓\n")
+            print("   " + r["cron_line"])
+        return
+
+    if a.action == "unauto":
+        from quantmill.paper.schedule import uninstall
+        r = uninstall()
+        if r["backend"] == "launchd":
+            print("✅ 已卸载每日自动推进。" if r["removed"] else "没找到已安装的代理(可能本就没装)。")
+        else:
+            print(r.get("note", ""))
+        return
+
+    if a.action == "loop":                                    # 前台常驻(不想动系统调度时用)
+        import time
+        from datetime import datetime, timedelta
+        hh, mm = (int(x) for x in a.at.split(":"))
+        print(f"⏳ 前台自动推进已启动 · 市场 {','.join(markets)} · {a.model} · 每天 {a.at}(Ctrl+C 退出)")
+        while True:
+            now = datetime.now()
+            nxt = now.replace(hour=hh, minute=mm, second=0, microsecond=0)
+            if nxt <= now:
+                nxt += timedelta(days=1)
+            wait = (nxt - now).total_seconds()
+            print(f"   下次推进 {nxt:%Y-%m-%d %H:%M}(等 {wait/3600:.1f} 小时)")
+            time.sleep(wait)
+            for mk in markets:
+                try:
+                    out = run_forward(market=mk, model=a.model, horizon=a.horizon)
+                    print(f"   [{datetime.now():%m-%d %H:%M}] {mk.upper()} 现值 {out['summary']['nav']:.0f}")
+                except Exception as e:  # noqa: BLE001
+                    print(f"   [{datetime.now():%m-%d %H:%M}] {mk.upper()} 失败:{e}")
+
     if a.action == "status":
         state = load_state(a.market, a.model)
         if not state.get("nav"):
@@ -434,9 +497,12 @@ def main():
     sp.set_defaults(func=cmd_niche)
 
     sp = sub.add_parser("forward", help="前瞻纸面记录:只前进不回测的真实净值曲线 | forward paper track")
-    sp.add_argument("action", nargs="?", default="run", choices=["run", "status"])
+    sp.add_argument("action", nargs="?", default="run",
+                    choices=["run", "status", "tick", "auto", "unauto", "loop"])
     sp.add_argument("--market", default="cn", choices=["cn", "hk", "us"])
+    sp.add_argument("--markets", default=None, help="多市场,逗号分隔(auto/tick/loop 用),如 cn,hk")
     sp.add_argument("--model", default="composite", choices=["composite", "ml"])
+    sp.add_argument("--at", default="16:40", help="每日自动推进时刻 HH:MM(auto/loop 用)")
     sp.add_argument("--cash", type=float, default=100000.0)
     sp.add_argument("-k", "--topk", type=int, default=20)
     sp.add_argument("--horizon", type=int, default=20)
